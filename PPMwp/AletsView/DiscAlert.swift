@@ -12,8 +12,6 @@ class DiscAlert: UIViewController {
     
     var progressBar = GTProgressBar()
     
-    //fire
-    var user: UserModel!
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     

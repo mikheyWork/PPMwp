@@ -86,7 +86,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
             return
         }
         
-//        logIn()
+        logIn()
         
     }
     
@@ -120,6 +120,45 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func logIn() {
+        
+        guard let user = emailLbl.text, let password = passLbl.text, user != nil, user != "", password != nil, password != "" else {
+            print("empty fields")
+            return
+        }
+        let url = URL(string: "http://localhost:8888/wp-json/wp/v2/users/me")
+        let credentialData = "\(user):\(password)".data(using: String.Encoding.utf8)!
+        let base64Credentials = credentialData.base64EncodedString(options: [])
+        let headers = ["Authorization": "Basic \(base64Credentials)"]
+        
+        Alamofire.request(url!,
+                          method: .get,
+                          parameters: nil,
+                          encoding: URLEncoding.default,
+                          headers:headers)
+            .responseJSON { (response) in
+                guard response.result.value != nil else {
+                    print("json response false: \(response)")
+                    return
+                }
+                let json = JSON(response.result.value!)
+                print("json: \(json)")
+                let id: Int!
+                id = json["id"].intValue
+                print("id is \(id)")
+                if id != nil && id != 0 {
+                    print("work0")
+                    self.performSegue(withIdentifier: "cepia", sender: nil)
+                    let user = User(name: json["name"].stringValue,
+                                    password: self.passLbl.text!,
+                        favor: json["description"].stringValue,
+                        id: json["id"].intValue)
+                    self.appDelegate.currentUser = user
+                    
+                    
+                }
+        }
+    }
 }
 
 extension UIViewController {

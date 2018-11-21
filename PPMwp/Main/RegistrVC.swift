@@ -2,7 +2,6 @@ import UIKit
 
 class RegistrVC: UIViewController {
     
-    var user: UserModel!
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     @IBOutlet weak var nameLbl: UILabel!

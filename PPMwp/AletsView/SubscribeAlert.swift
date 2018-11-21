@@ -10,7 +10,6 @@ class SubscribeAlert: UIViewController {
     @IBOutlet weak var cancelBut: UIButton!
     
     var progressBar = GTProgressBar()
-    var user: UserModel!
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     

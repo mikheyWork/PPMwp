@@ -10,6 +10,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var showDisc =  UserDefaults.standard.bool(forKey: "DiscAlert")
+    var currentUser: User!
+    
     var allCateg: [CategoryEnt] = []
     var parents: [CategoryEnt] = []
     var childs: [CategoryEnt] = []
@@ -40,7 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var networkRef = [String]()
     
     var closeCheckData = false
-    var user: UserModel!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         

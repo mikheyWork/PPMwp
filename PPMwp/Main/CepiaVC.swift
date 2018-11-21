@@ -22,13 +22,18 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 //        NotificationCenter.default.addObserver(self, selector: #selector(showCongr), name: NSNotification.Name("Check"), object: nil)
 //         NotificationCenter.default.addObserver(self, selector: #selector(fireBaseSub), name: NSNotification.Name("CheckSub"), object: nil)
-        
+        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
         searchBarLbl.delegate = self
         
-//        appDelegate.subscribtion = true
-//        showSub(nameVC: "CheckDataController")
+       
+        
+        
+        
+        appDelegate.subscribtion = true
+        showSub(nameVC: "CheckDataController")
         
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
@@ -51,13 +56,23 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         print("app \(appDelegate.subscribtion)")
     }
     
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         
+        let a  = appDelegate.currentUser.favor.split(separator: ",")
+        if a.isEmpty == false {
+            print("favor add")
+            appDelegate.favourites.removeAll()
+            for i in a {
+                if appDelegate.favourites.contains(String(i)) == false {
+                    appDelegate.favourites.append(String(i))
+                }
+            }
+        } else {
+            
+        }
+        
         if Reachability.isConnectedToNetwork() == true {
-//            favorConnection()
-
+           
         } else {
         }
     }

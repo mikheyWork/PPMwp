@@ -19,9 +19,7 @@ class ProductiPad: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     
     var parentID: Int64?
-    var productsArray: [Post] = []
     var name = " "
-    //test
     var carsDictionary = [String: [String]]()
     var carSectionTitles = [String]()
     var cars = [String]()

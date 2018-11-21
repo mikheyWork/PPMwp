@@ -14,7 +14,6 @@ class IAPService: NSObject {
     var state: String!
     var products = [SKProduct]()
     let paymentQueue = SKPaymentQueue.default()
-    var user: UserModel!
     
     func getProducts() {
         let products: Set = [IAPProd.autoRenewingSubs.rawValue]

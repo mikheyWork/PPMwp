@@ -72,7 +72,6 @@
 		FFC1D6BF21A594B200F4EDC1 /* VitalTVCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6B121A594B200F4EDC1 /* VitalTVCell2.swift */; };
 		FFC1D6C621A594CD00F4EDC1 /* Favor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C121A594CD00F4EDC1 /* Favor.swift */; };
 		FFC1D6C721A594CD00F4EDC1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C221A594CD00F4EDC1 /* User.swift */; };
-		FFC1D6C821A594CD00F4EDC1 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C321A594CD00F4EDC1 /* Post.swift */; };
 		FFC1D6C921A594CD00F4EDC1 /* PdfDocumentInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C421A594CD00F4EDC1 /* PdfDocumentInfo.swift */; };
 		FFC1D6CA21A594CD00F4EDC1 /* PdfDocumentInfoRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C521A594CD00F4EDC1 /* PdfDocumentInfoRef.swift */; };
 		FFC1D6D621A594F000F4EDC1 /* ControllModel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFC1D6CC21A594EF00F4EDC1 /* ControllModel.storyboard */; };
@@ -204,7 +203,6 @@
 		FFC1D6B121A594B200F4EDC1 /* VitalTVCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VitalTVCell2.swift; sourceTree = "<group>"; };
 		FFC1D6C121A594CD00F4EDC1 /* Favor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favor.swift; sourceTree = "<group>"; };
 		FFC1D6C221A594CD00F4EDC1 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		FFC1D6C321A594CD00F4EDC1 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		FFC1D6C421A594CD00F4EDC1 /* PdfDocumentInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PdfDocumentInfo.swift; sourceTree = "<group>"; };
 		FFC1D6C521A594CD00F4EDC1 /* PdfDocumentInfoRef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PdfDocumentInfoRef.swift; sourceTree = "<group>"; };
 		FFC1D6CC21A594EF00F4EDC1 /* ControllModel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ControllModel.storyboard; sourceTree = "<group>"; };
@@ -503,7 +501,6 @@
 				FFC1D6C121A594CD00F4EDC1 /* Favor.swift */,
 				FFC1D6C421A594CD00F4EDC1 /* PdfDocumentInfo.swift */,
 				FFC1D6C521A594CD00F4EDC1 /* PdfDocumentInfoRef.swift */,
-				FFC1D6C321A594CD00F4EDC1 /* Post.swift */,
 				FFC1D6C221A594CD00F4EDC1 /* User.swift */,
 			);
 			path = Models;
@@ -847,7 +844,6 @@
 				FFC1D6DF21A594F000F4EDC1 /* AppDelegate.swift in Sources */,
 				FFC1D65921A5937500F4EDC1 /* PDFviewerVC.swift in Sources */,
 				FFC1D6B821A594B200F4EDC1 /* ManufacturersTVCell.swift in Sources */,
-				FFC1D6C821A594CD00F4EDC1 /* Post.swift in Sources */,
 				FFC1D6A121A5949100F4EDC1 /* IAPService.swift in Sources */,
 				FFC1D65821A5937500F4EDC1 /* VitalStatVC.swift in Sources */,
 				FFC1D64921A592BE00F4EDC1 /* RegistrVC.swift in Sources */,
@@ -1047,7 +1043,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM2;
+				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1067,7 +1063,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM2;
+				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
