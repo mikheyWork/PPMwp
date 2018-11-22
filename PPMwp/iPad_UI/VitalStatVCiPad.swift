@@ -73,7 +73,7 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         rangeChar(label: nameLbl)
         rangeChar(label: nameLbl2)
-        buttonChang(senderButton: starBut, senderSwitch: starIsTaped)
+        Functions.shared.checkStar(name: name, button: starBut)
         indexFunc()
         checkStar()
 
@@ -282,14 +282,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         label.attributedText = attributedString
     }
     
-    fileprivate func buttonChang(senderButton: UIButton,senderSwitch: Bool) {
-        if senderSwitch == false {
-            starBut.setImage(UIImage(named: "star"), for: UIControl.State.normal)
-        } else {
-            starBut.setImage(UIImage(named: "star_active"), for: UIControl.State.normal)
-        }
-    }
-    
     @IBAction func fScreenTaped(_ sender: Any) {
         performSegue(withIdentifier: "showFsVital", sender: nil)
     }
@@ -303,44 +295,7 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     @IBAction func starBut(_ sender: Any) {
-//        if self.appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || self.appDelegate.curentPdfRef.contains(where: {$0.title == name}) == true || self.appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
-//            if appDelegate.favourites.contains(where: { $0 == name }) {
-//                appDelegate.favourites = appDelegate.favourites.filter({$0 != name})
-//                if appDelegate.favourites.isEmpty == true {
-//                    ref.removeValue()
-//                } else {
-//                    var arrayFav = [String]()
-//                    for fav in appDelegate.favourites {
-//                        arrayFav.append(fav)
-//                    }
-//                    UserDefaults.standard.set(arrayFav, forKey: "favorArr")
-//                    let favor = Favor(favArray: arrayFav, userId: user.uid)
-//                    let favorRef = self.ref.child("title")
-//                    favorRef.setValue(["favor": favor.favArray ,"userId": favor.userId])
-//                }
-//                
-//            } else {
-//                
-//                let element = appDelegate.childs.filter({$0.name == name})
-//                var nameElement = element.first?.name
-//                if nameElement == "" || nameElement == nil  {
-//                    let element2 = appDelegate.referencesChild.filter(({$0.name == name}))
-//                    nameElement = element2.first?.name
-//                }
-//                appDelegate.favourites.append(nameElement!)
-//                var arrayFav = [String]()
-//                if appDelegate.favourites.isEmpty == false {
-//                    for fav in appDelegate.favourites {
-//                        arrayFav.append(fav)
-//                    }
-//                }
-//                UserDefaults.standard.set(arrayFav, forKey: "favorArr")
-//                let favor = Favor(favArray: arrayFav, userId: user.uid)
-//                let favorRef = self.ref.child("title")
-//                favorRef.setValue(["favor": favor.favArray ,"userId": favor.userId])
-//            }
-//        }
-        checkStar()
+        Functions.shared.sendFavorInfo(name: name, button: starBut)
     }
     
     func checkStar() {

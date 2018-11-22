@@ -1,5 +1,7 @@
 import UIKit
 import GTProgressBar
+import Alamofire
+import SwiftyJSON
 
 class DiscAlert: UIViewController {
     
@@ -41,11 +43,11 @@ class DiscAlert: UIViewController {
     
     @IBAction func subscribeButTaped(_ sender: Any) {
         appDelegate.showDisc = true
-//        UserDefaults.standard.set(appDelegate.showDisc, forKey: "DiscAlert")
-//        
-//        let ref2  = Database.database().reference(withPath: "users").child((self.user.uid)).child("disclaimer")
-//        ref2.setValue(["disclaimer": self.appDelegate.showDisc])
-//        
+        
+        let parameters = ["last_name" : "+"]
+
+        Functions.shared.requestChangeParam(parameters: parameters)
+        
         self.removeFromParent()
         self.view.removeFromSuperview()
     }

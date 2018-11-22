@@ -21,7 +21,7 @@ class PDFviewerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var name2 = PDFDownloader.shared.addPercent(fromString: name)
+        let name2 = PDFDownloader.shared.addPercent(fromString: name)
         
         if name.contains("Info") {
             name = String(name.dropLast(4))
@@ -32,7 +32,7 @@ class PDFviewerVC: UIViewController {
         }
         
     progressShow()
-        checkStar()
+        Functions.shared.checkStar(name: name, button: starBut)
         checkSub()
         
         read(nameFile: name2)
@@ -82,15 +82,6 @@ class PDFviewerVC: UIViewController {
             subView.isHidden = false
         }
     }
-
-    
-    func checkStar() {
-        if appDelegate.favourites.contains(where: {$0 == name}) {
-            starBut.setImage(UIImage(named: "star_active"), for: .normal)
-        } else {
-            starBut.setImage(UIImage(named: "star"), for: .normal)
-        }
-    }
     
     @IBAction func backBut(_ sender: Any) {
         switch nameVC {
@@ -121,8 +112,7 @@ class PDFviewerVC: UIViewController {
     }
     
     @IBAction func starBut(_ sender: Any) {
-        
-        checkStar()
+        Functions.shared.sendFavorInfo(name: name, button: starBut)
     }
     
 }

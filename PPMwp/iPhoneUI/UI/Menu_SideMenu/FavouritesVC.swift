@@ -15,6 +15,19 @@ class FavouritesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let a  = self.appDelegate.currentUser.favor.split(separator: ",")
+        if a.isEmpty == false {
+            print("favor add")
+            self.appDelegate.favourites.removeAll()
+            for i in a {
+                if self.appDelegate.favourites.contains(String(i)) == false {
+                    self.appDelegate.favourites.append(String(i))
+                }
+            }
+        }
+        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(updateData ), name: NSNotification.Name("Star"), object: nil)
         
         for i in appDelegate.favourites {
@@ -107,6 +120,7 @@ extension FavouritesVC {
             text = cell.prodLbl.text!
         }
         
+        print("name cell is \(text)")
         if appDelegate.childs.contains(where: {$0.name == text }) {
            performSegue(withIdentifier: "showFavourVital", sender: text)
         } else {

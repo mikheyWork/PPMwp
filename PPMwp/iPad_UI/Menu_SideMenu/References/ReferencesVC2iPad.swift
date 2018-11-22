@@ -37,8 +37,6 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
         progressView.isHidden = true
         rangeChar()
         name2 = name
-        //fire
-        
         checkState()
     }
     
@@ -54,7 +52,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     
     override func viewWillLayoutSubviews() {
         self.tableView.reloadData()
-        checkStar()
+        Functions.shared.checkStar(name: name, button: starBut)
         indexFunc()
     }
     
@@ -166,7 +164,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     
     @IBAction func starButTaped(_ sender: Any) {
         
-        checkStar()
+        Functions.shared.sendFavorInfo(name: name2, button: starBut)
     }
     
     func checkState() {
@@ -181,16 +179,8 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
             webView.isHidden = true
             starBut.isHidden = true
         }
-        
     }
     
-    func checkStar() {
-        if appDelegate.favourites.contains(where: {$0 == name2}) {
-            starBut.setImage(UIImage(named: "star_active"), for: .normal)
-        } else {
-            starBut.setImage(UIImage(named: "star"), for: .normal)
-        }
-    }
     @IBAction func beckBut(_ sender: Any) {
         if name2 != nil && name2 != "" {
             performSegue(withIdentifier: "showFSREF2", sender: name)
@@ -335,10 +325,7 @@ extension ReferencesVC2iPad {
             tableView.reloadData()
         }
 
-        
-        
         checkState()
-    
     }
     
     //MARK: -Segue

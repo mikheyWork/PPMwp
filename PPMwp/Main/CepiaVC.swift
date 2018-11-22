@@ -1,5 +1,7 @@
 import UIKit
 import GTProgressBar
+import Alamofire
+import SwiftyJSON
 
 class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
@@ -14,7 +16,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     var cars = [SearchItem]()
     var cars2 = [SearchItem]()
     var isSearching = false
-
+    
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
@@ -23,17 +25,11 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(showCongr), name: NSNotification.Name("Check"), object: nil)
-//         NotificationCenter.default.addObserver(self, selector: #selector(fireBaseSub), name: NSNotification.Name("CheckSub"), object: nil)
-        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
-        searchBarLbl.delegate = self
-        
-       
-        
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(showCongr), name: NSNotification.Name("Check"), object: nil)
         
         appDelegate.subscribtion = true
-        showSub(nameVC: "CheckDataController")
+        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
+        searchBarLbl.delegate = self
         
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
@@ -42,39 +38,77 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         if appDelegate.referencesChild.count == 0 {
             appDelegate.fetchCoreDataRef()
         }
-    
+        
         //test store
         IAPService.shared.getProducts()
-        
-        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         rangeChar()
-        
         searchBarChange(searchBar: searchBarLbl)
         showTable()
         index()
-        print("app \(appDelegate.subscribtion)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        let a  = appDelegate.currentUser.favor.split(separator: ",")
-        if a.isEmpty == false {
-            print("favor add")
-            appDelegate.favourites.removeAll()
-            for i in a {
-                if appDelegate.favourites.contains(String(i)) == false {
-                    appDelegate.favourites.append(String(i))
+        print("subs \(appDelegate.currentUser.subs)")
+        print("discl \(appDelegate.currentUser.disclaimer)")
+        
+        if Reachability.isConnectedToNetwork() == true {
+            //requset actual data
+            DispatchQueue.global(qos: .userInteractive).async {
+                if self.appDelegate.currentUser.id != 0 {
+                    let user = self.appDelegate.currentUser.name!
+                    let password = self.appDelegate.currentUser.password!
+                    let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users/\(self.appDelegate.currentUser.id!)")
+                    let credentialData = "\(user):\(password)".data(using: String.Encoding.utf8)!
+                    let base64Credentials = credentialData.base64EncodedString(options: [])
+                    let headers = ["Authorization": "Basic \(base64Credentials)"]
+                    
+                    
+                    Alamofire.request(url!,
+                                      method: .post,
+                                      parameters: nil,
+                                      encoding: URLEncoding.default,
+                                      headers:headers)
+                        .responseJSON { [weak self] (response) in
+                            guard response.result.value != nil else {
+                                print("json response false: \(response)")
+                                return
+                            }
+                            let json = JSON(response.result.value!)
+                            print("json: \(json)")
+                            let id: Int!
+                            id = json["id"].intValue
+                            print("id is \(id)")
+                            if id != nil && id != 0 {
+                                print("work0")
+                                
+                                let user = User(name: json["name"].stringValue,
+                                                password: (self?.appDelegate.currentUser.password!)!,
+                                                favor: json["description"].stringValue,
+                                                id: json["id"].intValue,
+                                                subs: json["first_name"].stringValue,
+                                                disclaimer: json["last_name"].stringValue)
+                                self?.appDelegate.currentUser = user
+                                
+                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self!.appDelegate.currentUser!)
+                                UserDefaults.standard.set(encodedData, forKey: "currentUser")
+                                UserDefaults.standard.synchronize()
+                                print("subs2 \(self!.appDelegate.currentUser.subs)")
+                                print("discl2 \(self?.appDelegate.currentUser.disclaimer)")
+                                DispatchQueue.main.async {
+                                    self?.loadDataWp()
+                                }
+                                
+                            }
+                    }
                 }
             }
         } else {
-            
+            loadDataWp()
         }
         
-        if Reachability.isConnectedToNetwork() == true {
-           
-        } else {
-        }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -85,6 +119,39 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewWillLayoutSubviews() {
         addTapGestureToHideKeyboard1()
+    }
+    
+    func loadDataWp() {
+        let a  = self.appDelegate.currentUser.favor.split(separator: ",")
+        if a.isEmpty == false {
+            print("favor add")
+            self.appDelegate.favourites.removeAll()
+            for i in a {
+                if self.appDelegate.favourites.contains(String(i)) == false {
+                    self.appDelegate.favourites.append(String(i))
+                }
+            }
+        }
+        if appDelegate.currentUser.subs == "+" {
+            appDelegate.subscribtion = true
+            if showAlert == true {
+                showSub(nameVC: "CheckDataController", alpha: 0.2)
+            }
+        } else {
+            appDelegate.subscribtion = false
+            showSub(nameVC: "SubscribeAlert", alpha: 0.2)
+        }
+        
+        if appDelegate.currentUser.disclaimer == "+" {
+            appDelegate.showDisc = false
+        } else {
+            appDelegate.showDisc = true
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "DiscAlert")
+            
+            vc?.view.backgroundColor = UIColor.white
+            self.addChild(vc!)
+            self.view.addSubview((vc?.view)!)
+        }
     }
     
     func addTapGestureToHideKeyboard1() {
@@ -107,7 +174,6 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     func index() {
-        
         for i in appDelegate.parents {
             let a = appDelegate.parents.filter({$0.name == i.name})
             if cars.contains(where: {$0.name == a.first!.name!}) == false {
@@ -284,14 +350,24 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         nameLbl.attributedText = attributedString
     }
     
-    func showSub(nameVC: String) {
+    func showSub(nameVC: String, alpha: Double) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: nameVC)
         
-        vc?.view.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
+        vc?.view.backgroundColor = UIColor.gray.withAlphaComponent(CGFloat(alpha))
         self.addChild(vc!)
         self.view.addSubview((vc?.view)!)
     }
     
+    @objc func showCongr() {
+        if Reachability.isConnectedToNetwork() == true {
+            if showAlert == true {
+                //при релизе вкл
+                if appDelegate.subscribtion == true {
+                    showSub(nameVC: "CheckDataController", alpha: 0.2)
+                }
+            }
+        }
+    }
     
     @IBAction func manufBut(_ sender: Any) {
         from = "Manuf"
@@ -318,7 +394,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     @IBAction func modelsBut(_ sender: Any) {
-       from = "Models"
+        from = "Models"
         if Reachability.isConnectedToNetwork() {
             if appDelegate.closeCheckData == true {
                 performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
@@ -486,7 +562,7 @@ extension CepiaVC {
         if selectedName.isEmpty {
             selectedName = appDelegate.models.filter({$0.name == text})
             if selectedName.isEmpty {
-//                let reflName = selectedName.first?.name
+                //                let reflName = selectedName.first?.name
                 if Reachability.isConnectedToNetwork() {
                     if appDelegate.referencesParent.contains(where: {$0.name == text}) {
                         if appDelegate.closeCheckData == true {
@@ -513,20 +589,20 @@ extension CepiaVC {
                 if Reachability.isConnectedToNetwork() {
                     if appDelegate.closeCheckData == true {
                         from = "Models"
-                         performSegue(withIdentifier: "searchCepia", sender: modelName)
+                        performSegue(withIdentifier: "searchCepia", sender: modelName)
                     }
                 } else {
                     from = "Models"
                     performSegue(withIdentifier: "searchCepia", sender: modelName)
                 }
-               
+                
             }
             
         } else {
             selectedNameID = selectedName.first?.id
             
             let cell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
-
+            
             if Reachability.isConnectedToNetwork() {
                 if appDelegate.closeCheckData == true {
                     from = "Manuf"
@@ -538,26 +614,14 @@ extension CepiaVC {
             }
             
         }
-        
-        
-        
     }
     
-    @objc func showCongr() {
-        if Reachability.isConnectedToNetwork() == true {
-            if showAlert == true {
-                //при релизе вкл
-                if appDelegate.subscribtion == true {
-                    showSub(nameVC: "CheckDataController")
-                }
-            }
-        }
-    }
+    
     
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        appDelegate.subscribtion = true
         print("appDel is \(appDelegate.closeCheckData)")
         print("state is \(IAPService.shared.state)")
         if IAPService.shared.state == "purchasing" {
@@ -570,7 +634,7 @@ extension CepiaVC {
             print("error state is \(IAPService.shared.state)")
         }
         
-            //при релизе включить
+        //при релизе включить
         if segue.identifier == "showManufacturers" {
             let manuf = segue.destination as! Manufacturers
             manuf.from = from
@@ -580,12 +644,12 @@ extension CepiaVC {
             manuf.from = from
         }
         if segue.identifier == "searchProd" {
-                let cell = sender as! CepiaTVCell
+            let cell = sender as! CepiaTVCell
             let arr = appDelegate.parents.filter({$0.name == cell.nameLbl.text})
-                let types = segue.destination as! ProductTypes
-                types.from = "Manuf"
-                types.parentID = arr.first?.id
-                types.manufacturer = arr.first?.name
+            let types = segue.destination as! ProductTypes
+            types.from = "Manuf"
+            types.parentID = arr.first?.id
+            types.manufacturer = arr.first?.name
         }
         if segue.identifier == "searchCepia" {
             let nameModel = sender as! String

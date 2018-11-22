@@ -41,7 +41,7 @@ class SubscribeAlert: UIViewController {
     @IBAction func subscribeButTaped(_ sender: Any) {
         if Reachability.isConnectedToNetwork() {
         IAPService.shared.purchase(product: .autoRenewingSubs)
-            
+        print("a")
         }
         
         
