@@ -1,4 +1,6 @@
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
@@ -16,7 +18,7 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     var fieldsDict = [String:String]()
     var keysAZ = [String]()
     var prodArr = [PdfDocumentInfo]()
-    
+   
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
@@ -24,15 +26,11 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         print("name \(name)")
         rangeChar()
         tableView1.isScrollEnabled = false
-        checkStar()
         prodArr = appDelegate.curentPdf.filter({$0.model_name == name})
         if prodArr.isEmpty == true {
             prodArr = appDelegate.curentPdf.filter({$0.model_number == name})
         }
         addDataToDict()
-        var model2 = appDelegate.childs.filter({$0.name == name})
-        var prod = appDelegate.childs.filter({$0.id == model2.first?.parent})
-        var manuf = appDelegate.parents.filter({$0.id == prod.first?.parent})
     }
     
     var nameVC = "VitalStatVC"
@@ -47,7 +45,7 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView1.reloadData()
-        checkStar()
+        Functions.shared.checkStar(name: name, button: starBut)
         
         
     }
@@ -64,14 +62,6 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
         }
     }
     
-    func checkStar() {
-        if appDelegate.favourites.contains(where: {$0 == name}) {
-            starBut.setImage(UIImage(named: "star_active"), for: .normal)
-        } else {
-            starBut.setImage(UIImage(named: "star"), for: .normal)
-        }
-    }
-    
     @IBAction func backBut(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
@@ -81,7 +71,7 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     }
     
     @IBAction func starBut(_ sender: Any) {
-        checkStar()
+        Functions.shared.sendFavorInfo(name: name, button: starBut)
     }
 }
 

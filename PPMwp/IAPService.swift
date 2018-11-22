@@ -14,7 +14,6 @@ class IAPService: NSObject {
     var state: String!
     var products = [SKProduct]()
     let paymentQueue = SKPaymentQueue.default()
-    var user: UserModel!
     
     func getProducts() {
         let products: Set = [IAPProd.autoRenewingSubs.rawValue]
@@ -26,19 +25,16 @@ class IAPService: NSObject {
     
     func purchase(product: IAPProd) {
         guard let productToPurchase = products.filter({ $0.productIdentifier == product.rawValue }).first else { return }
-        
         let payment = SKPayment(product: productToPurchase)
         paymentQueue.add(payment)
     }
+    
     
     func restorePurchase() {
         print("restore purachases")
         paymentQueue.restoreCompletedTransactions()
     }
-    
-    
 }
-
 
 extension IAPService: SKProductsRequestDelegate {
     
@@ -48,37 +44,35 @@ extension IAPService: SKProductsRequestDelegate {
             print("product.localizedTitle is \(product.localizedTitle)")
         }
     }
-    
 }
 
 extension IAPService: SKPaymentTransactionObserver {
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        print("bbb")
         for transaction in transactions {
             print(transaction.transactionState.status())
             print(transaction.payment.productIdentifier)
-            
-            
-            
             switch transaction.transactionState {
             case .purchasing:
                 state = "purchasing"
+                print("pur222")
                 break
             case .restored:
-//                appDelegate.subscribtion = true
                 state = "restored"
                 print("restored free acc")
-                UserDefaults.standard.set(appDelegate.subscribtion, forKey: "subscribe2")
                 queue.finishTransaction(transaction)
             case .purchased:
                 appDelegate.subscribtion = true
                 state = "purchased"
                 print("purchased free acc")
                 if appDelegate.closeCheckData == false {
-//                NotificationCenter.default.post(name: NSNotification.Name("Check"), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name("Check"), object: nil)
                 }
-                //fire
+                let parameters = ["first_name" : "+"]
+                Functions.shared.requestChangeParam(parameters: parameters)
                
             default:
+                print("error restored")
                 state = "error"
                 queue.finishTransaction(transaction)
             }
@@ -86,10 +80,14 @@ extension IAPService: SKPaymentTransactionObserver {
         UserDefaults.standard.set(appDelegate.subscribtion, forKey: "subscribe2")
     }
     
-    
+    func restored() {
+        print("restored buy")
+        paymentQueue.restoreCompletedTransactions()
+    }
 }
 
 extension SKPaymentTransactionState {
+    
     func status() -> String {
         switch self {
         case .deferred: return "deferred"

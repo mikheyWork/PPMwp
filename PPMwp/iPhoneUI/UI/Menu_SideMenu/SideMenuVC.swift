@@ -1,4 +1,5 @@
 import UIKit
+import SwiftyJSON
 
 class SideMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -6,6 +7,7 @@ class SideMenuVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     //MARK: -variables
     var a = 2
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,12 +78,13 @@ extension SideMenuVC {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "LogOut" {
-            let vc = segue.destination as! LoginVC
-            vc.path = false
-            UserDefaults.standard.setValue(false, forKey: "saved2")
+            let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")
+            self.appDelegate.currentUser = user
             
+            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
+            UserDefaults.standard.set(encodedData, forKey: "currentUser")
+            UserDefaults.standard.synchronize()
+            UserDefaults.standard.setValue(false, forKey: "saved2")
         }
     }
-    
-    
 }

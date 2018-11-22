@@ -49,7 +49,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
         trueName = name
         
         rangeChar(label: nameLbl)
-        checkStar()
+        Functions.shared.checkStar(name: name, button: starBut)
         
        
         
@@ -148,17 +148,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     @IBAction func starBut(_ sender: Any) {
-        checkStar()
-    }
-    
-    
-    
-    func checkStar() {
-        if appDelegate.favourites.contains(where: {$0 == name2}) {
-            starBut.setImage(UIImage(named: "star_active"), for: .normal)
-        } else {
-            starBut.setImage(UIImage(named: "star"), for: .normal)
-        }
+        Functions.shared.sendFavorInfo(name: name, button: starBut)
     }
     
     func read(nameFile: String) {

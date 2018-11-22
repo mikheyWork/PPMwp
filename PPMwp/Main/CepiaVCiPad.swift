@@ -1,6 +1,8 @@
 import UIKit
 import GTProgressBar
 import MYTableViewIndex
+import Alamofire
+import SwiftyJSON
 
 
 
@@ -28,11 +30,10 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        NotificationCenter.default.addObserver(self, selector: #selector(showCongr), name: NSNotification.Name("Check"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(fireBaseSub), name: NSNotification.Name("CheckSub"), object: nil)
         
+        appDelegate.subscribtion = true
+        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
         searchBarLbl.delegate = self
-        
         
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
@@ -44,24 +45,76 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         
         //test store
         IAPService.shared.getProducts()
-        
-        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         rangeChar()
-        
         searchBarChange(searchBar: searchBarLbl)
         showTable()
-        indexFunc()
-        
+        index()
     }
     
     
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        print("subs \(appDelegate.currentUser.subs)")
+        print("discl \(appDelegate.currentUser.disclaimer)")
+        
         if Reachability.isConnectedToNetwork() == true {
-            
+            //requset actual data
+            DispatchQueue.global(qos: .userInteractive).async {
+                if self.appDelegate.currentUser.id != 0 {
+                    let user = self.appDelegate.currentUser.name!
+                    let password = self.appDelegate.currentUser.password!
+                    let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users/\(self.appDelegate.currentUser.id!)")
+                    let credentialData = "\(user):\(password)".data(using: String.Encoding.utf8)!
+                    let base64Credentials = credentialData.base64EncodedString(options: [])
+                    let headers = ["Authorization": "Basic \(base64Credentials)"]
+                    
+                    
+                    Alamofire.request(url!,
+                                      method: .post,
+                                      parameters: nil,
+                                      encoding: URLEncoding.default,
+                                      headers:headers)
+                        .responseJSON { [weak self] (response) in
+                            guard response.result.value != nil else {
+                                print("json response false: \(response)")
+                                return
+                            }
+                            let json = JSON(response.result.value!)
+                            print("json: \(json)")
+                            let id: Int!
+                            id = json["id"].intValue
+                            print("id is \(id)")
+                            if id != nil && id != 0 {
+                                print("work0")
+                                
+                                let user = User(name: json["name"].stringValue,
+                                                password: (self?.appDelegate.currentUser.password!)!,
+                                                favor: json["description"].stringValue,
+                                                id: json["id"].intValue,
+                                                subs: json["first_name"].stringValue,
+                                                disclaimer: json["last_name"].stringValue)
+                                self?.appDelegate.currentUser = user
+                                
+                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self!.appDelegate.currentUser!)
+                                UserDefaults.standard.set(encodedData, forKey: "currentUser")
+                                UserDefaults.standard.synchronize()
+                                print("subs2 \(self!.appDelegate.currentUser.subs)")
+                                print("discl2 \(self?.appDelegate.currentUser.disclaimer)")
+                                DispatchQueue.main.async {
+                                    self?.loadDataWp()
+                                }
+                                
+                            }
+                    }
+                }
+            }
         } else {
+            loadDataWp()
         }
+        
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -73,10 +126,43 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         indexFunc()
     }
     
-    func showSub(nameVC: String) {
+    func loadDataWp() {
+        let a  = self.appDelegate.currentUser.favor.split(separator: ",")
+        if a.isEmpty == false {
+            print("favor add")
+            self.appDelegate.favourites.removeAll()
+            for i in a {
+                if self.appDelegate.favourites.contains(String(i)) == false {
+                    self.appDelegate.favourites.append(String(i))
+                }
+            }
+        }
+        if appDelegate.currentUser.subs == "+" {
+            appDelegate.subscribtion = true
+            if showAlert == true {
+                showSub(nameVC: "CheckDataController", alpha: 0.2)
+            }
+        } else {
+            appDelegate.subscribtion = false
+            showSub(nameVC: "SubscribeAlert", alpha: 0.2)
+        }
+        
+        if appDelegate.currentUser.disclaimer == "+" {
+            appDelegate.showDisc = false
+        } else {
+            appDelegate.showDisc = true
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "DiscAlert")
+            
+            vc?.view.backgroundColor = UIColor.white
+            self.addChild(vc!)
+            self.view.addSubview((vc?.view)!)
+        }
+    }
+    
+    func showSub(nameVC: String, alpha: Double) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: nameVC)
         
-        vc?.view.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
+        vc?.view.backgroundColor = UIColor.gray.withAlphaComponent(CGFloat(alpha))
         self.addChild(vc!)
         self.view.addSubview((vc?.view)!)
     }

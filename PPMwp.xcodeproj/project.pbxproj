@@ -10,6 +10,7 @@
 		42B2E90F3D846FC6F4D65F7E /* Pods_PPMwpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC6D9DB90CB4AE57711F257 /* Pods_PPMwpTests.framework */; };
 		76CCD57BD3C552707E18D4B3 /* Pods_PPMwp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC733A0D9A2634164F1D958A /* Pods_PPMwp.framework */; };
 		E4C1008833CDF1686B4957F5 /* Pods_PPMwpUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A567E4C05AC689606A2FE78 /* Pods_PPMwpUITests.framework */; };
+		FF1B3DA321A6C9B1004473A5 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1B3DA221A6C9B1004473A5 /* Functions.swift */; };
 		FFC1D61821A592A100F4EDC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFC1D61721A592A100F4EDC1 /* Assets.xcassets */; };
 		FFC1D62621A592A100F4EDC1 /* PPMwpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D62521A592A100F4EDC1 /* PPMwpTests.swift */; };
 		FFC1D63121A592A100F4EDC1 /* PPMwpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D63021A592A100F4EDC1 /* PPMwpUITests.swift */; };
@@ -72,7 +73,6 @@
 		FFC1D6BF21A594B200F4EDC1 /* VitalTVCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6B121A594B200F4EDC1 /* VitalTVCell2.swift */; };
 		FFC1D6C621A594CD00F4EDC1 /* Favor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C121A594CD00F4EDC1 /* Favor.swift */; };
 		FFC1D6C721A594CD00F4EDC1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C221A594CD00F4EDC1 /* User.swift */; };
-		FFC1D6C821A594CD00F4EDC1 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C321A594CD00F4EDC1 /* Post.swift */; };
 		FFC1D6C921A594CD00F4EDC1 /* PdfDocumentInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C421A594CD00F4EDC1 /* PdfDocumentInfo.swift */; };
 		FFC1D6CA21A594CD00F4EDC1 /* PdfDocumentInfoRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6C521A594CD00F4EDC1 /* PdfDocumentInfoRef.swift */; };
 		FFC1D6D621A594F000F4EDC1 /* ControllModel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFC1D6CC21A594EF00F4EDC1 /* ControllModel.storyboard */; };
@@ -136,6 +136,7 @@
 		EC733A0D9A2634164F1D958A /* Pods_PPMwp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PPMwp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE8C02E2B43302FD2A1A6618 /* Pods-PPMwpUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PPMwpUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PPMwpUITests/Pods-PPMwpUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FB6A83A285C437FE7C23DBD9 /* Pods-PPMwp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PPMwp.release.xcconfig"; path = "Pods/Target Support Files/Pods-PPMwp/Pods-PPMwp.release.xcconfig"; sourceTree = "<group>"; };
+		FF1B3DA221A6C9B1004473A5 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		FFC1D60D21A5929F00F4EDC1 /* PPMwp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PPMwp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFC1D61721A592A100F4EDC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FFC1D61C21A592A100F4EDC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -204,7 +205,6 @@
 		FFC1D6B121A594B200F4EDC1 /* VitalTVCell2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VitalTVCell2.swift; sourceTree = "<group>"; };
 		FFC1D6C121A594CD00F4EDC1 /* Favor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favor.swift; sourceTree = "<group>"; };
 		FFC1D6C221A594CD00F4EDC1 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		FFC1D6C321A594CD00F4EDC1 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		FFC1D6C421A594CD00F4EDC1 /* PdfDocumentInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PdfDocumentInfo.swift; sourceTree = "<group>"; };
 		FFC1D6C521A594CD00F4EDC1 /* PdfDocumentInfoRef.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PdfDocumentInfoRef.swift; sourceTree = "<group>"; };
 		FFC1D6CC21A594EF00F4EDC1 /* ControllModel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ControllModel.storyboard; sourceTree = "<group>"; };
@@ -503,7 +503,6 @@
 				FFC1D6C121A594CD00F4EDC1 /* Favor.swift */,
 				FFC1D6C421A594CD00F4EDC1 /* PdfDocumentInfo.swift */,
 				FFC1D6C521A594CD00F4EDC1 /* PdfDocumentInfoRef.swift */,
-				FFC1D6C321A594CD00F4EDC1 /* Post.swift */,
 				FFC1D6C221A594CD00F4EDC1 /* User.swift */,
 			);
 			path = Models;
@@ -522,6 +521,7 @@
 				FFC1D6D021A594F000F4EDC1 /* ModelController.swift */,
 				FFC1D6D121A594F000F4EDC1 /* Network.swift */,
 				FFC1D6CD21A594EF00F4EDC1 /* PDFDownloader.swift */,
+				FF1B3DA221A6C9B1004473A5 /* Functions.swift */,
 				FFC1D61721A592A100F4EDC1 /* Assets.xcassets */,
 				FFC1D6E021A594F800F4EDC1 /* launch.xcassets */,
 				FFC1D6E221A5951900F4EDC1 /* fonts */,
@@ -826,6 +826,7 @@
 				FFC1D68121A593FD00F4EDC1 /* ProductTypesiPad.swift in Sources */,
 				FFC1D68221A593FD00F4EDC1 /* VitalStatVCiPad.swift in Sources */,
 				FFC1D6C721A594CD00F4EDC1 /* User.swift in Sources */,
+				FF1B3DA321A6C9B1004473A5 /* Functions.swift in Sources */,
 				FFC1D67621A593D300F4EDC1 /* ModelsVC2.swift in Sources */,
 				FFC1D6B421A594B200F4EDC1 /* Ref2TVCell.swift in Sources */,
 				FFC1D69621A5942E00F4EDC1 /* ReferencesVCiPad.swift in Sources */,
@@ -847,7 +848,6 @@
 				FFC1D6DF21A594F000F4EDC1 /* AppDelegate.swift in Sources */,
 				FFC1D65921A5937500F4EDC1 /* PDFviewerVC.swift in Sources */,
 				FFC1D6B821A594B200F4EDC1 /* ManufacturersTVCell.swift in Sources */,
-				FFC1D6C821A594CD00F4EDC1 /* Post.swift in Sources */,
 				FFC1D6A121A5949100F4EDC1 /* IAPService.swift in Sources */,
 				FFC1D65821A5937500F4EDC1 /* VitalStatVC.swift in Sources */,
 				FFC1D64921A592BE00F4EDC1 /* RegistrVC.swift in Sources */,
@@ -1038,7 +1038,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 61728CF6511073093C45C52D /* Pods-PPMwp.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6432D6XU4G;
 				INFOPLIST_FILE = PPMwp/Info.plist;
@@ -1047,7 +1047,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM2;
+				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM.Genius3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1058,7 +1058,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FB6A83A285C437FE7C23DBD9 /* Pods-PPMwp.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6432D6XU4G;
 				INFOPLIST_FILE = PPMwp/Info.plist;
@@ -1067,7 +1067,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM2;
+				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM.Genius3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

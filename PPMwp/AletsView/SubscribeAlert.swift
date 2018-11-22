@@ -10,7 +10,6 @@ class SubscribeAlert: UIViewController {
     @IBOutlet weak var cancelBut: UIButton!
     
     var progressBar = GTProgressBar()
-    var user: UserModel!
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -42,7 +41,7 @@ class SubscribeAlert: UIViewController {
     @IBAction func subscribeButTaped(_ sender: Any) {
         if Reachability.isConnectedToNetwork() {
         IAPService.shared.purchase(product: .autoRenewingSubs)
-            
+        print("a")
         }
         
         

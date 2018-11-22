@@ -19,7 +19,6 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
     @IBOutlet weak var tableViewIndex: TableViewIndex!
     
     var parentID: Int64?
-    var productsArray: [Post] = []
     var carsDictionary = [String: [String]]()
     var carSectionTitles = [String]()
     var cars = [String]()
