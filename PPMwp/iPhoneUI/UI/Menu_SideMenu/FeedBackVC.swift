@@ -47,7 +47,7 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         dismiss(animated: true, completion: nil)
     }
-    
+
     func sendEmail(text: String, email: String, subject: String) {
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
