@@ -44,23 +44,23 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     //mail
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        dismiss(animated: true, completion: nil)
-    }
-
-    func sendEmail(text: String, email: String, subject: String) {
-        if MFMailComposeViewController.canSendMail() {
-            let mail = MFMailComposeViewController()
-            mail.mailComposeDelegate = self
-            mail.setToRecipients([email])
-            mail.setMessageBody("<p>\(text)</p>", isHTML: true)
-            mail.setSubject(subject)
-            present(mail, animated: true)
-            showAlertError(text: "Profit", withText: "Profi2")
-        } else {
-            // show failure alert
-        }
-    }
+//    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+//        dismiss(animated: true, completion: nil)
+//    }
+//
+//    func sendEmail(text: String, email: String, subject: String) {
+//        if MFMailComposeViewController.canSendMail() {
+//            let mail = MFMailComposeViewController()
+//            mail.mailComposeDelegate = self
+//            mail.setToRecipients([email])
+//            mail.setMessageBody("<p>\(text)</p>", isHTML: true)
+//            mail.setSubject(subject)
+//            present(mail, animated: true)
+//            showAlertError(text: "Profit", withText: "Profi2")
+//        } else {
+//            // show failure alert
+//        }
+//    }
     
     func showAlertError(text: String ,withText: String) {
         let alert = UIAlertController(title: text, message: withText, preferredStyle: .alert)
@@ -74,7 +74,8 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
         guard subjText.text != "", textView.text != "" else {
             return
         }
-        sendEmail(text: textView.text , email: "team@qubasoft.com", subject: subjText.text! )
+//        sendEmail(text: textView.text , email: "team@qubasoft.com", subject: subjText.text! )
+        MailSender.shared.sendEmail(subject: subjText.text!, body: textView.text!)
     }
     
     @IBAction func backBut(_ sender: Any) {

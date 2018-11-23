@@ -58,11 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         model = UIDevice.current.modelName
-        
-        
-//        subscribtion = UserDefaults.standard.bool(forKey: "subscribe2")
-        
-        
+
         
         //test
         if UserDefaults.standard.bool(forKey: "disclaimer2") != nil {
