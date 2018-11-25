@@ -44,15 +44,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var closeCheckData = false
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+        if Reachability.isConnectedToNetwork() {
+            Store.shared.checkSub()
+        }
         DispatchQueue.global(qos: .userInteractive).async {
-            if Reachability.isConnectedToNetwork() {
-                self.checkSub(id: "mikhey.PPM.Genius3.Subscription", sharedSecret: "523764ba89824292bc45e96ae17f1137")
-            }
+            
             self.reqProductsDocCount(page: 1)
             self.reqRefsDocCount(page: 1)
         }
         
+        //storeKit
+        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+            for purchase in purchases {
+                switch purchase.transaction.transactionState {
+                case .purchased, .restored:
+                    if purchase.needsFinishTransaction {
+                        // Deliver content from server, then:
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    }
+                // Unlock content
+                case .failed, .purchasing, .deferred:
+                    break // do nothing
+                }
+            }
+        }
         
             self.check()
         
@@ -123,11 +138,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                removeDataFrom(entity: "CategoryEnt")
 //        CategoryEnt
 //        if need
+        Store.shared.retrieveInfo()
+        
         Thread.sleep(forTimeInterval: 2.0)
         
         
         //if need delete file
         //        removeFile(name: " ")
+        
+        
         
         return true
     }
@@ -185,7 +204,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         Alamofire.request(url!, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { [weak self] (response) in
-            
+            guard response.result.value != nil else {
+                return
+            }
             let json = JSON(response.result.value!)
             let resaults = json[].arrayValue
             guard resaults.isEmpty == false else {
@@ -209,7 +230,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         Alamofire.request(url!, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { [weak self] (response) in
-            
+            guard response.result.value != nil else {
+                return
+            }
             let json = JSON(response.result.value!)
             let resaults = json[].arrayValue
             guard resaults.isEmpty == false else {
@@ -464,58 +487,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     //check sub
-    
-    
-    func checkSub(id: String, sharedSecret: String) {
-
-        
-        let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: sharedSecret)
-        SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
-            switch result {
-            case .success(let receipt):
-                // Verify the purchase of a Subscription
-                let purchaseResult = SwiftyStoreKit.verifySubscription(
-                    ofType: .autoRenewable, // or .nonRenewing (see below)
-                    productId: id,
-                    inReceipt: receipt)
-
-                switch purchaseResult {
-                case .purchased(let expiryDate, let items):
-                    self.subscribtion = true
-                    DispatchQueue.main.async {
-                        print("subso purchased is \(self.subscribtion)")
-                        if self.closeCheckData == false {
-                            NotificationCenter.default.post(name: NSNotification.Name("Check"), object: nil)
-                        }
-                    }
-
-                    print("\(id) is valid until \(expiryDate)\n\(items)\n")
-                case .expired(let expiryDate, let items):
-                    //change
-                    self.subscribtion = false
-//                    DispatchQueue.main.async {
-//                        print("subso purchased is \(self.subscribtion)")
-//                        if self.closeCheckData == false {
-//                            NotificationCenter.default.post(name: NSNotification.Name("Check"), object: nil)
-//                        }
-//                    }
-                    print("\(id) is expired since \(expiryDate)\n\(items)\n")
-                case .notPurchased:
-                    self.subscribtion = false
-                    //                    self.subscribtion = false
-                    print("The user has never purchased \(id)")
-                }
-
-            case .error(let error):
-                //релиз
-                self.subscribtion = false
-                //                    self.subscribtion = false
-                print("Receipt verification failed: \(error)")
-            }
-            print("subs is \(self.subscribtion)")
-            UserDefaults.standard.set(self.subscribtion, forKey: "subscribe2")
-        }
-    }
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

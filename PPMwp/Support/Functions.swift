@@ -21,6 +21,9 @@ class Functions: NSObject {
     
     
     func requestChangeParam(parameters: Parameters) {
+        guard self.appDelegate.currentUser.id != 0 && self.appDelegate.currentUser != nil else {
+            return
+        }
         let user = self.appDelegate.currentUser.name!
         let password = self.appDelegate.currentUser.password!
         let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users/\(self.appDelegate.currentUser.id!)")

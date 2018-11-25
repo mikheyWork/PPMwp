@@ -25,9 +25,15 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(showCongr), name: NSNotification.Name("Check"), object: nil)
         
-        appDelegate.subscribtion = true
+//        appDelegate.subscribtion = true
+//        showSub(nameVC: "CheckDataController", alpha: 0.2)
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
+        }
+        
         print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
         searchBarLbl.delegate = self
         
@@ -40,12 +46,13 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         }
         
         //test store
-        IAPService.shared.getProducts()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         rangeChar()
         searchBarChange(searchBar: searchBarLbl)
         showTable()
         index()
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,16 +103,33 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                                 UserDefaults.standard.synchronize()
                                 print("subs2 \(self!.appDelegate.currentUser.subs)")
                                 print("discl2 \(self?.appDelegate.currentUser.disclaimer)")
-                                DispatchQueue.main.async {
+//                                DispatchQueue.main.async {
                                     self?.loadDataWp()
-                                }
+//
                                 
                             }
                     }
                 }
             }
         } else {
-            loadDataWp()
+            if appDelegate.currentUser.subs == "+" {
+                appDelegate.closeCheckData = true
+                self.appDelegate.favourites = [String]()
+                let a  = self.appDelegate.currentUser.favor.split(separator: ",")
+                if a.isEmpty == false {
+                    print("favor add")
+                    self.appDelegate.favourites.removeAll()
+                    for i in a {
+                        if self.appDelegate.favourites.contains(String(i)) == false {
+                            self.appDelegate.favourites.append(String(i))
+                        }
+                    }
+                }
+            } else {
+                //show alert
+                showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
+                
+            }
         }
         
         
@@ -121,7 +145,8 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         addTapGestureToHideKeyboard1()
     }
     
-    func loadDataWp() {
+    @objc func loadDataWp() {
+        print("subs: \(self.appDelegate.subscribtion)")
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
             print("favor add")
@@ -132,13 +157,13 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                 }
             }
         }
-        if appDelegate.currentUser.subs == "+" {
-            appDelegate.subscribtion = true
+        if appDelegate.subscribtion == true {
+            print("work")
             if showAlert == true {
                 showSub(nameVC: "CheckDataController", alpha: 0.2)
             }
         } else {
-            appDelegate.subscribtion = false
+            print("work2")
             showSub(nameVC: "SubscribeAlert", alpha: 0.2)
         }
         
@@ -368,6 +393,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             }
         }
     }
+    
     
     @IBAction func manufBut(_ sender: Any) {
         from = "Manuf"
@@ -621,17 +647,9 @@ extension CepiaVC {
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        appDelegate.subscribtion = true
         print("appDel is \(appDelegate.closeCheckData)")
-        print("state is \(IAPService.shared.state)")
-        if IAPService.shared.state == "purchasing" {
-            
-        } else if IAPService.shared.state == "purchased" {
-            print("purchased subs")
-        } else if appDelegate.subscribtion == false {
+        if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.")
-        } else {
-            print("error state is \(IAPService.shared.state)")
         }
         
         //при релизе включить
@@ -683,7 +701,7 @@ extension CepiaVC {
         let alert = UIAlertController(title: "Confirm Purchase", message: withText, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
         let subscribeAction = UIAlertAction(title: "Subscribe", style: .default) { (subscribe) in
-            IAPService.shared.purchase(product: .autoRenewingSubs)
+            Store.shared.purachaseProduct()
         }
         alert.addAction(cancelAction)
         alert.addAction(subscribeAction)

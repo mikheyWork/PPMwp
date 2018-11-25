@@ -31,7 +31,17 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        appDelegate.subscribtion = true
+        if Reachability.isConnectedToNetwork() {
+            self.appDelegate.favourites.removeAll()
+        }
+        //        appDelegate.subscribtion = true
+        //        showSub(nameVC: "CheckDataController", alpha: 0.2)
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
+        }
+        
         print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
         searchBarLbl.delegate = self
         
@@ -44,15 +54,14 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         }
         
         //test store
-        IAPService.shared.getProducts()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         rangeChar()
         searchBarChange(searchBar: searchBarLbl)
         showTable()
         index()
+        
+        
     }
-    
-    
     
     override func viewWillAppear(_ animated: Bool) {
         
@@ -102,19 +111,34 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                                 UserDefaults.standard.synchronize()
                                 print("subs2 \(self!.appDelegate.currentUser.subs)")
                                 print("discl2 \(self?.appDelegate.currentUser.disclaimer)")
-                                DispatchQueue.main.async {
-                                    self?.loadDataWp()
-                                }
+                                //                                DispatchQueue.main.async {
+                                self?.loadDataWp()
+                                //
                                 
                             }
                     }
                 }
             }
         } else {
-            loadDataWp()
+            if appDelegate.currentUser.subs == "+" {
+                appDelegate.closeCheckData = true
+                self.appDelegate.favourites = [String]()
+                let a  = self.appDelegate.currentUser.favor.split(separator: ",")
+                if a.isEmpty == false {
+                    print("favor add")
+                    self.appDelegate.favourites.removeAll()
+                    for i in a {
+                        if self.appDelegate.favourites.contains(String(i)) == false {
+                            self.appDelegate.favourites.append(String(i))
+                        }
+                    }
+                }
+            } else {
+                //show alert
+                showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
+                
+            }
         }
-        
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -126,7 +150,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         indexFunc()
     }
     
-    func loadDataWp() {
+    @objc func loadDataWp() {
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
             print("favor add")
@@ -156,6 +180,17 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             vc?.view.backgroundColor = UIColor.white
             self.addChild(vc!)
             self.view.addSubview((vc?.view)!)
+        }
+    }
+    
+    @objc func showCongr() {
+        if Reachability.isConnectedToNetwork() == true {
+            if showAlert == true {
+                //при релизе вкл
+                if appDelegate.subscribtion == true {
+                    showSub(nameVC: "CheckDataController", alpha: 0.2)
+                }
+            }
         }
     }
     
@@ -653,19 +688,19 @@ extension CepiaVCiPad {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         
-        print("state is \(IAPService.shared.state)")
-        if IAPService.shared.state == "purchasing" {
-            let alert = UIAlertController(title: "Wait a minute", message: "Wait until the end of the purchase.", preferredStyle: .alert)
-            let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-            alert.addAction(action)
-            present(alert, animated: true, completion: nil)
-        } else if IAPService.shared.state == "purchased" {
-            print("purchased subs")
-        } else if appDelegate.subscribtion == false {
-            showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.", title: "Confirm Purchase")
-        } else {
-            print("error state is \(IAPService.shared.state)")
-        }
+//        print("state is \(IAPService.shared.state)")
+//        if IAPService.shared.state == "purchasing" {
+//            let alert = UIAlertController(title: "Wait a minute", message: "Wait until the end of the purchase.", preferredStyle: .alert)
+//            let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+//            alert.addAction(action)
+//            present(alert, animated: true, completion: nil)
+//        } else if IAPService.shared.state == "purchased" {
+//            print("purchased subs")
+//        } else if appDelegate.subscribtion == false {
+//            showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.", title: "Confirm Purchase")
+//        } else {
+//            print("error state is \(IAPService.shared.state)")
+//        }
         
         
         if segue.identifier == "showManufacturers" {
@@ -710,7 +745,7 @@ extension CepiaVCiPad {
         let alert = UIAlertController(title: title, message: withText, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
         let subscribeAction = UIAlertAction(title: "Subscribe", style: .default) { (subscribe) in
-            IAPService.shared.purchase(product: .autoRenewingSubs)
+            Store.shared.purachaseProduct()
             
             let alert = UIAlertController(title: "Confirm Purchase", message: "After the subscription, wait until you receive a confirmation of the successful subscription", preferredStyle: .alert)
             let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
