@@ -49,7 +49,6 @@ class Functions: NSObject {
                 print("id is \(id)")
                 if id != nil && id != 0 {
                     print("work0")
-                    
                     let user = User(name: json["name"].stringValue,
                                     password: (self?.appDelegate.currentUser.password!)!,
                                     favor: json["description"].stringValue,
@@ -68,6 +67,9 @@ class Functions: NSObject {
         if appDelegate.favourites.contains(where: {$0 == name}) {
             button.setImage(UIImage(named: "star_active"), for: .normal)
         } else {
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: NSNotification.Name("Star"), object: nil)
+            }
             button.setImage(UIImage(named: "star"), for: .normal)
         }
     }
@@ -78,7 +80,6 @@ class Functions: NSObject {
             if self.appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || self.appDelegate.curentPdfRef.contains(where: {$0.title == name}) == true || self.appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
                 print("name star is \(name)")
                 
-                
                 if self.appDelegate.favourites.contains(name) == true {
                     //delete
                     self.appDelegate.favourites = self.appDelegate.favourites.filter({$0 != name})
@@ -88,51 +89,71 @@ class Functions: NSObject {
                 }
                 favor = self.appDelegate.favourites.joined(separator: ",")
                 print("favor: \(favor!)")
-            }
-            //add to wp
-            let user = self.appDelegate.currentUser.name!
-            let password = self.appDelegate.currentUser.password!
-            let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users/\(self.appDelegate.currentUser.id!)")
-            let credentialData = "\(user):\(password)".data(using: String.Encoding.utf8)!
-            let base64Credentials = credentialData.base64EncodedString(options: [])
-            let headers = ["Authorization": "Basic \(base64Credentials)"]
-            
-            let parameters: Parameters = ["description": favor!]
-            
-            Alamofire.request(url!,
-                              method: .post,
-                              parameters: parameters,
-                              encoding: URLEncoding.default,
-                              headers:headers)
-                .responseJSON { (response) in
-                    guard response.result.value != nil else {
-                        print("json response false: \(response)")
-                        return
+                if Reachability.isConnectedToNetwork() {
+                    //add to wp
+                    let user = self.appDelegate.currentUser.name!
+                    let password = self.appDelegate.currentUser.password!
+                    let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users/\(self.appDelegate.currentUser.id!)")
+                    let credentialData = "\(user):\(password)".data(using: String.Encoding.utf8)!
+                    let base64Credentials = credentialData.base64EncodedString(options: [])
+                    let headers = ["Authorization": "Basic \(base64Credentials)"]
+                    
+                    let parameters: Parameters = ["description": favor!]
+                    
+                    Alamofire.request(url!,
+                                      method: .post,
+                                      parameters: parameters,
+                                      encoding: URLEncoding.default,
+                                      headers:headers)
+                        .responseJSON { (response) in
+                            guard response.result.value != nil else {
+                                print("json response false: \(response)")
+                                return
+                            }
+                            let json = JSON(response.result.value!)
+                            print("json: \(json)")
+                            let id: Int!
+                            id = json["id"].intValue
+                            print("id is \(id)")
+                            if id != nil && id != 0 {
+                                print("work0")
+                                let user = User(name: self.appDelegate.currentUser.name,
+                                                password: self.appDelegate.currentUser.password!,
+                                                favor: json["description"].stringValue,
+                                                id: json["id"].intValue,
+                                                subs: json["first_name"].stringValue,
+                                                disclaimer: json["last_name"].stringValue)
+                                self.appDelegate.currentUser = user
+                                
+                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
+                                UserDefaults.standard.set(encodedData, forKey: "currentUser")
+                                UserDefaults.standard.synchronize()
+                            }
+                            
+                            UserDefaults.standard.set(self.appDelegate.favourites, forKey: "favorArr")
                     }
-                    let json = JSON(response.result.value!)
-                    print("json: \(json)")
-                    let id: Int!
-                    id = json["id"].intValue
-                    print("id is \(id)")
-                    if id != nil && id != 0 {
-                        print("work0")
-                        let user = User(name: self.appDelegate.currentUser.name,
-                                        password: self.appDelegate.currentUser.password!,
-                                        favor: json["description"].stringValue,
-                                        id: json["id"].intValue,
-                                        subs: json["first_name"].stringValue,
-                                        disclaimer: json["last_name"].stringValue)
-                        self.appDelegate.currentUser = user
-                        
-                        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
-                        UserDefaults.standard.set(encodedData, forKey: "currentUser")
-                        UserDefaults.standard.synchronize()
+                    DispatchQueue.main.async {
+                        self.checkStar(name: name, button: button)
                     }
-                    UserDefaults.standard.set(self.appDelegate.favourites, forKey: "favorArr")
+                } else {
+                    let user = User(name: self.appDelegate.currentUser.name,
+                                    password: self.appDelegate.currentUser.password!,
+                                    favor: favor,
+                                    id: self.appDelegate.currentUser.id,
+                                    subs: self.appDelegate.currentUser.subs,
+                                    disclaimer: self.appDelegate.currentUser.disclaimer)
+                    self.appDelegate.currentUser = user
+                    
+                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
+                    UserDefaults.standard.set(encodedData, forKey: "currentUser")
+                    UserDefaults.standard.synchronize()
+                }
+                
+                UserDefaults.standard.set(self.appDelegate.favourites, forKey: "favorArr")
+                }
             }
-            DispatchQueue.main.async {
-                self.checkStar(name: name, button: button)
-            }
+        DispatchQueue.main.async {
+            Functions.shared.checkStar(name: name, button: button)
         }
-    }
+        }
 }

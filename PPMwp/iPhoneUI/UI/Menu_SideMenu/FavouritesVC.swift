@@ -65,6 +65,7 @@ class FavouritesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @objc func updateData() {
+        print("reload")
         self.tableView.reloadData()
     }
     
@@ -102,13 +103,8 @@ extension FavouritesVC {
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1.0)
         cell.selectedBackgroundView = backgroundView
-        
-        if appDelegate.favourites.contains(where: {$0 == cell.prodLbl.text}) {
-            cell.starBut.setImage(UIImage(named: "star_active"), for: .normal)
-        } else {
-            cell.starBut.setImage(UIImage(named: "star"), for: .normal)
-        }
-        
+        print("1")
+        Functions.shared.checkStar(name: cell.prodLbl.text!, button: cell.starBut)
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -135,15 +131,12 @@ extension FavouritesVC {
             let name = sender as! String
             let vs = segue.destination as! VitalStatVC
             vs.name = name
-            
         }
         
         if segue.identifier == "showFavRefer" {
             let name = sender as! String
             let vs = segue.destination as! PDFviewerVC
             vs.name = name
-            
-            
         }
     }
 }

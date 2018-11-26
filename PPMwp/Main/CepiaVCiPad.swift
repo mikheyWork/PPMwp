@@ -27,10 +27,9 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         //off
-        //        appDelegate.subscribtion = true
-        //        showSub(nameVC: "CheckDataController", alpha: 0.2)
+        appDelegate.subscribtion = true
+        showSub(nameVC: "CheckDataController", alpha: 0.2)
         
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
@@ -38,10 +37,12 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             NotificationCenter.default.addObserver(self, selector: #selector(self.showMenu), name: NSNotification.Name("ShowMenu"), object: nil)
         }
         
-        
-        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
-        hideMenu.isHidden = false
-        
+        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!), disc: \(appDelegate.currentUser.disclaimer) ")
+        self.hideMenu.isHidden = false
+        self.showMenu()
+        if Reachability.isConnectedToNetwork() {
+            loadDataWp()
+        }
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
         }
@@ -60,8 +61,6 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     
     override func viewWillAppear(_ animated: Bool) {
         
-        showMenu()
-        
         print("subs \(appDelegate.currentUser.subs)")
         print("discl \(appDelegate.currentUser.disclaimer)")
         
@@ -69,13 +68,16 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             //requset actual data
             DispatchQueue.global(qos: .userInteractive).async {
                 if self.appDelegate.currentUser.id != 0 {
+                    guard self.appDelegate.currentUser != nil && self.appDelegate.currentUser.password != nil else {
+                        print("user is nil")
+                        return
+                    }
                     let user = self.appDelegate.currentUser.name!
                     let password = self.appDelegate.currentUser.password!
                     let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users/\(self.appDelegate.currentUser.id!)")
                     let credentialData = "\(user):\(password)".data(using: String.Encoding.utf8)!
                     let base64Credentials = credentialData.base64EncodedString(options: [])
                     let headers = ["Authorization": "Basic \(base64Credentials)"]
-                    
                     
                     Alamofire.request(url!,
                                       method: .post,
@@ -91,10 +93,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                             print("json: \(json)")
                             let id: Int!
                             id = json["id"].intValue
-                            print("id is \(id)")
                             if id != nil && id != 0 {
-                                print("work0")
-                                
                                 let user = User(name: json["name"].stringValue,
                                                 password: (self?.appDelegate.currentUser.password!)!,
                                                 favor: json["description"].stringValue,
@@ -102,13 +101,11 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                                                 subs: json["first_name"].stringValue,
                                                 disclaimer: json["last_name"].stringValue)
                                 self?.appDelegate.currentUser = user
-                                
                                 let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self!.appDelegate.currentUser!)
                                 UserDefaults.standard.set(encodedData, forKey: "currentUser")
                                 UserDefaults.standard.synchronize()
                                 print("subs2 \(self!.appDelegate.currentUser.subs)")
                                 print("discl2 \(self?.appDelegate.currentUser.disclaimer)")
-                                self?.loadDataWp()
                             }
                     }
                 }
@@ -120,7 +117,10 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                 let a  = self.appDelegate.currentUser.favor.split(separator: ",")
                 if a.isEmpty == false {
                     print("favor add")
-                    self.appDelegate.favourites.removeAll()
+                    if Reachability.isConnectedToNetwork() {
+                        self.appDelegate.favourites.removeAll()
+                    }
+                    
                     for i in a {
                         if self.appDelegate.favourites.contains(String(i)) == false {
                             self.appDelegate.favourites.append(String(i))
@@ -128,8 +128,10 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                     }
                 }
             } else {
-                //show alert
-                showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
+                if appDelegate.currentUser.subs != "+" {
+//                    showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
+                }
+                
             }
         }
     }
@@ -153,34 +155,41 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     
     @objc func loadDataWp() {
+        print("subs: \(self.appDelegate.subscribtion)")
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
             print("favor add")
-            self.appDelegate.favourites.removeAll()
+            if Reachability.isConnectedToNetwork() {
+                self.appDelegate.favourites.removeAll()
+            }
             for i in a {
                 if self.appDelegate.favourites.contains(String(i)) == false {
                     self.appDelegate.favourites.append(String(i))
                 }
             }
         }
+        
         if appDelegate.currentUser.subs == "+" {
-            appDelegate.subscribtion = true
+            print("work")
             if showAlert == true {
-                showSub(nameVC: "CheckDataController", alpha: 0.2)
+                if appDelegate.closeCheckData == false {
+                    showSub(nameVC: "CheckDataController", alpha: 0.2)
+                }
             }
         } else {
-            appDelegate.subscribtion = false
+            print("work2")
             showSub(nameVC: "SubscribeAlert", alpha: 0.2)
         }
+        
         if appDelegate.currentUser.disclaimer == "+" {
             appDelegate.showDisc = true
         } else {
-            appDelegate.showDisc = false
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "DiscAlert")
             
             vc?.view.backgroundColor = UIColor.white
             self.addChild(vc!)
             self.view.addSubview((vc?.view)!)
+            self.appDelegate.showDisc = true
         }
         showMenu()
     }

@@ -10,8 +10,10 @@ class FavorTVCell: UITableViewCell {
     @IBOutlet weak var starBut: UIButton!
     var starActive = false
     
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        Functions.shared.checkStar(name: prodLbl.text!, button: starBut)
     }
     
     @IBAction func starTaped(_ sender: Any) {
@@ -19,6 +21,5 @@ class FavorTVCell: UITableViewCell {
         DispatchQueue.main.async {
              NotificationCenter.default.post(name: NSNotification.Name("Star"), object: nil)
         }
-       
     }
 }

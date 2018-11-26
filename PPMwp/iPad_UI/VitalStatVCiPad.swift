@@ -75,7 +75,7 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         rangeChar(label: nameLbl2)
         Functions.shared.checkStar(name: name, button: starBut)
         indexFunc()
-        checkStar()
+//        checkStar()
 
         //find element
         a = appDelegate.childs.filter({$0.name == name })
@@ -92,7 +92,8 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         self.tableView2.reloadData()
         orient()
         name2 = name
-        checkStar()
+//        checkStar()
+        Functions.shared.checkStar(name: name, button: starBut)
     }
     
     override func viewWillLayoutSubviews() {
@@ -732,7 +733,8 @@ extension VitalStatVCiPad {
                 }
             }
         }
-        checkStar()
+//        checkStar()
+        Functions.shared.checkStar(name: name, button: starBut)
     }
     
     

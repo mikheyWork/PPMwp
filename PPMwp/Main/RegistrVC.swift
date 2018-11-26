@@ -15,8 +15,11 @@ class RegistrVC: UIViewController {
     @IBOutlet weak var rePassText: UITextField!
     @IBOutlet weak var goBut: UIButton!
     
+    @IBOutlet weak var activity: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        activity.isHidden = true
         rangeChar()
         emailText.layer.cornerRadius = 5
         addTapGestureToHideKeyboard()
@@ -49,7 +52,11 @@ class RegistrVC: UIViewController {
         let headers = ["Authorization": "Basic \(base64Credentials)"]
         
         let parameters: Parameters = ["username": emailText.text!, "email": emailText.text!, "password": passwordText.text!]
-      
+        DispatchQueue.main.async {
+            self.activity.isHidden = false
+            self.activity.startAnimating()
+        }
+        DispatchQueue.global(qos: .userInteractive).async {
         Alamofire.request(url!,
                           method: .post,
                           parameters: parameters,
@@ -68,8 +75,16 @@ class RegistrVC: UIViewController {
                 print("answer is \(answer)")
                 if answer == "Invalid parameter(s): email" || answer == "rest_invalid_param" {
                     self.showAlertError(title: "Create Account Failed", withText: "Invalid email address.")
+                    DispatchQueue.main.async {
+                        self.activity.stopAnimating()
+                        self.activity.isHidden = true
+                    }
                 } else if answer == "existing_user_email" || answer == "existing_user_login"  {
                     self.showAlertError(title: "Create Account Failed", withText: "Sorry, that email already exists.")
+                    DispatchQueue.main.async {
+                        self.activity.stopAnimating()
+                        self.activity.isHidden = true
+                    }
                 } else {
                     //
                     let id: Int!
@@ -91,11 +106,14 @@ class RegistrVC: UIViewController {
                         
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "loginAfterRegister", sender: nil)
+                        self.activity.stopAnimating()
+                            self.activity.isHidden = true
                         }
                         
                 }
                 
                 }
+            }
         }
     }
     
@@ -108,9 +126,8 @@ class RegistrVC: UIViewController {
                 return
             }
             if Reachability.isConnectedToNetwork() {
-                DispatchQueue.global().async {
+                
                     self.register()
-                }
             } else {
                 self.showAlertError(title: "Sign In Failed", withText: "No internet connection.")
             }

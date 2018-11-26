@@ -6,6 +6,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     
     
+    @IBOutlet weak var activity: UIActivityIndicatorView!
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var emailLbl: UITextField!
     @IBOutlet weak var passLbl: UITextField!
@@ -24,9 +25,8 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("subs4: \(appDelegate.subscribtion)")
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        activity.isHidden = true
         rangeChar()
         addTapGestureToHideKeyboard()
         buttonChang(senderButton: checkBut, senderSwitch: isChecmarkTaped)
@@ -34,25 +34,14 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         textFieldFont(text: "Email", textField: emailLbl, fontName: "Lato", fontSize: 14.0)
         textFieldFont(text: "Password", textField: passLbl, fontName: "Lato", fontSize: 14.0)
         
-        
         //check sub
         if isChecmarkTaped == true {
-            if path == true {
-                
-            }
             if appDelegate.currentUser != nil {
                 if appDelegate.currentUser.id != 0 {
                     performSegue(withIdentifier: "cepia", sender: nil)
                 }
-                print("go to tap")
             }
-            
         }
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -83,6 +72,10 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         alert.addAction(cancelAction)
         
         self.present(alert, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.activity.stopAnimating()
+            self.activity.isHidden = true
+        }
     }
     
     
@@ -121,7 +114,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         }
         buttonChang(senderButton: checkBut, senderSwitch: isChecmarkTaped)
         UserDefaults.standard.setValue(isChecmarkTaped, forKey: "saved")
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -140,8 +132,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
                 }
             }
         }
-        
-        print("current2 user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!), disc: \(appDelegate.currentUser.disclaimer) ")
         if appDelegate.model == "iPhone"{
             if segue.identifier == "cepia" {
                 let vs = segue.destination as! CepiaVC
@@ -166,7 +156,10 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         let credentialData = "\(user):\(password)".data(using: String.Encoding.utf8)!
         let base64Credentials = credentialData.base64EncodedString(options: [])
         let headers = ["Authorization": "Basic \(base64Credentials)"]
-        
+        DispatchQueue.main.async {
+            self.activity.isHidden = false
+            self.activity.startAnimating()
+        }
         DispatchQueue.global(qos: .userInteractive).async {
             Alamofire.request(url!,
                               method: .post,
