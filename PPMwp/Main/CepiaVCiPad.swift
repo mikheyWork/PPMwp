@@ -12,8 +12,8 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     @IBOutlet weak var searchBarLbl: UISearchBar!
     @IBOutlet weak var showTableView: UIView!
     @IBOutlet weak var tableView: UITableView!
-    
     @IBOutlet weak var tableViewIndex: TableViewIndex!
+    @IBOutlet weak var hideMenu: UIView!
     
     var from: String!
     var showAlert = false
@@ -23,27 +23,24 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     var cars2 = [SearchItem]()
     var isSearching = false
     var progressBar = GTProgressBar()
-    
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if Reachability.isConnectedToNetwork() {
-            self.appDelegate.favourites.removeAll()
-        }
+        //off
         //        appDelegate.subscribtion = true
         //        showSub(nameVC: "CheckDataController", alpha: 0.2)
         
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.showMenu), name: NSNotification.Name("ShowMenu"), object: nil)
         }
         
+        
         print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
-        searchBarLbl.delegate = self
+        hideMenu.isHidden = false
         
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
@@ -58,12 +55,12 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         rangeChar()
         searchBarChange(searchBar: searchBarLbl)
         showTable()
-        index()
-        
-        
+        indexFunc()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        showMenu()
         
         print("subs \(appDelegate.currentUser.subs)")
         print("discl \(appDelegate.currentUser.disclaimer)")
@@ -111,10 +108,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                                 UserDefaults.standard.synchronize()
                                 print("subs2 \(self!.appDelegate.currentUser.subs)")
                                 print("discl2 \(self?.appDelegate.currentUser.disclaimer)")
-                                //                                DispatchQueue.main.async {
                                 self?.loadDataWp()
-                                //
-                                
                             }
                     }
                 }
@@ -136,7 +130,6 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             } else {
                 //show alert
                 showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
-                
             }
         }
     }
@@ -148,6 +141,15 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     override func viewWillLayoutSubviews() {
         indexFunc()
+    }
+    
+    @objc func showMenu() {
+        print("show disc is \(appDelegate.showDisc)")
+        if appDelegate.showDisc == true {
+            hideMenu.isHidden = true
+        } else {
+            hideMenu.isHidden = false
+        }
     }
     
     @objc func loadDataWp() {
@@ -170,17 +172,17 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             appDelegate.subscribtion = false
             showSub(nameVC: "SubscribeAlert", alpha: 0.2)
         }
-        
         if appDelegate.currentUser.disclaimer == "+" {
-            appDelegate.showDisc = false
-        } else {
             appDelegate.showDisc = true
+        } else {
+            appDelegate.showDisc = false
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "DiscAlert")
             
             vc?.view.backgroundColor = UIColor.white
             self.addChild(vc!)
             self.view.addSubview((vc?.view)!)
         }
+        showMenu()
     }
     
     @objc func showCongr() {
@@ -594,8 +596,6 @@ extension CepiaVCiPad {
                     arr1 = appDelegate.curentPdf.filter({$0.model_number == text})
                 }
                 cell.resultsLbl.text = "\(arr1.count) Results"
-                
-                
             }
             if appDelegate.referencesParent.contains(where: {$0.name == text}) {
                 let arr1 = appDelegate.referencesParent.filter({$0.name == text})
@@ -686,22 +686,12 @@ extension CepiaVCiPad {
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        
-//        print("state is \(IAPService.shared.state)")
-//        if IAPService.shared.state == "purchasing" {
-//            let alert = UIAlertController(title: "Wait a minute", message: "Wait until the end of the purchase.", preferredStyle: .alert)
-//            let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
-//            alert.addAction(action)
-//            present(alert, animated: true, completion: nil)
-//        } else if IAPService.shared.state == "purchased" {
-//            print("purchased subs")
-//        } else if appDelegate.subscribtion == false {
-//            showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.", title: "Confirm Purchase")
-//        } else {
-//            print("error state is \(IAPService.shared.state)")
-//        }
-        
+        //off
+        appDelegate.subscribtion = true
+        print("appDel is \(appDelegate.closeCheckData)")
+        if appDelegate.subscribtion == false {
+            showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.", title: "Confirm Purchase")
+        }
         
         if segue.identifier == "showManufacturers" {
             let manuf = segue.destination as! ManufacturersiPad
@@ -760,8 +750,7 @@ extension CepiaVCiPad {
     func showAlertError2(withText: String, title: String) {
         let alert = UIAlertController(title: title, message: withText, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .default) { (cencel) in
-            
-            
+            self.appDelegate.favourites.removeAll()
             for controller in self.navigationController!.viewControllers as Array {
                 if controller.isKind(of: LoginVC.self) {
                     self.navigationController!.popToViewController(controller, animated: true)

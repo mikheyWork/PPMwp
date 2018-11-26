@@ -80,7 +80,7 @@ extension SideMenuVC {
         if segue.identifier == "LogOut" {
             let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")
             self.appDelegate.currentUser = user
-            self.appDelegate.favourites = [String]()
+            self.appDelegate.favourites.removeAll()
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
             UserDefaults.standard.set(encodedData, forKey: "currentUser")
             UserDefaults.standard.synchronize()

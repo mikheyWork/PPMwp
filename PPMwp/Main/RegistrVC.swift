@@ -100,15 +100,21 @@ class RegistrVC: UIViewController {
     }
     
     @IBAction func registrBut(_ sender: Any) {
-        guard let email = emailText.text, let password = passwordText.text, email != "", password != "", rePassText.text != ""  else {
-            showAlertError(title: "Create Account Failed", withText: "Complete the fields.")
-            return
-        }
+        
         
         if passwordText.text == rePassText.text {
-            DispatchQueue.global(qos: .userInteractive).async {
-                self.register()
+            guard let email = emailText.text, let password = passwordText.text, email != "", password != "", rePassText.text != ""  else {
+                showAlertError(title: "Create Account Failed", withText: "Complete the fields.")
+                return
             }
+            if Reachability.isConnectedToNetwork() {
+                DispatchQueue.global().async {
+                    self.register()
+                }
+            } else {
+                self.showAlertError(title: "Sign In Failed", withText: "No internet connection.")
+            }
+            
         } else {
             showAlertError(title: "Create Account Failed", withText: "Passwords don’t match.")
         }
@@ -119,6 +125,20 @@ class RegistrVC: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if appDelegate.currentUser != nil {
+            if appDelegate.currentUser.id != 0 {
+                if appDelegate.currentUser.subs == "+" {
+                    appDelegate.subscribtion = true
+                } else {
+                    appDelegate.subscribtion = false
+                }
+                if appDelegate.currentUser.disclaimer == "+" {
+                    appDelegate.showDisc = true
+                } else {
+                    appDelegate.showDisc = false
+                }
+            }
+        }
         if appDelegate.model == "iPhone"{
             if segue.identifier == "loginAfterRegister" {
                 print("subs3: \(appDelegate.subscribtion)")

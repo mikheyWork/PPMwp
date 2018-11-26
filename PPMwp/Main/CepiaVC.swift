@@ -8,6 +8,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var searchBarLbl: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var hidenMenu: UIView!
     
     var from: String!
     var showAlert = false
@@ -24,19 +25,22 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-//        appDelegate.subscribtion = true
-//        showSub(nameVC: "CheckDataController", alpha: 0.2)
+        //off
+                appDelegate.subscribtion = true
+                showSub(nameVC: "CheckDataController", alpha: 0.2)
         
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.showMenu), name: NSNotification.Name("ShowMenu"), object: nil)
         }
         
-        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!) ")
-        searchBarLbl.delegate = self
-        
+        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!), disc: \(appDelegate.currentUser.disclaimer) ")
+        self.hidenMenu.isHidden = false
+        self.showMenu()
+        if Reachability.isConnectedToNetwork() {
+          loadDataWp()
+        }
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
         }
@@ -51,8 +55,6 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         searchBarChange(searchBar: searchBarLbl)
         showTable()
         index()
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,7 +73,6 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                     let base64Credentials = credentialData.base64EncodedString(options: [])
                     let headers = ["Authorization": "Basic \(base64Credentials)"]
                     
-                    
                     Alamofire.request(url!,
                                       method: .post,
                                       parameters: nil,
@@ -86,10 +87,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                             print("json: \(json)")
                             let id: Int!
                             id = json["id"].intValue
-                            print("id is \(id)")
                             if id != nil && id != 0 {
-                                print("work0")
-                                
                                 let user = User(name: json["name"].stringValue,
                                                 password: (self?.appDelegate.currentUser.password!)!,
                                                 favor: json["description"].stringValue,
@@ -97,16 +95,11 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                                                 subs: json["first_name"].stringValue,
                                                 disclaimer: json["last_name"].stringValue)
                                 self?.appDelegate.currentUser = user
-                                
                                 let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self!.appDelegate.currentUser!)
                                 UserDefaults.standard.set(encodedData, forKey: "currentUser")
                                 UserDefaults.standard.synchronize()
                                 print("subs2 \(self!.appDelegate.currentUser.subs)")
                                 print("discl2 \(self?.appDelegate.currentUser.disclaimer)")
-//                                DispatchQueue.main.async {
-                                    self?.loadDataWp()
-//
-                                
                             }
                     }
                 }
@@ -126,19 +119,9 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                     }
                 }
             } else {
-                //show alert
                 showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
-                
             }
         }
-        
-        
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        
     }
     
     override func viewWillLayoutSubviews() {
@@ -157,10 +140,13 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                 }
             }
         }
-        if appDelegate.subscribtion == true {
+        
+        if appDelegate.currentUser.subs == "+" {
             print("work")
             if showAlert == true {
-                showSub(nameVC: "CheckDataController", alpha: 0.2)
+                if appDelegate.closeCheckData == false {
+                    showSub(nameVC: "CheckDataController", alpha: 0.2)
+                }
             }
         } else {
             print("work2")
@@ -168,14 +154,24 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         }
         
         if appDelegate.currentUser.disclaimer == "+" {
-            appDelegate.showDisc = false
-        } else {
             appDelegate.showDisc = true
+        } else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "DiscAlert")
             
             vc?.view.backgroundColor = UIColor.white
             self.addChild(vc!)
             self.view.addSubview((vc?.view)!)
+            self.appDelegate.showDisc = true
+        }
+        showMenu()
+    }
+    
+    @objc func showMenu() {
+        print("show disc is \(appDelegate.showDisc)")
+        if appDelegate.showDisc == true {
+            hidenMenu.isHidden = true
+        } else {
+            hidenMenu.isHidden = false
         }
     }
     
@@ -376,6 +372,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     func showSub(nameVC: String, alpha: Double) {
+        print("showSub: \(nameVC) ")
         let vc = self.storyboard?.instantiateViewController(withIdentifier: nameVC)
         
         vc?.view.backgroundColor = UIColor.gray.withAlphaComponent(CGFloat(alpha))
@@ -384,6 +381,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     @objc func showCongr() {
+        print("subsssss")
         if Reachability.isConnectedToNetwork() == true {
             if showAlert == true {
                 //при релизе вкл
@@ -647,6 +645,7 @@ extension CepiaVC {
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        appDelegate.subscribtion = true
         print("appDel is \(appDelegate.closeCheckData)")
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.")
@@ -711,7 +710,7 @@ extension CepiaVC {
     func showAlertError2(withText: String, title: String) {
         let alert = UIAlertController(title: title, message: withText, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .default) { (cencel) in
-            
+            self.appDelegate.favourites.removeAll()
             for controller in self.navigationController!.viewControllers as Array {
                 if controller.isKind(of: LoginVC.self) {
                     self.navigationController!.popToViewController(controller, animated: true)

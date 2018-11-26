@@ -96,7 +96,11 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         }
         
         print("aaa2")
+        if Reachability.isConnectedToNetwork() {
         logIn()
+        } else {
+             showAlertError(title: "Sign In Failed", withText: "No internet connection.")
+        }
         
     }
     
@@ -121,6 +125,23 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if appDelegate.currentUser != nil {
+            if appDelegate.currentUser.id != 0 {
+                if appDelegate.currentUser.subs == "+" {
+                    appDelegate.subscribtion = true
+                } else {
+                    appDelegate.subscribtion = false
+                }
+                if appDelegate.currentUser.disclaimer == "+" {
+                    appDelegate.showDisc = true
+                } else {
+                    appDelegate.showDisc = false
+                }
+            }
+        }
+        
+        print("current2 user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!), disc: \(appDelegate.currentUser.disclaimer) ")
         if appDelegate.model == "iPhone"{
             if segue.identifier == "cepia" {
                 let vs = segue.destination as! CepiaVC
@@ -133,6 +154,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    
     
     func logIn() {
         
@@ -147,7 +169,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         
         DispatchQueue.global(qos: .userInteractive).async {
             Alamofire.request(url!,
-                              method: .get,
+                              method: .post,
                               parameters: nil,
                               encoding: URLEncoding.default,
                               headers:headers)
@@ -172,9 +194,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
                     id = json["id"].intValue
                     if id != nil && id != 0 {
                         //                    print("work0")
-                        DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "cepia", sender: nil)
-                        }
                         let user = User(name: json["name"].stringValue,
                                         password: self.passLbl.text!,
                                         favor: json["description"].stringValue,
@@ -186,6 +205,10 @@ class LoginVC: UIViewController, UITextFieldDelegate {
                         let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
                         UserDefaults.standard.set(encodedData, forKey: "currentUser")
                         UserDefaults.standard.synchronize()
+                        print("json disc \(json["last_name"].stringValue)")
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: "cepia", sender: nil)
+                        }
                     }
             }
         }

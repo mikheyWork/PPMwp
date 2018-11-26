@@ -1,11 +1,3 @@
-//
-//  Network.swift
-//  WP.m.1
-//
-//  Created by softevol on 9/25/18.
-//  Copyright © 2018 softevol. All rights reserved.
-//
-
 import Foundation
 import SystemConfiguration
 

@@ -82,7 +82,7 @@ class Store: NSObject {
             }
             UserDefaults.standard.set(self.appDelegate.subscribtion, forKey: "subscribe2")
             print("subs99 is \(self.appDelegate.subscribtion)")
-            NotificationCenter.default.post(name: NSNotification.Name("CheckSub"), object: nil)
+//            NotificationCenter.default.post(name: NSNotification.Name("CheckSub"), object: nil)
             
         }
     }

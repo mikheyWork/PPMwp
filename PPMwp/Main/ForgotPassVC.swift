@@ -110,11 +110,14 @@ class ForgotPassVC: UIViewController {
     @IBAction func requestBut(_ sender: Any) {
         
         guard emailLbl.text != "" else { return }
-        //
         
-        DispatchQueue.global(qos: .userInteractive).async {
-            self.forgotReq(page: 1)
-        }
+            if Reachability.isConnectedToNetwork() {
+                DispatchQueue.global(qos: .userInteractive).async {
+                self.forgotReq(page: 1)
+                }
+            } else {
+                showAlertError(title: "Request Failed", withText: "No internet connection")
+            }
     }
         @IBAction func backBut(_ sender: Any) {
             navigationController?.popViewController(animated: true)

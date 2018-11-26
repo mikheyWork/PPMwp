@@ -24,7 +24,7 @@ class SubscribeAlert: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-                if appDelegate.closeCheckData == true {
+        if appDelegate.closeCheckData == true {
             self.removeFromParent()
             self.view.removeFromSuperview()
         }
@@ -40,8 +40,8 @@ class SubscribeAlert: UIViewController {
     
     @IBAction func subscribeButTaped(_ sender: Any) {
         if Reachability.isConnectedToNetwork() {
-        Store.shared.purachaseProduct()
-        print("a")
+            Store.shared.purachaseProduct()
+            print("a")
         }
         
         
@@ -60,9 +60,7 @@ class SubscribeAlert: UIViewController {
         
         let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")
         self.appDelegate.currentUser = user
-        if Reachability.isConnectedToNetwork() {
-            self.appDelegate.favourites.removeAll()
-        }
+        self.appDelegate.favourites.removeAll()
         let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
         UserDefaults.standard.set(encodedData, forKey: "currentUser")
         UserDefaults.standard.synchronize()
