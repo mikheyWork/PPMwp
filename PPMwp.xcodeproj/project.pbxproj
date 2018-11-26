@@ -10,6 +10,8 @@
 		42B2E90F3D846FC6F4D65F7E /* Pods_PPMwpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC6D9DB90CB4AE57711F257 /* Pods_PPMwpTests.framework */; };
 		76CCD57BD3C552707E18D4B3 /* Pods_PPMwp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC733A0D9A2634164F1D958A /* Pods_PPMwp.framework */; };
 		E4C1008833CDF1686B4957F5 /* Pods_PPMwpUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A567E4C05AC689606A2FE78 /* Pods_PPMwpUITests.framework */; };
+		FF12405221A7F6D800D13EE4 /* MailSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF12405121A7F6D800D13EE4 /* MailSender.swift */; };
+		FF12408F21A8390500D13EE4 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF12408E21A8390500D13EE4 /* Store.swift */; };
 		FF1B3DA321A6C9B1004473A5 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1B3DA221A6C9B1004473A5 /* Functions.swift */; };
 		FFC1D61821A592A100F4EDC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFC1D61721A592A100F4EDC1 /* Assets.xcassets */; };
 		FFC1D62621A592A100F4EDC1 /* PPMwpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D62521A592A100F4EDC1 /* PPMwpTests.swift */; };
@@ -55,8 +57,6 @@
 		FFC1D69B21A5947200F4EDC1 /* DiscAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D69821A5947200F4EDC1 /* DiscAlert.swift */; };
 		FFC1D69C21A5947200F4EDC1 /* SubscribeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D69921A5947200F4EDC1 /* SubscribeAlert.swift */; };
 		FFC1D69D21A5947200F4EDC1 /* CheckData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D69A21A5947200F4EDC1 /* CheckData.swift */; };
-		FFC1D6A121A5949100F4EDC1 /* IAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D69F21A5949100F4EDC1 /* IAPService.swift */; };
-		FFC1D6A221A5949100F4EDC1 /* IAPProd.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6A021A5949100F4EDC1 /* IAPProd.swift */; };
 		FFC1D6B221A594B200F4EDC1 /* CepiaCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6A421A594B200F4EDC1 /* CepiaCVCell.swift */; };
 		FFC1D6B321A594B200F4EDC1 /* AlertsTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6A521A594B200F4EDC1 /* AlertsTVCell.swift */; };
 		FFC1D6B421A594B200F4EDC1 /* Ref2TVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC1D6A621A594B200F4EDC1 /* Ref2TVCell.swift */; };
@@ -136,6 +136,9 @@
 		EC733A0D9A2634164F1D958A /* Pods_PPMwp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PPMwp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE8C02E2B43302FD2A1A6618 /* Pods-PPMwpUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PPMwpUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PPMwpUITests/Pods-PPMwpUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FB6A83A285C437FE7C23DBD9 /* Pods-PPMwp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PPMwp.release.xcconfig"; path = "Pods/Target Support Files/Pods-PPMwp/Pods-PPMwp.release.xcconfig"; sourceTree = "<group>"; };
+		FF12405021A7F43500D13EE4 /* PPMwp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PPMwp-Bridging-Header.h"; sourceTree = "<group>"; };
+		FF12405121A7F6D800D13EE4 /* MailSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailSender.swift; sourceTree = "<group>"; };
+		FF12408E21A8390500D13EE4 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		FF1B3DA221A6C9B1004473A5 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		FFC1D60D21A5929F00F4EDC1 /* PPMwp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PPMwp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFC1D61721A592A100F4EDC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -187,8 +190,6 @@
 		FFC1D69821A5947200F4EDC1 /* DiscAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscAlert.swift; sourceTree = "<group>"; };
 		FFC1D69921A5947200F4EDC1 /* SubscribeAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscribeAlert.swift; sourceTree = "<group>"; };
 		FFC1D69A21A5947200F4EDC1 /* CheckData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckData.swift; sourceTree = "<group>"; };
-		FFC1D69F21A5949100F4EDC1 /* IAPService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPService.swift; sourceTree = "<group>"; };
-		FFC1D6A021A5949100F4EDC1 /* IAPProd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPProd.swift; sourceTree = "<group>"; };
 		FFC1D6A421A594B200F4EDC1 /* CepiaCVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CepiaCVCell.swift; sourceTree = "<group>"; };
 		FFC1D6A521A594B200F4EDC1 /* AlertsTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertsTVCell.swift; sourceTree = "<group>"; };
 		FFC1D6A621A594B200F4EDC1 /* Ref2TVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ref2TVCell.swift; sourceTree = "<group>"; };
@@ -328,6 +329,7 @@
 				FFC1D61C21A592A100F4EDC1 /* Info.plist */,
 				FFC1D70921A5953E00F4EDC1 /* GoogleService-Info.plist */,
 				FFC1D70B21A5954A00F4EDC1 /* Model.xcdatamodeld */,
+				FF12405021A7F43500D13EE4 /* PPMwp-Bridging-Header.h */,
 			);
 			path = PPMwp;
 			sourceTree = "<group>";
@@ -470,8 +472,7 @@
 		FFC1D69E21A5948600F4EDC1 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				FFC1D6A021A5949100F4EDC1 /* IAPProd.swift */,
-				FFC1D69F21A5949100F4EDC1 /* IAPService.swift */,
+				FF12408E21A8390500D13EE4 /* Store.swift */,
 			);
 			name = Store;
 			sourceTree = "<group>";
@@ -522,6 +523,7 @@
 				FFC1D6D121A594F000F4EDC1 /* Network.swift */,
 				FFC1D6CD21A594EF00F4EDC1 /* PDFDownloader.swift */,
 				FF1B3DA221A6C9B1004473A5 /* Functions.swift */,
+				FF12405121A7F6D800D13EE4 /* MailSender.swift */,
 				FFC1D61721A592A100F4EDC1 /* Assets.xcassets */,
 				FFC1D6E021A594F800F4EDC1 /* launch.xcassets */,
 				FFC1D6E221A5951900F4EDC1 /* fonts */,
@@ -725,6 +727,7 @@
 				"${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyStoreKit/SwiftyStoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/skpsmtpmessage/skpsmtpmessage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -736,6 +739,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SideMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyStoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/skpsmtpmessage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -832,6 +836,7 @@
 				FFC1D69621A5942E00F4EDC1 /* ReferencesVCiPad.swift in Sources */,
 				FFC1D67721A593D300F4EDC1 /* Product2.swift in Sources */,
 				FFC1D6C921A594CD00F4EDC1 /* PdfDocumentInfo.swift in Sources */,
+				FF12405221A7F6D800D13EE4 /* MailSender.swift in Sources */,
 				FFC1D6B921A594B200F4EDC1 /* VitalTVCell.swift in Sources */,
 				FFC1D6B321A594B200F4EDC1 /* AlertsTVCell.swift in Sources */,
 				FFC1D6CA21A594CD00F4EDC1 /* PdfDocumentInfoRef.swift in Sources */,
@@ -840,7 +845,6 @@
 				FFC1D65621A5937500F4EDC1 /* Product.swift in Sources */,
 				FFC1D66521A5939200F4EDC1 /* FeedBackVC.swift in Sources */,
 				FFC1D6B721A594B200F4EDC1 /* RefTVCell.swift in Sources */,
-				FFC1D6A221A5949100F4EDC1 /* IAPProd.swift in Sources */,
 				FFC1D67F21A593FD00F4EDC1 /* ManufacturersiPad.swift in Sources */,
 				FFC1D66921A5939200F4EDC1 /* DisclaimerVC.swift in Sources */,
 				FFC1D69B21A5947200F4EDC1 /* DiscAlert.swift in Sources */,
@@ -848,7 +852,7 @@
 				FFC1D6DF21A594F000F4EDC1 /* AppDelegate.swift in Sources */,
 				FFC1D65921A5937500F4EDC1 /* PDFviewerVC.swift in Sources */,
 				FFC1D6B821A594B200F4EDC1 /* ManufacturersTVCell.swift in Sources */,
-				FFC1D6A121A5949100F4EDC1 /* IAPService.swift in Sources */,
+				FF12408F21A8390500D13EE4 /* Store.swift in Sources */,
 				FFC1D65821A5937500F4EDC1 /* VitalStatVC.swift in Sources */,
 				FFC1D64921A592BE00F4EDC1 /* RegistrVC.swift in Sources */,
 				FFC1D68A21A5940F00F4EDC1 /* AlertsVCiPad.swift in Sources */,
@@ -1049,6 +1053,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM.Genius3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PPMwp/PPMwp-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1069,6 +1074,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mikhey.PPM.Genius3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PPMwp/PPMwp-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

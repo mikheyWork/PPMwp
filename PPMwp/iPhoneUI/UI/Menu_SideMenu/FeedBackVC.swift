@@ -12,6 +12,8 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
     let placeholder = "Message"
     
     override func viewDidLoad() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showAlert), name: NSNotification.Name("Alert2"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showAlert2), name: NSNotification.Name("Alert"), object: nil)
         super.viewDidLoad()
         sendBut.layer.cornerRadius = 5
         textViewChange()
@@ -44,23 +46,23 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     //mail
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func sendEmail(text: String, email: String, subject: String) {
-        if MFMailComposeViewController.canSendMail() {
-            let mail = MFMailComposeViewController()
-            mail.mailComposeDelegate = self
-            mail.setToRecipients([email])
-            mail.setMessageBody("<p>\(text)</p>", isHTML: true)
-            mail.setSubject(subject)
-            present(mail, animated: true)
-            showAlertError(text: "Profit", withText: "Profi2")
-        } else {
-            // show failure alert
-        }
-    }
+//    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+//        dismiss(animated: true, completion: nil)
+//    }
+//
+//    func sendEmail(text: String, email: String, subject: String) {
+//        if MFMailComposeViewController.canSendMail() {
+//            let mail = MFMailComposeViewController()
+//            mail.mailComposeDelegate = self
+//            mail.setToRecipients([email])
+//            mail.setMessageBody("<p>\(text)</p>", isHTML: true)
+//            mail.setSubject(subject)
+//            present(mail, animated: true)
+//            showAlertError(text: "Profit", withText: "Profi2")
+//        } else {
+//            // show failure alert
+//        }
+//    }
     
     func showAlertError(text: String ,withText: String) {
         let alert = UIAlertController(title: text, message: withText, preferredStyle: .alert)
@@ -74,7 +76,7 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
         guard subjText.text != "", textView.text != "" else {
             return
         }
-        sendEmail(text: textView.text , email: "team@qubasoft.com", subject: subjText.text! )
+        MailSender.shared.sendEmail(subject: subjText.text!, body: textView.text!, mail: "vlm.softevol@gmail.com")
     }
     
     @IBAction func backBut(_ sender: Any) {
@@ -113,6 +115,26 @@ extension FeedBackVC: UITextViewDelegate {
             textView.textColor = UIColor(red: 143/255, green: 150/255, blue: 158/255, alpha: 1)
             textView.font = UIFont(name: "Lato", size: 14.0)
         }
+    }
+    
+    @objc func showAlert() {
+        let alert = UIAlertController(title: "Success", message: "The letter was sent.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alert.addAction(action)
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    @objc func showAlert2() {
+        let alert = UIAlertController(title: "Failed", message: "Failed request", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alert.addAction(action)
+        
+        self.present(alert, animated: true, completion: nil)
+        
     }
 }
 

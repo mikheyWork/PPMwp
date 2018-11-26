@@ -106,6 +106,9 @@ class CheckDataController: UIViewController {
         
         Alamofire.request(url!, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             
+            guard response.result.value != nil else {
+                return
+            }
             let json = JSON(response.result.value!)
             let resaults = json[].arrayValue
             guard resaults.isEmpty == false else {
@@ -231,6 +234,9 @@ class CheckDataController: UIViewController {
         }
         
         Alamofire.request(url!, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
+            guard response.result.value != nil else {
+                return
+            }
             let json = JSON(response.result.value!)
             let resaults = json[].arrayValue
             guard resaults.isEmpty == false else {

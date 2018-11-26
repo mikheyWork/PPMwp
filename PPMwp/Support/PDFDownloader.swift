@@ -1,11 +1,3 @@
-//
-//  PDFDownloader.swift
-//  PPM
-//
-//  Created by softevol on 10/31/18.
-//  Copyright © 2018 softevol. All rights reserved.
-//
-
 import Foundation
 
 

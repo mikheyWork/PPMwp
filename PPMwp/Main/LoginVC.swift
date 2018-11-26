@@ -17,13 +17,15 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     var path = UserDefaults.standard.bool(forKey: "saved2")
     
     var showSubAlert = false
-
+    
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("subs4: \(appDelegate.subscribtion)")
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         rangeChar()
         addTapGestureToHideKeyboard()
@@ -38,10 +40,13 @@ class LoginVC: UIViewController, UITextFieldDelegate {
             if path == true {
                 
             }
-            if appDelegate.currentUser.id != 0 {
-                performSegue(withIdentifier: "cepia", sender: nil)
+            if appDelegate.currentUser != nil {
+                if appDelegate.currentUser.id != 0 {
+                    performSegue(withIdentifier: "cepia", sender: nil)
+                }
+                print("go to tap")
             }
-            print("go to tap")
+            
         }
         
     }
@@ -89,8 +94,13 @@ class LoginVC: UIViewController, UITextFieldDelegate {
             showAlertError(title: "Sign In Failed", withText: "Complete the fields.")
             return
         }
+        
         print("aaa2")
+        if Reachability.isConnectedToNetwork() {
         logIn()
+        } else {
+             showAlertError(title: "Sign In Failed", withText: "No internet connection.")
+        }
         
     }
     
@@ -115,6 +125,23 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if appDelegate.currentUser != nil {
+            if appDelegate.currentUser.id != 0 {
+                if appDelegate.currentUser.subs == "+" {
+                    appDelegate.subscribtion = true
+                } else {
+                    appDelegate.subscribtion = false
+                }
+                if appDelegate.currentUser.disclaimer == "+" {
+                    appDelegate.showDisc = true
+                } else {
+                    appDelegate.showDisc = false
+                }
+            }
+        }
+        
+        print("current2 user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!), disc: \(appDelegate.currentUser.disclaimer) ")
         if appDelegate.model == "iPhone"{
             if segue.identifier == "cepia" {
                 let vs = segue.destination as! CepiaVC
@@ -128,6 +155,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         }
     }
     
+    
     func logIn() {
         
         guard let user = emailLbl.text, let password = passLbl.text, user != "", password != "" else {
@@ -139,35 +167,50 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         let base64Credentials = credentialData.base64EncodedString(options: [])
         let headers = ["Authorization": "Basic \(base64Credentials)"]
         
-        Alamofire.request(url!,
-                          method: .get,
-                          parameters: nil,
-                          encoding: URLEncoding.default,
-                          headers:headers)
-            .responseJSON { (response) in
-                guard response.result.value != nil else {
-                    print("json response false: \(response)")
-                    return
-                }
-                let json = JSON(response.result.value!)
-//                print("json: \(json)")
-                let id: Int!
-                id = json["id"].intValue
-                if id != nil && id != 0 {
-//                    print("work0")
-                    self.performSegue(withIdentifier: "cepia", sender: nil)
-                    let user = User(name: json["name"].stringValue,
-                                    password: self.passLbl.text!,
-                                    favor: json["description"].stringValue,
-                                    id: json["id"].intValue,
-                                    subs: json["first_name"].stringValue,
-                                    disclaimer: json["last_name"].stringValue)
-                    self.appDelegate.currentUser = user
-                    
-                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
-                    UserDefaults.standard.set(encodedData, forKey: "currentUser")
-                    UserDefaults.standard.synchronize()
-                }
+        DispatchQueue.global(qos: .userInteractive).async {
+            Alamofire.request(url!,
+                              method: .post,
+                              parameters: nil,
+                              encoding: URLEncoding.default,
+                              headers:headers)
+                .responseJSON { (response) in
+                    guard response.result.value != nil else {
+                        print("json response false: \(response)")
+                        return
+                    }
+                    let json = JSON(response.result.value!)
+                    print("json: \(json)")
+                    //error handle
+                    var answer = ""
+                    answer = json["code"].stringValue
+                    print("answer is \(answer)")
+                    if answer == "invalid_username" || answer == "invalid_email"{
+                        self.showAlertError(title: "Sign In Failed", withText: "Username was not found.")
+                    } else if answer == "incorrect_password" {
+                        self.showAlertError(title: "Sign In Failed", withText: "Incorrect password.")
+                    }
+                    //
+                    let id: Int!
+                    id = json["id"].intValue
+                    if id != nil && id != 0 {
+                        //                    print("work0")
+                        let user = User(name: json["name"].stringValue,
+                                        password: self.passLbl.text!,
+                                        favor: json["description"].stringValue,
+                                        id: json["id"].intValue,
+                                        subs: json["first_name"].stringValue,
+                                        disclaimer: json["last_name"].stringValue)
+                        self.appDelegate.currentUser = user
+                        
+                        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
+                        UserDefaults.standard.set(encodedData, forKey: "currentUser")
+                        UserDefaults.standard.synchronize()
+                        print("json disc \(json["last_name"].stringValue)")
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: "cepia", sender: nil)
+                        }
+                    }
+            }
         }
     }
 }
