@@ -20,6 +20,7 @@ class ReferencesVC2: UIViewController, UITableViewDataSource, UITableViewDelegat
         super.viewDidLoad()
         rangeChar()
         indexFunc()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

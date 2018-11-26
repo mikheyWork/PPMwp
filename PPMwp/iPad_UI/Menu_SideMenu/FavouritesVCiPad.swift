@@ -28,6 +28,17 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     var name2 = ""
     override func viewDidLoad() {
         
+        let a  = self.appDelegate.currentUser.favor.split(separator: ",")
+        if a.isEmpty == false {
+            print("favor add")
+            self.appDelegate.favourites.removeAll()
+            for i in a {
+                if self.appDelegate.favourites.contains(String(i)) == false {
+                    self.appDelegate.favourites.append(String(i))
+                }
+            }
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(updateData ), name: NSNotification.Name("Star"), object: nil)
         
         progressView.isHidden = true

@@ -81,6 +81,10 @@
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bv0-vQ-Ma0">
+                                <rect key="frame" x="177" y="463" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -90,6 +94,7 @@
                         <viewLayoutGuide key="safeArea" id="jT5-9B-Nz2"/>
                     </view>
                     <connections>
+                        <outlet property="activity" destination="bv0-vQ-Ma0" id="YSw-xo-KIu"/>
                         <outlet property="emailLbl" destination="8wr-ym-hH6" id="kLF-hi-8Zf"/>
                         <outlet property="nameLbl" destination="MFH-Yb-5LK" id="tPn-eg-HO5"/>
                         <outlet property="reqBut" destination="s3I-zw-csU" id="Q1l-xU-QyW"/>
@@ -205,6 +210,10 @@
                                 <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="WBE-dn-gYB">
+                                <rect key="frame" x="176" y="493" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="bh8-du-2GK"/>
@@ -212,12 +221,13 @@
                     <navigationItem key="navigationItem" id="srK-Sa-mAd"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="activity" destination="WBE-dn-gYB" id="dta-YL-k9D"/>
                         <outlet property="checkBut" destination="oYi-ka-fQ5" id="kE1-iY-TFB"/>
                         <outlet property="emailLbl" destination="wJq-35-MJd" id="b4x-5m-m7e"/>
                         <outlet property="goBut" destination="EuD-zN-rqM" id="F2y-Lt-WET"/>
                         <outlet property="nameLbl" destination="WMC-88-BJh" id="RqV-jW-wKN"/>
                         <outlet property="passLbl" destination="aCw-fy-6A6" id="9ZO-qN-Yw8"/>
-                        <segue destination="Mw8-ZR-kIx" kind="show" identifier="cepia" animates="NO" id="aBX-YF-f82"/>
+                        <segue destination="Mw8-ZR-kIx" kind="show" identifier="cepia" id="aBX-YF-f82"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1C-IV-cdz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1683,6 +1693,10 @@
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="I2h-eG-8q4">
+                                <rect key="frame" x="176" y="531" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -1692,12 +1706,13 @@
                         <viewLayoutGuide key="safeArea" id="lm1-pI-UBC"/>
                     </view>
                     <connections>
+                        <outlet property="activity" destination="I2h-eG-8q4" id="1Wp-yJ-S3T"/>
                         <outlet property="emailText" destination="2ia-ua-MUd" id="qpl-gH-rcb"/>
                         <outlet property="goBut" destination="oyr-sp-6ds" id="3Kn-3S-lTe"/>
                         <outlet property="nameLbl" destination="L6X-TE-PSh" id="leQ-HF-Lqa"/>
                         <outlet property="passwordText" destination="dvm-8n-Xsc" id="h2v-Eu-nIw"/>
                         <outlet property="rePassText" destination="DHj-DI-uTh" id="ZrU-LC-txl"/>
-                        <segue destination="Mw8-ZR-kIx" kind="show" identifier="loginAfterRegister" animates="NO" id="HOx-ro-PbH"/>
+                        <segue destination="Mw8-ZR-kIx" kind="show" identifier="loginAfterRegister" id="HOx-ro-PbH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KSr-6N-YtN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3089,7 +3104,7 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
         <image name="star" width="22" height="21"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HOx-ro-PbH"/>
+        <segue reference="aBX-YF-f82"/>
         <segue reference="jvs-qd-sBY"/>
         <segue reference="SDY-ab-mWa"/>
         <segue reference="M9s-x2-Hn4"/>

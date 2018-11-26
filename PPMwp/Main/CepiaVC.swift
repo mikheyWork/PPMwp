@@ -66,16 +66,21 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             //requset actual data
             DispatchQueue.global(qos: .userInteractive).async {
                 if self.appDelegate.currentUser.id != 0 {
+                    guard self.appDelegate.currentUser != nil && self.appDelegate.currentUser.password != nil else {
+                        print("user is nil")
+                        return
+                    }
                     let user = self.appDelegate.currentUser.name!
                     let password = self.appDelegate.currentUser.password!
                     let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users/\(self.appDelegate.currentUser.id!)")
                     let credentialData = "\(user):\(password)".data(using: String.Encoding.utf8)!
                     let base64Credentials = credentialData.base64EncodedString(options: [])
                     let headers = ["Authorization": "Basic \(base64Credentials)"]
+                    let parameters = ["nickname" : self.appDelegate.currentUser.password!]
                     
                     Alamofire.request(url!,
                                       method: .post,
-                                      parameters: nil,
+                                      parameters: parameters,
                                       encoding: URLEncoding.default,
                                       headers:headers)
                         .responseJSON { [weak self] (response) in
@@ -119,7 +124,9 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                     }
                 }
             } else {
-                showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
+                if appDelegate.currentUser.subs != "+" {
+//                    showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
+                }
             }
         }
     }

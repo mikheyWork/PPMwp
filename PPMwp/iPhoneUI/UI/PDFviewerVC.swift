@@ -41,7 +41,7 @@ class PDFviewerVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        Functions.shared.checkStar(name: name, button: starBut)
         progressA.progress = 0.0
     }
     
@@ -113,6 +113,7 @@ class PDFviewerVC: UIViewController {
     
     @IBAction func starBut(_ sender: Any) {
         Functions.shared.sendFavorInfo(name: name, button: starBut)
+        Functions.shared.checkStar(name: name, button: starBut)
     }
     
 }

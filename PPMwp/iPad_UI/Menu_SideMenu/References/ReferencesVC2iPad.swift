@@ -38,11 +38,17 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
         rangeChar()
         name2 = name
         checkState()
+        Functions.shared.checkStar(name: name2, button: starBut)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
+        print("name2 \(name2)")
+        for i in appDelegate.favourites {
+            print("i \(i)")
+        }
+        Functions.shared.checkStar(name: name2, button: starBut)
         
     }
     
@@ -52,7 +58,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     
     override func viewWillLayoutSubviews() {
         self.tableView.reloadData()
-        Functions.shared.checkStar(name: name, button: starBut)
+        Functions.shared.checkStar(name: name2, button: starBut)
         indexFunc()
     }
     
@@ -163,7 +169,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     @IBAction func starButTaped(_ sender: Any) {
-        
+        print("name2 \(name2)")
         Functions.shared.sendFavorInfo(name: name2, button: starBut)
     }
     
@@ -302,6 +308,7 @@ extension ReferencesVC2iPad {
         
         let arr1 = appDelegate.referencesChild.filter({$0.name == text})
         print("arr1 \(arr1.first?.name)")
+        
         let arr2 = appDelegate.referencesChild.filter({$0.parent == arr1.first?.id})
         if arr2.isEmpty == true {
             name2 = text
@@ -324,7 +331,7 @@ extension ReferencesVC2iPad {
             index()
             tableView.reloadData()
         }
-
+        Functions.shared.checkStar(name: name2, button: starBut)
         checkState()
     }
     
