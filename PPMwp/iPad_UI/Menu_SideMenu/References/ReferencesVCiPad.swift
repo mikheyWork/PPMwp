@@ -278,7 +278,7 @@ extension ReferencesVCiPad {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        tableView.reloadData()
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! RefTVCell
         let text = selectedCell.nameLbl.text

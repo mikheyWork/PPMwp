@@ -117,21 +117,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if appDelegate.currentUser != nil {
-            if appDelegate.currentUser.id != 0 {
-                if appDelegate.currentUser.subs == "+" {
-                    appDelegate.subscribtion = true
-                } else {
-                    appDelegate.subscribtion = false
-                }
-                if appDelegate.currentUser.disclaimer == "+" {
-                    appDelegate.showDisc = true
-                } else {
-                    appDelegate.showDisc = false
-                }
-            }
-        }
         if appDelegate.model == "iPhone"{
             if segue.identifier == "cepia" {
                 let vs = segue.destination as! CepiaVC
