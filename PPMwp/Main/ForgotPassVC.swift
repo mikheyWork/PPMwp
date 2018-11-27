@@ -76,7 +76,6 @@ class ForgotPassVC: UIViewController {
                 
                 let json = JSON(response.result.value!)
                 let resaults = json[].arrayValue
-                print("json: \(json)")
                 if resaults.count == 100 {
                     print("page is full, page is \(page)")
                     self.forgotReq(page: page + 1)
@@ -84,10 +83,8 @@ class ForgotPassVC: UIViewController {
                     print("not full page")
                 }
                 for resault in resaults {
-                    print("email \(resault["name"].stringValue)")
                     if self.emailLbl.text == resault["name"].stringValue {
                         self.id = resault["id"].intValue
-                        print("woooow")
                         self.mailTrue = true
                         //delete current user
                         let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")

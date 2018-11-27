@@ -41,7 +41,6 @@ class SubscribeAlert: UIViewController {
     @IBAction func subscribeButTaped(_ sender: Any) {
         if Reachability.isConnectedToNetwork() {
             Store.shared.purachaseProduct()
-            print("a")
         }
         
         

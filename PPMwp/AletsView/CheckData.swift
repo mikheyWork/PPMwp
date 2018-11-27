@@ -17,17 +17,11 @@ class CheckDataController: UIViewController {
     var countAll: CGFloat = 0.0
     var progressCount: CGFloat = 0.0 {
         didSet {
-//                        print("count is \(progressCount)")
             self.progressBar.animateTo(progress: self.progressCount)
-//            print("count1 \(appDelegate.allCountDoc)")
-//            print("count2 \(appDelegate.productsDocCount)")
-//            print("count3 \(appDelegate.refsDocCount)")
-            // check count
             if self.progressBar.progress >= 0.99 {
                 Thread.sleep(forTimeInterval: 0.25)
                 DispatchQueue.main.async(flags: .barrier) {
                     self.appDelegate.closeCheckData = true
-//                    print("close1")
                     Thread.sleep(forTimeInterval: 0.5)
                     self.removeFromParent()
                     self.view.removeFromSuperview()
@@ -37,22 +31,17 @@ class CheckDataController: UIViewController {
     }
     
     override func viewDidLoad() {
-//        print("appd \(appDelegate.allCountDoc)")
         self.point2 = CGFloat(1 / self.appDelegate.allCountDoc)
         self.progressBar.progress = 0.0
         alertView.layer.cornerRadius = 15
         appDelegate.closeCheckData = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        
-        
-//        DispatchQueue.global(qos: .userInteractive).async {
         Thread.sleep(forTimeInterval: 1.0)
-            self.countAll = self.appDelegate.allCountDoc
-            self.checkDataPdfRef(page: 1)
-            self.checkDataPdfProd(page: 1)
-            if self.appDelegate.networkProd.isEmpty == false &&  self.appDelegate.networkRef.isEmpty == false {
-                self.checkActualData()
-//            }
+        self.countAll = self.appDelegate.allCountDoc
+        self.checkDataPdfRef(page: 1)
+        self.checkDataPdfProd(page: 1)
+        if self.appDelegate.networkProd.isEmpty == false &&  self.appDelegate.networkRef.isEmpty == false {
+            self.checkActualData()
         }
     }
     
@@ -64,7 +53,6 @@ class CheckDataController: UIViewController {
                 appDelegate.removeFile(name: "\(i.name!)Alert")
                 appDelegate.removeFile(name: "\(i.name!)Info")
                 appDelegate.deleteFromCoreData(id: i.id)
-//                print("deleted \(i.name)")
             }
         }
         for i in appDelegate.childs {
@@ -73,7 +61,6 @@ class CheckDataController: UIViewController {
                 appDelegate.removeFile(name: "\(i.name!)Alert")
                 appDelegate.removeFile(name: "\(i.name!)Info")
                 appDelegate.deleteFromCoreData(id: i.id)
-//                print("deleted \(i.name)")
             }
         }
         
@@ -82,7 +69,6 @@ class CheckDataController: UIViewController {
             if appDelegate.networkRef.contains(where: {$0 == i.name}) == false {
                 appDelegate.referencesParent = appDelegate.referencesParent.filter({$0.name != i.name})
                 appDelegate.deleteFromCoreDataRef(id: i.id)
-//                print("deleted \(i.name)")
             }
         }
         
@@ -92,7 +78,6 @@ class CheckDataController: UIViewController {
                 let name2 = PDFDownloader.shared.addPercent(fromString: i.name!)
                 appDelegate.removeFile(name: name2)
                 appDelegate.deleteFromCoreDataRef(id: i.id)
-//                print("deleted \(i.name)")
             }
         }
     }
@@ -126,12 +111,8 @@ class CheckDataController: UIViewController {
             }
             for resault in resaults {
                 self.count10 += 1
-//                print("count9 \(self.count10)")
-                
                 self.point2 = CGFloat(1 / self.appDelegate.allCountDoc)
                 self.progressCount += self.point2
-//                print("point1 \(self.point2)")
-
                 let name = resault["title"]["rendered"].stringValue
                 let startLink = resault["acf"]["references"].stringValue
                 let name2 = PDFDownloader.shared.addPercent(fromString: name)
@@ -139,7 +120,6 @@ class CheckDataController: UIViewController {
                 if name != "false" && name != ""  {
                     //prog
                     if resault["parent"].intValue != 0 {
-                      
                         
                         if self.appDelegate.networkPdfRef.contains(where: {$0.title == name}) {
                             if self.appDelegate.curentPdfRef.contains(where: {$0.title == name}) {
@@ -193,26 +173,25 @@ class CheckDataController: UIViewController {
                             }
                         } else {
                             
+                            let object = PdfDocumentInfoRef(title: name,
+                                                            link: finishLink,
+                                                            description: resault["acf"]["description"].stringValue,
+                                                            modified: resault["modified"].stringValue)
+                            
+                            self.appDelegate.networkPdfRef.append(object)
+                            self.appDelegate.curentPdfRef.append(object)
+                            
+                            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
+                            UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
+                            UserDefaults.standard.synchronize()
+                            let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
+                            UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
+                            UserDefaults.standard.synchronize()
+                            
                             if finishLink != "" && finishLink != "false" {
-                                let object = PdfDocumentInfoRef(title: name,
-                                                                link: finishLink,
-                                                                description: resault["acf"]["description"].stringValue,
-                                                                modified: resault["modified"].stringValue)
-                                
-                                self.appDelegate.networkPdfRef.append(object)
-                                self.appDelegate.curentPdfRef.append(object)
-                                
                                 let name2 = PDFDownloader.shared.addPercent(fromString: name)
                                 
                                 PDFDownloader.shared.dowloandAndSave(name: "\(name2).pdf", url: URL(string: finishLink)!)
-                                
-                                
-                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
-                                UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
-                                UserDefaults.standard.synchronize()
-                                let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
-                                UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
-                                UserDefaults.standard.synchronize()
                             }
                             //                            }
                         }
@@ -255,7 +234,7 @@ class CheckDataController: UIViewController {
             
             for resault in resaults {
                 self.count10 += 1
-                    self.progressCount += self.point2
+                self.progressCount += self.point2
                 let name = resault["acf"]["model_name"].stringValue
                 let number = resault["acf"]["model_number"].stringValue
                 if name != "false" && name != ""  || number != "false" && number != "" {
@@ -479,11 +458,9 @@ class CheckDataController: UIViewController {
                             if networkAlert.isEmpty == true {
                                 networkAlert = self.appDelegate.networkPdf.filter({$0.model_number == number})
                             }
-//                            print("new element3 \(name)")
                             
                             if networkAlert.first?.modified != resault["modified"].stringValue {
                                 if  name == "" || name == "false" {
-//                                    print("modified \(name)")
                                     self.appDelegate.networkPdf = self.appDelegate.networkPdf.filter({$0.model_number != resault["acf"]["model_number"].stringValue})
                                     self.appDelegate.curentPdf =  self.appDelegate.curentPdf.filter({$0.model_number != resault["acf"]["model_number"].stringValue})
                                     let name2 = resault["acf"]["model_number"].stringValue
@@ -559,7 +536,6 @@ class CheckDataController: UIViewController {
                             }
                             
                         } else {
-//                            print("new element2 \(name)")
                             let object = PdfDocumentInfo(alerts: alerts,
                                                          model_number: model_number,
                                                          info: info,
@@ -616,7 +592,6 @@ class CheckDataController: UIViewController {
                             UserDefaults.standard.synchronize()
                         }
                     } else {
-//                        print("new element \(name)")
                         //change
                         let object = PdfDocumentInfo(alerts: alerts,
                                                      model_number: model_number,

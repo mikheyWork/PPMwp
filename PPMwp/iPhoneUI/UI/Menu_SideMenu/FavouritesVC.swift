@@ -15,7 +15,7 @@ class FavouritesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        appDelegate.favourites.removeAll()
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
             print("favor add")

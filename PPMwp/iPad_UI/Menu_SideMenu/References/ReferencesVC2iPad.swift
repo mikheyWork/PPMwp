@@ -45,9 +45,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         print("name2 \(name2)")
-        for i in appDelegate.favourites {
-            print("i \(i)")
-        }
+        
         Functions.shared.checkStar(name: name2, button: starBut)
         
     }
@@ -170,6 +168,9 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     
     @IBAction func starButTaped(_ sender: Any) {
         print("name2 \(name2)")
+        for i in appDelegate.curentPdfRef {
+            print("i \(i.title)")
+        }
         Functions.shared.sendFavorInfo(name: name2, button: starBut)
     }
     
@@ -333,6 +334,7 @@ extension ReferencesVC2iPad {
         }
         Functions.shared.checkStar(name: name2, button: starBut)
         checkState()
+        tableView.reloadData()
     }
     
     //MARK: -Segue

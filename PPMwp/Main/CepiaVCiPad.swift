@@ -24,24 +24,21 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     var isSearching = false
     var progressBar = GTProgressBar()
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    var loadDataWpBool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //off
-        appDelegate.subscribtion = true
-        showSub(nameVC: "CheckDataController", alpha: 0.2)
-        
+        searchBarLbl.delegate = self
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.showMenu), name: NSNotification.Name("ShowMenu"), object: nil)
         }
         
-        print("current user is id:\(appDelegate.currentUser.id!), name: \(appDelegate.currentUser.name!), pass: \(appDelegate.currentUser.password!), favor: \(appDelegate.currentUser.favor!), disc: \(appDelegate.currentUser.disclaimer) ")
         self.hideMenu.isHidden = false
         self.showMenu()
         if Reachability.isConnectedToNetwork() {
-            loadDataWp()
+              loadDataWp()
         }
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
@@ -57,19 +54,15 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         searchBarChange(searchBar: searchBarLbl)
         showTable()
         indexFunc()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        print("subs \(appDelegate.currentUser.subs)")
-        print("discl \(appDelegate.currentUser.disclaimer)")
-        
         if Reachability.isConnectedToNetwork() == true {
             //requset actual data
             DispatchQueue.global(qos: .userInteractive).async {
                 if self.appDelegate.currentUser.id != 0 {
                     guard self.appDelegate.currentUser != nil && self.appDelegate.currentUser.password != nil else {
-                        print("user is nil")
                         return
                     }
                     let user = self.appDelegate.currentUser.name!
@@ -86,11 +79,9 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                                       headers:headers)
                         .responseJSON { [weak self] (response) in
                             guard response.result.value != nil else {
-                                print("json response false: \(response)")
                                 return
                             }
                             let json = JSON(response.result.value!)
-                            print("json: \(json)")
                             let id: Int!
                             id = json["id"].intValue
                             if id != nil && id != 0 {
@@ -104,23 +95,17 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                                 let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self!.appDelegate.currentUser!)
                                 UserDefaults.standard.set(encodedData, forKey: "currentUser")
                                 UserDefaults.standard.synchronize()
-                                print("subs2 \(self!.appDelegate.currentUser.subs)")
-                                print("discl2 \(self?.appDelegate.currentUser.disclaimer)")
                             }
                     }
                 }
             }
         } else {
-            if appDelegate.currentUser.subs == "+" {
-                appDelegate.closeCheckData = true
+            if appDelegate.subscribtion == true {
+                
                 self.appDelegate.favourites = [String]()
                 let a  = self.appDelegate.currentUser.favor.split(separator: ",")
                 if a.isEmpty == false {
-                    print("favor add")
-                    if Reachability.isConnectedToNetwork() {
-                        self.appDelegate.favourites.removeAll()
-                    }
-                    
+                    self.appDelegate.favourites.removeAll()
                     for i in a {
                         if self.appDelegate.favourites.contains(String(i)) == false {
                             self.appDelegate.favourites.append(String(i))
@@ -128,10 +113,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                     }
                 }
             } else {
-                if appDelegate.currentUser.subs != "+" {
-//                    showAlertError2(withText: "Subscribtion failde", title: "Need subscribe")
-                }
-                
+                showAlertError2(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.", title: "Error Purchase")
             }
         }
     }
@@ -146,7 +128,6 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     
     @objc func showMenu() {
-        print("show disc is \(appDelegate.showDisc)")
         if appDelegate.showDisc == true {
             hideMenu.isHidden = true
         } else {
@@ -155,13 +136,13 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     
     @objc func loadDataWp() {
-        print("subs: \(self.appDelegate.subscribtion)")
+        guard loadDataWpBool == false else {
+            return
+        }
+        loadDataWpBool = true
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
-            print("favor add")
-            if Reachability.isConnectedToNetwork() {
-                self.appDelegate.favourites.removeAll()
-            }
+            self.appDelegate.favourites.removeAll()
             for i in a {
                 if self.appDelegate.favourites.contains(String(i)) == false {
                     self.appDelegate.favourites.append(String(i))
@@ -169,15 +150,13 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             }
         }
         
-        if appDelegate.currentUser.subs == "+" {
-            print("work")
+        if appDelegate.subscribtion == true {
             if showAlert == true {
                 if appDelegate.closeCheckData == false {
                     showSub(nameVC: "CheckDataController", alpha: 0.2)
                 }
             }
         } else {
-            print("work2")
             showSub(nameVC: "SubscribeAlert", alpha: 0.2)
         }
         
@@ -185,7 +164,6 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             appDelegate.showDisc = true
         } else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "DiscAlert")
-            
             vc?.view.backgroundColor = UIColor.white
             self.addChild(vc!)
             self.view.addSubview((vc?.view)!)
@@ -196,11 +174,8 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     
     @objc func showCongr() {
         if Reachability.isConnectedToNetwork() == true {
-            if showAlert == true {
-                //при релизе вкл
-                if appDelegate.subscribtion == true {
-                    showSub(nameVC: "CheckDataController", alpha: 0.2)
-                }
+            if appDelegate.subscribtion == true {
+                showSub(nameVC: "CheckDataController", alpha: 0.2)
             }
         }
     }
@@ -330,9 +305,6 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             cars = cars.filter({ (elemt: SearchItem) -> Bool in
                 elemt.name.lowercased().contains(searchText.lowercased())
             })
-            
-            
-            
         } else {
             for i in appDelegate.parents {
                 let a = appDelegate.parents.filter({$0.id == i.id})
@@ -695,9 +667,6 @@ extension CepiaVCiPad {
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //off
-        appDelegate.subscribtion = true
-        print("appDel is \(appDelegate.closeCheckData)")
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.", title: "Confirm Purchase")
         }
@@ -713,10 +682,10 @@ extension CepiaVCiPad {
         if segue.identifier == "searchProd" {
             let cell = sender as! CepiaTVCell
             let arr = appDelegate.parents.filter({$0.name == cell.nameLbl.text})
-            let types = segue.destination as! ProductTypes
+            let types = segue.destination as! ProductTypesiPad
             types.from = "Manuf"
             types.parentID = arr.first?.id
-            types.manufacturer = arr.first?.name
+            types.manufacturer = (arr.first?.name)!
         }
         if segue.identifier == "searchCepia" {
             let nameModel = sender as! String

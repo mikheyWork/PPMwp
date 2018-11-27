@@ -46,9 +46,10 @@ class DiscAlert: UIViewController {
         NotificationCenter.default.post(name: NSNotification.Name("ShowMenu"), object: nil)
         UserDefaults.standard.set(appDelegate.showDisc, forKey: "disclaimer2")
         let parameters = ["last_name" : "+"]
-
         Functions.shared.requestChangeParam(parameters: parameters)
-        
+        if appDelegate.subscribtion == true {
+            NotificationCenter.default.post(name: NSNotification.Name("Check"), object: nil)
+        }
         self.removeFromParent()
         self.view.removeFromSuperview()
     }
@@ -56,14 +57,12 @@ class DiscAlert: UIViewController {
     
     
     @IBAction func cancelButTapped(_ sender: Any) {
-        
         for controller in self.navigationController!.viewControllers as Array {
             if controller.isKind(of: LoginVC.self) {
                 self.navigationController!.popToViewController(controller, animated: true)
                 break
             }
         }
-        
         let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")
         self.appDelegate.currentUser = user
         self.appDelegate.favourites.removeAll()

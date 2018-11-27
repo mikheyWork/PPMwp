@@ -27,7 +27,8 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     var name = ""
     var name2 = ""
     override func viewDidLoad() {
-        
+        print("subs1 \(appDelegate.subscribtion)")
+        appDelegate.favourites.removeAll()
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
             print("favor add")
@@ -70,6 +71,7 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
+         print("subs2 \(appDelegate.subscribtion)")
         
         print("name2 \(name2)")
         if appDelegate.curentPdfRef.contains(where: {$0.title == name2}) == false {

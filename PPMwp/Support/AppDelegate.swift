@@ -19,7 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var favouritesStart: [String] = []
     var model: String!
-    var subscribtion = false
+    var subscribtion = false {
+        didSet {
+            print("subs change from \(oldValue) to \(subscribtion)")
+        }
+    }
     var pdfArray2 = [String]()
     
     var references = [ReferEnt]()
