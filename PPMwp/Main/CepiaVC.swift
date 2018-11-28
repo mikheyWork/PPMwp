@@ -23,6 +23,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("load is \(appDelegate.subscribtion)")
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
@@ -117,6 +118,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     @objc func loadDataWp() {
+        print("data is \(loadDataWpBool)")
         guard loadDataWpBool == false else {
             return
         }
@@ -130,12 +132,10 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                 }
             }
         }
-        
+        print("apppp \(appDelegate.subscribtion)")
         if appDelegate.subscribtion == true {
             if showAlert == true {
-                if appDelegate.closeCheckData == false {
                     showSub(nameVC: "CheckDataController", alpha: 0.2)
-                }
             }
         } else {
             showSub(nameVC: "SubscribeAlert", alpha: 0.2)
@@ -662,6 +662,7 @@ extension CepiaVC {
         }
         showAlert = false
         searchBarLbl.text = ""
+        loadDataWpBool = false
     }
     
     

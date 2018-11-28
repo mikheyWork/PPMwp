@@ -37,6 +37,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         //check sub
         if isChecmarkTaped == true {
             if appDelegate.currentUser != nil {
+                print("id \(appDelegate.currentUser.id)")
                 if appDelegate.currentUser.id != 0 {
                     performSegue(withIdentifier: "cepia", sender: nil)
                 }
@@ -118,6 +119,15 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if appDelegate.model == "iPhone"{
+            if appDelegate.currentUser != nil {
+                if appDelegate.currentUser.id != 0 {
+                    if appDelegate.currentUser.subs == "+" {
+                        appDelegate.subscribtion = true
+                    } else {
+                        appDelegate.subscribtion = false
+                    }
+                }
+            }
             if segue.identifier == "cepia" {
                 let vs = segue.destination as! CepiaVC
                 vs.showAlert = true

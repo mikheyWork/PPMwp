@@ -237,6 +237,8 @@ class CheckDataController: UIViewController {
                 self.progressCount += self.point2
                 let name = resault["acf"]["model_name"].stringValue
                 let number = resault["acf"]["model_number"].stringValue
+                print("name \(name)")
+                print("parent id \(resault["categories"]["1"])")
                 if name != "false" && name != ""  || number != "false" && number != "" {
                     var alerts: String?
                     var model_number: String?

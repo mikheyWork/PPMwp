@@ -48,13 +48,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var closeCheckData = false
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        if Reachability.isConnectedToNetwork() {
-            Store.shared.checkSub()
-        }
+            if Reachability.isConnectedToNetwork() {
+                Store.shared.checkSub()
+            }
+            subscribtion = UserDefaults.standard.bool(forKey: "subscribe2")
         DispatchQueue.global(qos: .userInteractive).async {
+            if Reachability.isConnectedToNetwork() {
+                self.reqProductsDocCount(page: 1)
+                self.reqRefsDocCount(page: 1)
+            }
             
-            self.reqProductsDocCount(page: 1)
-            self.reqRefsDocCount(page: 1)
         }
         
         //storeKit
@@ -144,7 +147,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        if need
         Store.shared.retrieveInfo()
         
-        Thread.sleep(forTimeInterval: 2.0)
+        Thread.sleep(forTimeInterval: 0.5)
         
         
         //if need delete file
