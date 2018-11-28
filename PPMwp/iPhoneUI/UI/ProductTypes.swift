@@ -207,45 +207,23 @@ extension ProductTypes {
                     cellName.append(i)
                 }
             }
-            
-            var res2 = [CategoryEnt]()
+            var resArr = [PdfDocumentInfo]()
             if manufacturer != nil && manufacturer != "" {
                 let selectedNameID = cellName.first?.id
                 let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                res2 = appDelegate.childs.filter{$0.parent == resault.first?.id}
+                resArr = appDelegate.curentPdf.filter({$0.prodTypeId == resault.first?.id})
             } else {
-                var resault = [CategoryEnt]()
-                var arr4 = [CategoryEnt]()
                 for i in cellName {
                     let selectedNameID = i.id
-                    resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                    for i in resault {
-                        if arr4.contains(where: {$0.name == i.name}) == false {
-                            arr4.append(contentsOf: resault)
+                    let pop = appDelegate.curentPdf.filter({$0.prodTypeId == selectedNameID})
+                    for i in pop {
+                        if resArr.contains(where: {$0.model_name == i.model_name}) == false {
+                            resArr.append(i)
                         }
                     }
                 }
-                res2 = arr4
             }
-            var arr3 = [PdfDocumentInfo]()
-            for i in res2 {
-                var car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-               
-                if car.isEmpty == false {
-                    for i in car {
-                        arr3.append(i)
-                    }
-                } else {
-                    car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                    if car.isEmpty == false {
-                        for i in car {
-                            arr3.append(i)
-                        }
-                    }
-                }
-                
-            }
-            cell.resaultLbl.text = "\(arr3.count) Results"
+            cell.resaultLbl.text = "\(resArr.count) Results"
         }
         
         

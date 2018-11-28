@@ -238,7 +238,10 @@ class CheckDataController: UIViewController {
                 let name = resault["acf"]["model_name"].stringValue
                 let number = resault["acf"]["model_number"].stringValue
                 print("name \(name)")
-                print("parent id \(resault["categories"]["1"])")
+                print("parent id \(resault["categories"].array)")
+                var parent = resault["categories"].arrayValue
+                let parentId = parent.last?.int64Value
+                print("paarrr \(parentId)")
                 if name != "false" && name != ""  || number != "false" && number != "" {
                     var alerts: String?
                     var model_number: String?
@@ -246,6 +249,7 @@ class CheckDataController: UIViewController {
                     var model_name: String?
                     var manufacturer: String?
                     var modified: String?
+                    var prodTypeId: Int64?
                     var nbg_code: String?
                     var polarity: String?
                     var sensor_type: String?
@@ -304,6 +308,11 @@ class CheckDataController: UIViewController {
                         modified = resault["modified"].stringValue
                     } else {
                         modified = "_"
+                    }
+                    if parentId != nil  {
+                        prodTypeId = parentId
+                    } else {
+                        prodTypeId = 0
                     }
                     if resault["acf"]["nbg_code"] != "" &&  resault["acf"]["nbg_code"] != "false" {
                         nbg_code = resault["acf"]["nbg_code"].stringValue
@@ -465,13 +474,13 @@ class CheckDataController: UIViewController {
                                 if  name == "" || name == "false" {
                                     self.appDelegate.networkPdf = self.appDelegate.networkPdf.filter({$0.model_number != resault["acf"]["model_number"].stringValue})
                                     self.appDelegate.curentPdf =  self.appDelegate.curentPdf.filter({$0.model_number != resault["acf"]["model_number"].stringValue})
-                                    let name2 = resault["acf"]["model_number"].stringValue
+                                    let name2 = PDFDownloader.shared.addPercent(fromString: resault["acf"]["model_name"].stringValue)
                                     self.appDelegate.removeFile(name: "\(name2)Alert")
                                     self.appDelegate.removeFile(name: "\(name2)Info")
                                 } else {
                                     self.appDelegate.networkPdf = self.appDelegate.networkPdf.filter({$0.model_name != resault["acf"]["model_name"].stringValue})
                                     self.appDelegate.curentPdf =  self.appDelegate.curentPdf.filter({$0.model_name != resault["acf"]["model_name"].stringValue})
-                                    let name2 = resault["acf"]["model_name"].stringValue
+                                    let name2 = PDFDownloader.shared.addPercent(fromString: resault["acf"]["model_name"].stringValue)
                                     self.appDelegate.removeFile(name: "\(name2)Alert")
                                     self.appDelegate.removeFile(name: "\(name2)Info")
                                 }
@@ -483,6 +492,7 @@ class CheckDataController: UIViewController {
                                                              model_name: model_name,
                                                              manufacturer: manufacturer,
                                                              modified: modified,
+                                                             prodTypeId: prodTypeId,
                                                              nbg_code: nbg_code,
                                                              polarity: polarity,
                                                              sensor_type: sensor_type,
@@ -544,6 +554,7 @@ class CheckDataController: UIViewController {
                                                          model_name: model_name,
                                                          manufacturer: manufacturer,
                                                          modified: modified,
+                                                         prodTypeId: prodTypeId,
                                                          nbg_code: nbg_code,
                                                          polarity: polarity,
                                                          sensor_type: sensor_type,
@@ -601,6 +612,7 @@ class CheckDataController: UIViewController {
                                                      model_name: model_name,
                                                      manufacturer: manufacturer,
                                                      modified: modified,
+                                                     prodTypeId: prodTypeId,
                                                      nbg_code: nbg_code,
                                                      polarity: polarity,
                                                      sensor_type: sensor_type,

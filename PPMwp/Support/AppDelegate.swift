@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
         }
         
-        //storeKit
+//        storeKit
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
             for purchase in purchases {
                 switch purchase.transaction.transactionState {

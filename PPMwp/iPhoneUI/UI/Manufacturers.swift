@@ -316,25 +316,8 @@ extension Manufacturers {
         let cellName = appDelegate.parents.filter({$0.name == text})
         let selectedNameID = cellName.first?.id
         let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-        let arr2 = appDelegate.childs.filter({$0.parent == resault.first?.id})
-        var arr3 = [PdfDocumentInfo]()
-        for i in arr2 {
-            var car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-            if car.isEmpty == false {
-                if arr3.contains(where: {$0.model_name == i.name}) == false {
-                    arr3.append(car.first!)
-                }
-            } else {
-                car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                if car.isEmpty == false {
-                    if arr3.contains(where: {$0.model_number == i.name}) == false {
-                        arr3.append(car.first!)
-                    }
-                }
-            }
-            
-        }
-        cell.resaultLabel.text = "\(arr3.count) Results"
+        let resaultArr = appDelegate.curentPdf.filter({$0.prodTypeId == resault.first?.id})
+        cell.resaultLabel.text = "\(resaultArr.count) Results"
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -377,7 +360,7 @@ extension Manufacturers {
             let text = cell.createrLabel.text
             let selectedName = appDelegate.parents.filter({$0.name == text})
             let selectedNameID = selectedName.first?.id
-            
+            print("selectedNameID \(selectedNameID)")
             let types = segue.destination as! ProductTypes
             types.from = from
             types.parentID = selectedNameID

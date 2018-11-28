@@ -23,6 +23,10 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for i in appDelegate.childs {
+            print("i \(i.name)")
+        }
         print("load is \(appDelegate.subscribtion)")
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
