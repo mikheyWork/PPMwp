@@ -117,7 +117,7 @@ extension FavouritesVC {
         }
         
         print("name cell is \(text)")
-        if appDelegate.childs.contains(where: {$0.name == text }) {
+        if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text})  {
            performSegue(withIdentifier: "showFavourVital", sender: text)
         } else {
             performSegue(withIdentifier: "showFavRefer", sender: text)

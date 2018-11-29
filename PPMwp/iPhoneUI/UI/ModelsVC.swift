@@ -281,14 +281,12 @@ extension ModelsVC {
         }
         
         if segue.identifier == "showProduct" {
-            
             let parentId = sender as! ModelsTVCell
             let text = parentId.text2
             let selectedName = appDelegate.childs.filter({$0.name == text})
             let prod = segue.destination as! Product
             prod.name = text
             prod.prodName = text
-            
             let id = appDelegate.childs.filter({$0.id == selectedName.first?.parent})
             prod.parentID = id.first?.id
         }

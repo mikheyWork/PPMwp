@@ -23,11 +23,9 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        for i in appDelegate.childs {
-            print("i \(i.name)")
-        }
-        print("load is \(appDelegate.subscribtion)")
+        //off
+        appDelegate.subscribtion = true
+        showSub(nameVC: "CheckDataController", alpha: 0.2)
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
@@ -505,28 +503,19 @@ extension CepiaVC {
             
             cell.nameLbl.text = carValues[indexPath.row]
             let text = cell.nameLbl.text
+            
             if appDelegate.parents.contains(where: {$0.name == text}) {
                 let cellName = appDelegate.parents.filter({$0.name == text})
                 let selectedNameID = cellName.first?.id
                 let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                let arr2 = appDelegate.childs.filter({$0.parent == resault.first?.id})
-                var arr3 = [PdfDocumentInfo]()
-                for i in arr2 {
-                    var car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                    if car.isEmpty == false {
-                        if arr3.contains(where: {$0.model_name == i.name}) == false {
-                            arr3.append(car.first!)
-                        }
-                    } else {
-                        car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                        if car.isEmpty == false {
-                            if arr3.contains(where: {$0.model_number == i.name}) == false {
-                                arr3.append(car.first!)
-                            }
-                        }
+                var resaultArr = [PdfDocumentInfo]()
+                for i in resault {
+                    let arr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                    for j in arr {
+                        resaultArr.append(j)
                     }
-                    
                 }
+                let arr3 = resaultArr
                 cell.resultsLbl.text = "\(arr3.count) Results"
             }
             if appDelegate.childs.contains(where: {$0.name == text}) {
@@ -622,6 +611,7 @@ extension CepiaVC {
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        appDelegate.subscribtion = true
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.")
         }

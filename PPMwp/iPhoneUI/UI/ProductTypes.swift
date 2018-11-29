@@ -83,6 +83,7 @@ class ProductTypes: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func index() {
         
+        print("parent \(parentID)")
         
         if parentID != nil {
             let resault = appDelegate.childs.filter{$0.parent == parentID}
@@ -104,7 +105,7 @@ class ProductTypes: UIViewController, UITableViewDelegate, UITableViewDataSource
             let text = aText
             let cellName = appDelegate.childs.filter({$0.name == text})
             let selectedNameID = cellName.first?.id
-            let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
+            let resault = appDelegate.curentPdf.filter{$0.prodTypeId == selectedNameID}
             if resault.count > 0 {
                 cars.append(aText)
             }

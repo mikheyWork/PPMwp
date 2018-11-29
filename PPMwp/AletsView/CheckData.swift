@@ -22,7 +22,7 @@ class CheckDataController: UIViewController {
                 Thread.sleep(forTimeInterval: 0.25)
                 DispatchQueue.main.async(flags: .barrier) {
                     self.appDelegate.closeCheckData = true
-                    Thread.sleep(forTimeInterval: 0.5)
+//                    Thread.sleep(forTimeInterval: 0.5)
                     self.removeFromParent()
                     self.view.removeFromSuperview()
                 }
@@ -36,7 +36,7 @@ class CheckDataController: UIViewController {
         alertView.layer.cornerRadius = 15
         appDelegate.closeCheckData = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        Thread.sleep(forTimeInterval: 1.0)
+//        Thread.sleep(forTimeInterval: 1.0)
         self.countAll = self.appDelegate.allCountDoc
         self.checkDataPdfRef(page: 1)
         self.checkDataPdfProd(page: 1)
@@ -141,35 +141,36 @@ class CheckDataController: UIViewController {
                                     self.appDelegate.networkPdfRef.append(object)
                                     self.appDelegate.curentPdfRef.append(object)
                                     
-                                    let name2 = PDFDownloader.shared.addPercent(fromString: name)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name2).pdf", url: URL(string: finishLink)!)
-                                    
-                                    
-                                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
-                                    UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
-                                    UserDefaults.standard.synchronize()
-                                    
-                                    let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
-                                    UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
-                                    UserDefaults.standard.synchronize()
-                                    
-                                    
+                                    DispatchQueue.global(qos: .background).async {
+                                        let name2 = PDFDownloader.shared.addPercent(fromString: name)
+                                        PDFDownloader.shared.dowloandAndSave(name: "\(name2).pdf", url: URL(string: finishLink)!)
+                                        
+                                        
+                                        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
+                                        UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
+                                        UserDefaults.standard.synchronize()
+                                        
+                                        let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
+                                        UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
+                                        UserDefaults.standard.synchronize()
+                                    }
                                 }
-                                
                             } else {
                                 let object = PdfDocumentInfoRef(title: name,
                                                                 link: finishLink,
                                                                 description: resault["acf"]["description"].stringValue,
                                                                 modified: resault["modified"].stringValue)
                                 self.appDelegate.curentPdfRef.append(object)
-                                let name2 = PDFDownloader.shared.addPercent(fromString: name)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name2).pdf", url: URL(string: finishLink)!)
-                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
-                                UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
-                                UserDefaults.standard.synchronize()
-                                let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
-                                UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
-                                UserDefaults.standard.synchronize()
+                                DispatchQueue.global(qos: .background).async {
+                                    let name2 = PDFDownloader.shared.addPercent(fromString: name)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name2).pdf", url: URL(string: finishLink)!)
+                                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
+                                    UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
+                                    UserDefaults.standard.synchronize()
+                                    let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
+                                    UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
+                                    UserDefaults.standard.synchronize()
+                                }
                             }
                         } else {
                             
@@ -181,12 +182,15 @@ class CheckDataController: UIViewController {
                             self.appDelegate.networkPdfRef.append(object)
                             self.appDelegate.curentPdfRef.append(object)
                             
-                            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
-                            UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
-                            UserDefaults.standard.synchronize()
-                            let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
-                            UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
-                            UserDefaults.standard.synchronize()
+                            DispatchQueue.global(qos: .background).async {
+                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
+                                UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
+                                UserDefaults.standard.synchronize()
+                                let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
+                                UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
+                                UserDefaults.standard.synchronize()
+                            }
+                           
                             
                             if finishLink != "" && finishLink != "false" {
                                 let name2 = PDFDownloader.shared.addPercent(fromString: name)
@@ -297,7 +301,7 @@ class CheckDataController: UIViewController {
                     if resault["acf"]["model_name"] != "" &&  resault["acf"]["model_name"] != "false" {
                         model_name = resault["acf"]["model_name"].stringValue
                     } else {
-                        model_name = "_"
+                        model_name = ""
                     }
                     if resault["acf"]["manufacturer"] != "" &&  resault["acf"]["manufacturer"] != "false" {
                         manufacturer = resault["acf"]["manufacturer"].stringValue
@@ -524,29 +528,30 @@ class CheckDataController: UIViewController {
                                 //
                                 self.appDelegate.networkPdf.append(object)
                                 self.appDelegate.curentPdf.append(object)
-                                if name == "" || name == "false" {
-                                    let name3 = PDFDownloader.shared.addPercent(fromString: number)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                        object.info!)!)
-                                } else {
-                                    let name3 = PDFDownloader.shared.addPercent(fromString: name)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                        object.info!)!)
+                                DispatchQueue.global(qos: .background).async {
+                                    if name == "" || name == "false" {
+                                        let name3 = PDFDownloader.shared.addPercent(fromString: number)
+                                        PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                        PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                            object.info!)!)
+                                    } else {
+                                        let name3 = PDFDownloader.shared.addPercent(fromString: name)
+                                        PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                        PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                            object.info!)!)
+                                    }
+                                    
+                                    
+                                    
+                                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
+                                    UserDefaults.standard.set(encodedData, forKey: "networkPdf")
+                                    UserDefaults.standard.synchronize()
+                                    
+                                    let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
+                                    UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
+                                    UserDefaults.standard.synchronize()
                                 }
-                                
-                                
-                                
-                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
-                                UserDefaults.standard.set(encodedData, forKey: "networkPdf")
-                                UserDefaults.standard.synchronize()
-                                
-                                let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
-                                UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
-                                UserDefaults.standard.synchronize()
                             }
-                            
                         } else {
                             let object = PdfDocumentInfo(alerts: alerts,
                                                          model_number: model_number,
@@ -584,25 +589,26 @@ class CheckDataController: UIViewController {
                                                          placement: placement,
                                                          number_of_hv_coils: number_of_hv_coils)
                             self.appDelegate.curentPdf.append(object)
-                            if name == "" || name == "false" {
-                                let name3 = PDFDownloader.shared.addPercent(fromString: number)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                    object.info!)!)
-                            } else {
-                                let name3 = PDFDownloader.shared.addPercent(fromString: name)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                    object.info!)!)
+                            DispatchQueue.global(qos: .background).async {
+                                if name == "" || name == "false" {
+                                    let name3 = PDFDownloader.shared.addPercent(fromString: number)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                        object.info!)!)
+                                } else {
+                                    let name3 = PDFDownloader.shared.addPercent(fromString: name)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                        object.info!)!)
+                                }
+                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
+                                UserDefaults.standard.set(encodedData, forKey: "networkPdf")
+                                UserDefaults.standard.synchronize()
+                                
+                                let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
+                                UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
+                                UserDefaults.standard.synchronize()
                             }
-                            
-                            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
-                            UserDefaults.standard.set(encodedData, forKey: "networkPdf")
-                            UserDefaults.standard.synchronize()
-                            
-                            let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
-                            UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
-                            UserDefaults.standard.synchronize()
                         }
                     } else {
                         //change
@@ -644,27 +650,29 @@ class CheckDataController: UIViewController {
                         
                         self.appDelegate.networkPdf.append(object)
                         self.appDelegate.curentPdf.append(object)
-                        if name == "" || name == "false" {
-                            let name3 = PDFDownloader.shared.addPercent(fromString: number)
-                            PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                            PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                object.info!)!)
-                        } else {
-                            let name3 = PDFDownloader.shared.addPercent(fromString: name)
-                            PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                            PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                object.info!)!)
+                        DispatchQueue.global(qos: .background).async {
+                            if name == "" || name == "false" {
+                                let name3 = PDFDownloader.shared.addPercent(fromString: number)
+                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                    object.info!)!)
+                            } else {
+                                let name3 = PDFDownloader.shared.addPercent(fromString: name)
+                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                    object.info!)!)
+                            }
+                            
+                            
+                            
+                            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
+                            UserDefaults.standard.set(encodedData, forKey: "networkPdf")
+                            UserDefaults.standard.synchronize()
+                            
+                            let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
+                            UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
+                            UserDefaults.standard.synchronize()
                         }
-                        
-                        
-                        
-                        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
-                        UserDefaults.standard.set(encodedData, forKey: "networkPdf")
-                        UserDefaults.standard.synchronize()
-                        
-                        let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
-                        UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
-                        UserDefaults.standard.synchronize()
                     }
                 }
             }

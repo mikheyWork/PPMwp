@@ -316,7 +316,13 @@ extension Manufacturers {
         let cellName = appDelegate.parents.filter({$0.name == text})
         let selectedNameID = cellName.first?.id
         let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-        let resaultArr = appDelegate.curentPdf.filter({$0.prodTypeId == resault.first?.id})
+        var resaultArr = [PdfDocumentInfo]()
+        for i in resault {
+            let arr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+            for j in arr {
+               resaultArr.append(j)
+            }
+        }
         cell.resaultLabel.text = "\(resaultArr.count) Results"
         cell.accessoryType = .disclosureIndicator
         return cell
@@ -360,7 +366,6 @@ extension Manufacturers {
             let text = cell.createrLabel.text
             let selectedName = appDelegate.parents.filter({$0.name == text})
             let selectedNameID = selectedName.first?.id
-            print("selectedNameID \(selectedNameID)")
             let types = segue.destination as! ProductTypes
             types.from = from
             types.parentID = selectedNameID

@@ -46,65 +46,57 @@ class ProductiPad: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     func index() {
         if parentID != nil {
-            var arr1 = [CategoryEnt]()
-            if prodName == "" || prodName == nil {
-                arr1 = appDelegate.childs.filter({$0.id == parentID})
-                let arr2 = appDelegate.childs.filter({$0.name == arr1.first?.name})
-                for i in arr2 {
-                    let arr3 = appDelegate.childs.filter({$0.parent == i.id })
-                    for j in arr3 {
-                        if arr1.contains(where: {$0.id == j.id}) == false {
-                            arr1.append(j)
-                        }
-                    }
-                }
-            } else {
-                arr1 = appDelegate.childs.filter({$0.name == prodName})
+            print("parentID \(parentID)")
+            
+            if manufacturer != nil && manufacturer != "" {
+                var allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
+                parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
             }
-            for i in arr1 {
-                if manufacturer == "" {
-                    if appDelegate.curentPdf.contains(where: {$0.model_name == i.name}) {
-                        let car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                        if cars.contains((car.first?.model_name)!) == false {
-                            cars.append((car.first?.model_name)!)
+            print("parentID2 \(parentID)")
+            var resault = [CategoryEnt]()
+            var arr1 = [CategoryEnt]()
+            if manufacturer != "" && manufacturer != nil {
+                var resArr = [PdfDocumentInfo]()
+                
+                let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
+                
+                for i in pop {
+                    print("pop is \(i.model_name)")
+                    if cars.contains(where: {$0 == i.model_name}) == false && cars.contains(where: {$0 == i.model_number}) == false {
+                        var name = i.model_name
+                        if name == nil || name == "" {
+                            name = i.model_number
                         }
-                    } else {
-                        if appDelegate.curentPdf.contains(where: {$0.model_number == i.name}) {
-                            let car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                            if cars.contains((car.first?.model_number)!) == false {
-                                cars.append((car.first?.model_number)!)
-                            }
-                        }
-                    }
-                    
-                } else {
-                    if appDelegate.curentPdf.contains(where: {$0.model_name == i.name}) {
-                        let car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                        if manufacturer != "" {
-                            if cars.contains((car.first?.model_name)!) == false {
-                                cars.append((car.first?.model_name)!)
-                            }
-                        } else {
-                            cars.append((car.first?.model_name)!)
-                        }
-                    } else {
-                        if appDelegate.curentPdf.contains(where: {$0.model_number == i.name}) {
-                            
-                            let car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                            if cars.contains((car.first?.model_number)!) == false {
-                                cars.append((car.first?.model_number)!)
-                            }
-                        }
+                        cars.append(name!)
                     }
                 }
                 
-                
+            } else {
+                let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
+                resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
+                arr1 = appDelegate.childs.filter({$0.name == selectedNameID.first?.name})
+                for i in resault {
+                    print("ipp \(i.name)")
+                    print("ipp \(i.id)")
+                    let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                    for j in resArr {
+                        print("j.\(j.model_name)")
+                        if cars.contains(where: {$0 == j.model_name}) == false && cars.contains(where: {$0 == j.model_number}) == false {
+                            var name = j.model_name
+                            if name == nil || name == "" {
+                                name = j.model_number
+                            }
+                            cars.append(name!)
+                        }
+                    }
+                }
+                for car in cars {
+                    print("carr \(car)")
+                }
             }
         } else {
             for i in appDelegate.curentPdf {
-                if cars.contains(i.model_name!) == false {
-                    cars.append(i.model_name!)
-                }
+                cars.append(i.model_name!)
             }
         }
         // 1

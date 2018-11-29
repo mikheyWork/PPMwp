@@ -177,7 +177,7 @@ extension FavouritesVCiPad {
             text = cell.prodLbl.text!
         }
         name2 = text
-        if appDelegate.childs.contains(where: {$0.name == text}) {
+        if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text})  {
             performSegue(withIdentifier: "showFavourVital", sender: text)
         } else {
             name = text
