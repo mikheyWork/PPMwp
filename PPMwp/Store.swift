@@ -74,16 +74,16 @@ class Store: NSObject {
             print("subs99 is \(self.appDelegate.subscribtion)")
             UserDefaults.standard.set(self.appDelegate.subscribtion, forKey: "subscribe2")
             NotificationCenter.default.post(name: NSNotification.Name("CheckSub"), object: nil)
-            if self.appDelegate.subscribtion == true {
                 if self.appDelegate.currentUser != nil {
                 if self.appDelegate.currentUser.id != 0 {
-                    let parameters = ["first_name" : "+"]
-                    Functions.shared.requestChangeParam(parameters: parameters)
-                } else {
-                    let parameters2 = ["first_name" : "-"]
-                    Functions.shared.requestChangeParam(parameters: parameters2)
+                    if self.appDelegate.subscribtion == true {
+                        let parameters = ["first_name" : "+"]
+                        Functions.shared.requestChangeParam(parameters: parameters)
+                    } else {
+                        let parameters2 = ["first_name" : "-"]
+                        Functions.shared.requestChangeParam(parameters: parameters2)
+                    }
                 }
-            }
             }
         }
     }

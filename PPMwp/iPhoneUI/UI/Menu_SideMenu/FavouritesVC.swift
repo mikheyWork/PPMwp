@@ -18,11 +18,12 @@ class FavouritesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         appDelegate.favourites.removeAll()
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
-            print("favor add")
             self.appDelegate.favourites.removeAll()
             for i in a {
                 if self.appDelegate.favourites.contains(String(i)) == false {
-                    self.appDelegate.favourites.append(String(i))
+                    if appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdfRef.contains(where: {$0.title == String(i)}) || appDelegate.childs.contains(where: {$0.name == String(i)}) || appDelegate.referencesChild.contains(where: {$0.name == String(i)}) {
+                        self.appDelegate.favourites.append(String(i))
+                    }
                 }
             }
         }
@@ -65,7 +66,6 @@ class FavouritesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @objc func updateData() {
-        print("reload")
         self.tableView.reloadData()
     }
     
@@ -103,7 +103,6 @@ extension FavouritesVC {
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1.0)
         cell.selectedBackgroundView = backgroundView
-        print("1")
         Functions.shared.checkStar(name: cell.prodLbl.text!, button: cell.starBut)
         cell.accessoryType = .disclosureIndicator
         return cell
@@ -116,7 +115,6 @@ extension FavouritesVC {
             text = cell.prodLbl.text!
         }
         
-        print("name cell is \(text)")
         if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text})  {
            performSegue(withIdentifier: "showFavourVital", sender: text)
         } else {

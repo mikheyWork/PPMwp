@@ -23,7 +23,6 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("name \(name)")
         rangeChar()
         tableView1.isScrollEnabled = false
         prodArr = appDelegate.curentPdf.filter({$0.model_name == name})
@@ -34,8 +33,6 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     }
     
     var nameVC = "VitalStatVC"
-    
-    //    nameLbl char range
     fileprivate func rangeChar() {
         let attributedString = nameLbl.attributedText as! NSMutableAttributedString
         attributedString.addAttribute(kCTKernAttributeName as NSAttributedString.Key, value: 3.0, range: NSMakeRange(0, attributedString.length))

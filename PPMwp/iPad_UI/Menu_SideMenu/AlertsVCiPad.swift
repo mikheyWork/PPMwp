@@ -45,7 +45,6 @@ class AlertsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
         
-        print("name2 \(name2)")
         if appDelegate.curentPdfRef.contains(where: {$0.title == name2}) == false {
             webView.isHidden = true
             progressView.isHidden = true
@@ -420,8 +419,7 @@ extension AlertsVCiPad {
             
             let vs = segue.destination as! VitalStatVCiPad
             vs.name = name
-            var arr = appDelegate.childs.filter({$0.name == name})
-            
+            let arr = appDelegate.childs.filter({$0.name == name})
             vs.parentID = arr.first?.parent
         }
         

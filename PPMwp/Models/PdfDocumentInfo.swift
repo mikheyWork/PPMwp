@@ -1,6 +1,7 @@
 import Foundation
 class PdfDocumentInfo: NSObject, NSCoding {
     
+    var id: Int?
     var alerts: String?
     var model_number: String?
     var info: String?
@@ -39,7 +40,8 @@ class PdfDocumentInfo: NSObject, NSCoding {
     
     
     
-    init(alerts: String?,
+    init(id: Int?,
+        alerts: String?,
          model_number: String?,
          info: String?,
          model_name: String?,
@@ -74,6 +76,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
          max_lead_diameter: String?,
          placement: String?,
          number_of_hv_coils: String?) {
+        self.id = id
         self.alerts = alerts
         self.model_number = model_number
         self.info = info
@@ -116,6 +119,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
     
     //decoding
     required convenience init?(coder aDecoder: NSCoder) {
+        let id = aDecoder.decodeObject(forKey: "id") as! Int
         let alerts = aDecoder.decodeObject(forKey: "alerts") as! String
         let model_number = aDecoder.decodeObject(forKey: "model_number") as! String
         let info = aDecoder.decodeObject(forKey: "info") as! String
@@ -151,7 +155,8 @@ class PdfDocumentInfo: NSObject, NSCoding {
         let max_lead_diameter = aDecoder.decodeObject(forKey: "max_lead_diameter") as! String
         let placement = aDecoder.decodeObject(forKey: "placement") as! String
         let number_of_hv_coils = aDecoder.decodeObject(forKey: "number_of_hv_coils") as! String
-        self.init(alerts: alerts,
+        self.init(id: id,
+            alerts: alerts,
                   model_number: model_number,
                   info: info,
                   model_name: model_name,
@@ -189,6 +194,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
     }
     
     func encode(with aCoder: NSCoder) {
+        aCoder.encode(id, forKey: "id")
         aCoder.encode(alerts, forKey: "alerts")
         aCoder.encode(model_number, forKey: "model_number")
         aCoder.encode(info, forKey: "info")

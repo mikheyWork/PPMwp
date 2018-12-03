@@ -27,15 +27,15 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     var name = ""
     var name2 = ""
     override func viewDidLoad() {
-        print("subs1 \(appDelegate.subscribtion)")
         appDelegate.favourites.removeAll()
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
-            print("favor add")
             self.appDelegate.favourites.removeAll()
             for i in a {
                 if self.appDelegate.favourites.contains(String(i)) == false {
-                    self.appDelegate.favourites.append(String(i))
+                    if appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdfRef.contains(where: {$0.title == String(i)}) || appDelegate.childs.contains(where: {$0.name == String(i)}) || appDelegate.referencesChild.contains(where: {$0.name == String(i)}) {
+                        self.appDelegate.favourites.append(String(i))
+                    }
                 }
             }
         }
@@ -71,9 +71,6 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
-         print("subs2 \(appDelegate.subscribtion)")
-        
-        print("name2 \(name2)")
         if appDelegate.curentPdfRef.contains(where: {$0.title == name2}) == false {
             state = false
             checkState()

@@ -203,13 +203,11 @@ extension ReferencesVC2 {
         }
         
         let arr1 = appDelegate.referencesChild.filter({$0.name == text})
-        print("arr1 \(arr1.first?.name)")
         let arr2 = appDelegate.referencesChild.filter({$0.parent == arr1.first?.id})
         if arr2.isEmpty == true {
            performSegue(withIdentifier: "showRefPdf", sender: text)
         } else {
             parentID = arr2.first?.parent
-            print("parentId \(parentID)")
             cars.removeAll()
             carsDictionary.removeAll()
             carSectionTitles.removeAll()

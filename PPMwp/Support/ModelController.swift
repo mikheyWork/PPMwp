@@ -4,7 +4,6 @@ class ModelController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("work1")
     }
     
     override func viewWillAppear(_ animated: Bool) {

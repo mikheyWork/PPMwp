@@ -4,6 +4,11 @@ import Alamofire
 import SwiftyJSON
 import GTProgressBar
 
+var progressCount2: CGFloat = 0.0 {
+    didSet {
+        NotificationCenter.default.post(name: NSNotification.Name("Loader"), object: nil)
+    }
+}
 
 class CheckDataController: UIViewController {
     @IBOutlet weak var alertView: UIView!
@@ -15,36 +20,41 @@ class CheckDataController: UIViewController {
     var point2: CGFloat =  0.0
     var count10 = 0
     var countAll: CGFloat = 0.0
-    var progressCount: CGFloat = 0.0 {
-        didSet {
-            self.progressBar.animateTo(progress: self.progressCount)
-            if self.progressBar.progress >= 0.99 {
-                Thread.sleep(forTimeInterval: 0.25)
-                DispatchQueue.main.async(flags: .barrier) {
-                    self.appDelegate.closeCheckData = true
-//                    Thread.sleep(forTimeInterval: 0.5)
-                    self.removeFromParent()
-                    self.view.removeFromSuperview()
-                }
-            }
-        }
-    }
+    var timePDF = [PdfDocumentInfo]()
+    var timePDFRef = [PdfDocumentInfoRef]()
     
     override func viewDidLoad() {
-        self.point2 = CGFloat(1 / self.appDelegate.allCountDoc)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.loader), name: NSNotification.Name("Loader"), object: nil)
+       
+        
         self.progressBar.progress = 0.0
         alertView.layer.cornerRadius = 15
         appDelegate.closeCheckData = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-//        Thread.sleep(forTimeInterval: 1.0)
-        self.countAll = self.appDelegate.allCountDoc
+        Thread.sleep(forTimeInterval: 1.0)
+        self.point2 = CGFloat(1 / self.appDelegate.allCountDoc)
         self.checkDataPdfRef(page: 1)
         self.checkDataPdfProd(page: 1)
-        if self.appDelegate.networkProd.isEmpty == false &&  self.appDelegate.networkRef.isEmpty == false {
+        if self.appDelegate.allCountDoc != 0 {
             self.checkActualData()
+            
         }
     }
     
+    
+    @objc func loader() {
+        self.progressBar.animateTo(progress: progressCount2)
+        
+        if self.progressBar.progress >= 0.99 {
+            Thread.sleep(forTimeInterval: 0.45)
+            DispatchQueue.main.async(flags: .barrier) {
+                self.appDelegate.closeCheckData = true
+                Thread.sleep(forTimeInterval: 0.5)
+                self.removeFromParent()
+                self.view.removeFromSuperview()
+            }
+        }
+    }
     
     fileprivate func checkActualData() {
         for i in appDelegate.parents {
@@ -82,7 +92,6 @@ class CheckDataController: UIViewController {
         }
     }
     
-    
     func checkDataPdfRef(page: Int) {
         let url = URL(string: "http://ppm.customertests.com/wp-json/wp/v2/reference?page=\(page)&per_page=100")
         guard url != nil else {
@@ -97,71 +106,77 @@ class CheckDataController: UIViewController {
             let json = JSON(response.result.value!)
             let resaults = json[].arrayValue
             guard resaults.isEmpty == false else {
-                print("page is empty")
                 return
             }
             if resaults.count == 100 {
-                print("page is full, page is \(page)")
                 self.checkDataPdfRef(page: page + 1)
-            } else {
-                print("not full page")
             }
-            if self.appDelegate.refsDocCount != nil &&  self.appDelegate.productsDocCount != nil {
-                self.appDelegate.allCountDoc = self.appDelegate.refsDocCount + self.appDelegate.productsDocCount
-            }
+            
+            
             for resault in resaults {
                 self.count10 += 1
-                self.point2 = CGFloat(1 / self.appDelegate.allCountDoc)
-                self.progressCount += self.point2
+                progressCount2 += self.point2
                 let name = resault["title"]["rendered"].stringValue
+                let id = resault["id"].intValue
                 let startLink = resault["acf"]["references"].stringValue
                 let name2 = PDFDownloader.shared.addPercent(fromString: name)
                 let finishLink = PDFDownloader.shared.removeHtmlSymbols(fromString: startLink, name: name2)
+                
                 if name != "false" && name != ""  {
                     //prog
                     if resault["parent"].intValue != 0 {
                         
-                        if self.appDelegate.networkPdfRef.contains(where: {$0.title == name}) {
-                            if self.appDelegate.curentPdfRef.contains(where: {$0.title == name}) {
+                        if self.appDelegate.networkPdfRef.contains(where: {$0.id == id}) {
+                            if self.appDelegate.curentPdfRef.contains(where: {$0.id == id}) {
                                 
                                 //chek cuttent updates
-                                
-                                let networkAlertRef = self.appDelegate.networkPdfRef.filter({$0.title == name})
-                                if networkAlertRef.first?.link != finishLink && finishLink != "" && finishLink != "false" {
+                                let networkAlertRef = self.appDelegate.curentPdfRef.filter({$0.id == id})
+                                let name3 = networkAlertRef.first?.title
+                                if networkAlertRef.first?.modified != resault["modified"].stringValue {
+                                    self.appDelegate.networkPdfRef = self.appDelegate.networkPdfRef.filter({$0.id != id})
+                                    self.appDelegate.curentPdfRef =  self.appDelegate.curentPdfRef.filter({$0.id != id})
+                                    self.timePDFRef = self.timePDFRef.filter({$0.id != id})
+                                    let name4 = PDFDownloader.shared.addPercent(fromString: name3!)
+                                    self.appDelegate.removeFile(name: "\(name4)")
                                     
-                                    self.appDelegate.networkPdfRef = self.appDelegate.networkPdfRef.filter({$0.title != name})
-                                    self.appDelegate.curentPdfRef =  self.appDelegate.curentPdfRef.filter({$0.title != name})
-                                    self.appDelegate.removeFile(name: "\(name)")
-                                    self.appDelegate.removeFile(name: "\(name)")
-                                    
-                                    let object = PdfDocumentInfoRef(title: name,
+                                    let object = PdfDocumentInfoRef(id: id,
+                                                                    title: name,
                                                                     link: finishLink,
                                                                     description: resault["acf"]["description"].stringValue,
                                                                     modified: resault["modified"].stringValue)
+                                    
+                                    self.timePDFRef.append(object)
                                     self.appDelegate.networkPdfRef.append(object)
                                     self.appDelegate.curentPdfRef.append(object)
-                                    
-                                    DispatchQueue.global(qos: .background).async {
+                                    if  finishLink != "" && finishLink != "false" {
                                         let name2 = PDFDownloader.shared.addPercent(fromString: name)
                                         PDFDownloader.shared.dowloandAndSave(name: "\(name2).pdf", url: URL(string: finishLink)!)
                                         
-                                        
-                                        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
-                                        UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
-                                        UserDefaults.standard.synchronize()
-                                        
-                                        let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
-                                        UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
-                                        UserDefaults.standard.synchronize()
                                     }
+                                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
+                                    UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
+                                    UserDefaults.standard.synchronize()
+                                    
+                                    let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
+                                    UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
+                                    UserDefaults.standard.synchronize()
+                                } else {
+                                    let object = PdfDocumentInfoRef(id: id,
+                                                                    title: name,
+                                                                    link: finishLink,
+                                                                    description: resault["acf"]["description"].stringValue,
+                                                                    modified: resault["modified"].stringValue)
+                                    self.timePDFRef.append(object)
                                 }
                             } else {
-                                let object = PdfDocumentInfoRef(title: name,
-                                                                link: finishLink,
-                                                                description: resault["acf"]["description"].stringValue,
-                                                                modified: resault["modified"].stringValue)
-                                self.appDelegate.curentPdfRef.append(object)
-                                DispatchQueue.global(qos: .background).async {
+                                if self.appDelegate.curentPdfRef.contains(where: {$0.id == id}) == false {
+                                    let object = PdfDocumentInfoRef(id: id,
+                                                                    title: name,
+                                                                    link: finishLink,
+                                                                    description: resault["acf"]["description"].stringValue,
+                                                                    modified: resault["modified"].stringValue)
+                                    self.timePDFRef.append(object)
+                                    self.appDelegate.curentPdfRef.append(object)
                                     let name2 = PDFDownloader.shared.addPercent(fromString: name)
                                     PDFDownloader.shared.dowloandAndSave(name: "\(name2).pdf", url: URL(string: finishLink)!)
                                     let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
@@ -173,16 +188,16 @@ class CheckDataController: UIViewController {
                                 }
                             }
                         } else {
-                            
-                            let object = PdfDocumentInfoRef(title: name,
-                                                            link: finishLink,
-                                                            description: resault["acf"]["description"].stringValue,
-                                                            modified: resault["modified"].stringValue)
-                            
-                            self.appDelegate.networkPdfRef.append(object)
-                            self.appDelegate.curentPdfRef.append(object)
-                            
-                            DispatchQueue.global(qos: .background).async {
+                            if self.appDelegate.curentPdfRef.contains(where: {$0.id == id}) == false {
+                                let object = PdfDocumentInfoRef(id: id,
+                                                                title: name,
+                                                                link: finishLink,
+                                                                description: resault["acf"]["description"].stringValue,
+                                                                modified: resault["modified"].stringValue)
+                                self.timePDFRef.append(object)
+                                self.appDelegate.networkPdfRef.append(object)
+                                self.appDelegate.curentPdfRef.append(object)
+                                
                                 let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
                                 UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
                                 UserDefaults.standard.synchronize()
@@ -190,21 +205,33 @@ class CheckDataController: UIViewController {
                                 UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
                                 UserDefaults.standard.synchronize()
                             }
-                           
+                            
                             
                             if finishLink != "" && finishLink != "false" {
                                 let name2 = PDFDownloader.shared.addPercent(fromString: name)
                                 
                                 PDFDownloader.shared.dowloandAndSave(name: "\(name2).pdf", url: URL(string: finishLink)!)
                             }
-                            //                            }
                         }
                     }
                     if self.progressBar.progress < 1 {
-                        self.progressBar.progress += self.point1
+                        self.progressBar.progress += self.point2
                     }
                 }
+               
             }
+            print("ss \(self.timePDFRef.count)")
+            for i in self.timePDFRef {
+                print("i \(i.title)")
+            }
+            self.appDelegate.networkPdfRef = self.timePDFRef
+            self.appDelegate.curentPdfRef = self.timePDFRef
+            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
+            UserDefaults.standard.set(encodedData, forKey: "networkPdfRef")
+            UserDefaults.standard.synchronize()
+            let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdfRef)
+            UserDefaults.standard.set(encodedData2, forKey: "curentPdfRef")
+            UserDefaults.standard.synchronize()
             //end alamofire
         }
     }
@@ -223,30 +250,22 @@ class CheckDataController: UIViewController {
             let json = JSON(response.result.value!)
             let resaults = json[].arrayValue
             guard resaults.isEmpty == false else {
-                print("page is empty")
                 return
             }
             if resaults.count == 100 {
-                print("page is full, page is \(page)")
                 self.checkDataPdfRef(page: page + 1)
-            } else {
-                print("not full page")
-            }
-            if self.appDelegate.refsDocCount != nil &&  self.appDelegate.productsDocCount != nil {
-                self.appDelegate.allCountDoc = self.appDelegate.refsDocCount + self.appDelegate.productsDocCount
             }
             
             for resault in resaults {
                 self.count10 += 1
-                self.progressCount += self.point2
+                progressCount2 += self.point2
                 let name = resault["acf"]["model_name"].stringValue
+                let id2 = resault["id"].intValue
                 let number = resault["acf"]["model_number"].stringValue
-                print("name \(name)")
-                print("parent id \(resault["categories"].array)")
-                var parent = resault["categories"].arrayValue
+                let parent = resault["categories"].arrayValue
                 let parentId = parent.last?.int64Value
-                print("paarrr \(parentId)")
-                if name != "false" && name != ""  || number != "false" && number != "" {
+                if name != "false" && name != ""  || number != "false" && number != ""   {
+                    var id: Int?
                     var alerts: String?
                     var model_number: String?
                     var info: String?
@@ -282,7 +301,11 @@ class CheckDataController: UIViewController {
                     var max_lead_diameter: String?
                     var placement: String?
                     var number_of_hv_coils: String?
-                    
+                    if resault["id"].intValue != 0 {
+                        id = resault["id"].intValue
+                    } else {
+                        id = 0
+                    }
                     if resault["acf"]["alerts"] != "" &&  resault["acf"]["alerts"] != "false" {
                         alerts = resault["acf"]["alerts"].stringValue
                     } else {
@@ -465,32 +488,34 @@ class CheckDataController: UIViewController {
                     }
                     
                     
-                    if self.appDelegate.networkPdf.contains(where: {$0.model_name == name}) || self.appDelegate.networkPdf.contains(where: {$0.model_number == number})  {
+                    if self.appDelegate.networkPdf.contains(where: {$0.id == id}) {
                         
-                        if self.appDelegate.curentPdf.contains(where: {$0.model_name == name}) || self.appDelegate.curentPdf.contains(where: {$0.model_number == number}) {
+                        if self.appDelegate.curentPdf.contains(where: {$0.id == id}) {
                             //chek cuttent updates
-                            var networkAlert = self.appDelegate.networkPdf.filter({$0.model_name == name})
+                            var networkAlert = self.appDelegate.networkPdf.filter({$0.id == id})
                             if networkAlert.isEmpty == true {
-                                networkAlert = self.appDelegate.networkPdf.filter({$0.model_number == number})
+                                networkAlert = self.appDelegate.curentPdf.filter({$0.id == id})
                             }
                             
                             if networkAlert.first?.modified != resault["modified"].stringValue {
                                 if  name == "" || name == "false" {
-                                    self.appDelegate.networkPdf = self.appDelegate.networkPdf.filter({$0.model_number != resault["acf"]["model_number"].stringValue})
-                                    self.appDelegate.curentPdf =  self.appDelegate.curentPdf.filter({$0.model_number != resault["acf"]["model_number"].stringValue})
+                                    self.appDelegate.networkPdf = self.appDelegate.networkPdf.filter({$0.id != id})
+                                    self.appDelegate.curentPdf =  self.appDelegate.curentPdf.filter({$0.id != id})
                                     let name2 = PDFDownloader.shared.addPercent(fromString: resault["acf"]["model_name"].stringValue)
                                     self.appDelegate.removeFile(name: "\(name2)Alert")
                                     self.appDelegate.removeFile(name: "\(name2)Info")
                                 } else {
-                                    self.appDelegate.networkPdf = self.appDelegate.networkPdf.filter({$0.model_name != resault["acf"]["model_name"].stringValue})
-                                    self.appDelegate.curentPdf =  self.appDelegate.curentPdf.filter({$0.model_name != resault["acf"]["model_name"].stringValue})
+                                    self.appDelegate.networkPdf = self.appDelegate.networkPdf.filter({$0.id != id})
+                                    self.appDelegate.curentPdf =  self.appDelegate.curentPdf.filter({$0.id != id})
+                                    self.timePDF = self.timePDF.filter({$0.id != id})
                                     let name2 = PDFDownloader.shared.addPercent(fromString: resault["acf"]["model_name"].stringValue)
                                     self.appDelegate.removeFile(name: "\(name2)Alert")
                                     self.appDelegate.removeFile(name: "\(name2)Info")
                                 }
                                 
                                 //change
-                                let object = PdfDocumentInfo(alerts: alerts,
+                                let object = PdfDocumentInfo(id: id,
+                                                             alerts: alerts,
                                                              model_number: model_number,
                                                              info: info,
                                                              model_name: model_name,
@@ -526,34 +551,135 @@ class CheckDataController: UIViewController {
                                                              placement: placement,
                                                              number_of_hv_coils: number_of_hv_coils)
                                 //
+                                self.timePDF.append(object)
                                 self.appDelegate.networkPdf.append(object)
                                 self.appDelegate.curentPdf.append(object)
-                                DispatchQueue.global(qos: .background).async {
-                                    if name == "" || name == "false" {
-                                        let name3 = PDFDownloader.shared.addPercent(fromString: number)
-                                        PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                        PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                            object.info!)!)
-                                    } else {
-                                        let name3 = PDFDownloader.shared.addPercent(fromString: name)
-                                        PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                        PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                            object.info!)!)
-                                    }
-                                    
-                                    
-                                    
-                                    let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
-                                    UserDefaults.standard.set(encodedData, forKey: "networkPdf")
-                                    UserDefaults.standard.synchronize()
-                                    
-                                    let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
-                                    UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
-                                    UserDefaults.standard.synchronize()
+                                if name == "" || name == "false" {
+                                    let name3 = PDFDownloader.shared.addPercent(fromString: number)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                        object.info!)!)
+                                } else {
+                                    let name3 = PDFDownloader.shared.addPercent(fromString: name)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                        object.info!)!)
                                 }
+                                
+                                
+                                
+                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
+                                UserDefaults.standard.set(encodedData, forKey: "networkPdf")
+                                UserDefaults.standard.synchronize()
+                                
+                                let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
+                                UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
+                                UserDefaults.standard.synchronize()
+                            } else {
+                                let object = PdfDocumentInfo(id: id,
+                                                             alerts: alerts,
+                                                             model_number: model_number,
+                                                             info: info,
+                                                             model_name: model_name,
+                                                             manufacturer: manufacturer,
+                                                             modified: modified,
+                                                             prodTypeId: prodTypeId,
+                                                             nbg_code: nbg_code,
+                                                             polarity: polarity,
+                                                             sensor_type: sensor_type,
+                                                             dimensions_size: dimensions_size,
+                                                             dimensions_weight: dimensions_weight,
+                                                             connectores_pace_sense: connectores_pace_sense,
+                                                             mri_conditional: mri_conditional,
+                                                             wireless_telemetry: wireless_telemetry,
+                                                             remote_monitoring: remote_monitoring,
+                                                             non_magnet_rate: non_magnet_rate,
+                                                             magnet_rate_bol: magnet_rate_bol,
+                                                             magnet_rate_eri_eol: magnet_rate_eri_eol,
+                                                             patient_alert_feature: patient_alert_feature,
+                                                             detach_tools: detach_tools,
+                                                             x_rey_id: x_rey_id,
+                                                             nbd_code: nbd_code,
+                                                             max_energy: max_energy,
+                                                             hv_waveform: hv_waveform,
+                                                             connectores_hight_voltage: connectores_hight_voltage,
+                                                             eri_notes: eri_notes,
+                                                             bol_characteristics: bol_characteristics,
+                                                             eri_eol_characteristics: eri_eol_characteristics,
+                                                             lead_polarity: lead_polarity,
+                                                             fixation: fixation,
+                                                             insulation_material: insulation_material,
+                                                             max_lead_diameter: max_lead_diameter,
+                                                             placement: placement,
+                                                             number_of_hv_coils: number_of_hv_coils)
+                                self.timePDF.append(object)
                             }
                         } else {
-                            let object = PdfDocumentInfo(alerts: alerts,
+                            if self.appDelegate.curentPdf.contains(where: {$0.id == id2}) == false {
+                                let object = PdfDocumentInfo(id: id,
+                                                             alerts: alerts,
+                                                             model_number: model_number,
+                                                             info: info,
+                                                             model_name: model_name,
+                                                             manufacturer: manufacturer,
+                                                             modified: modified,
+                                                             prodTypeId: prodTypeId,
+                                                             nbg_code: nbg_code,
+                                                             polarity: polarity,
+                                                             sensor_type: sensor_type,
+                                                             dimensions_size: dimensions_size,
+                                                             dimensions_weight: dimensions_weight,
+                                                             connectores_pace_sense: connectores_pace_sense,
+                                                             mri_conditional: mri_conditional,
+                                                             wireless_telemetry: wireless_telemetry,
+                                                             remote_monitoring: remote_monitoring,
+                                                             non_magnet_rate: non_magnet_rate,
+                                                             magnet_rate_bol: magnet_rate_bol,
+                                                             magnet_rate_eri_eol: magnet_rate_eri_eol,
+                                                             patient_alert_feature: patient_alert_feature,
+                                                             detach_tools: detach_tools,
+                                                             x_rey_id: x_rey_id,
+                                                             nbd_code: nbd_code,
+                                                             max_energy: max_energy,
+                                                             hv_waveform: hv_waveform,
+                                                             connectores_hight_voltage: connectores_hight_voltage,
+                                                             eri_notes: eri_notes,
+                                                             bol_characteristics: bol_characteristics,
+                                                             eri_eol_characteristics: eri_eol_characteristics,
+                                                             lead_polarity: lead_polarity,
+                                                             fixation: fixation,
+                                                             insulation_material: insulation_material,
+                                                             max_lead_diameter: max_lead_diameter,
+                                                             placement: placement,
+                                                             number_of_hv_coils: number_of_hv_coils)
+                                self.appDelegate.networkPdf.append(object)
+                                self.appDelegate.curentPdf.append(object)
+                                self.timePDF.append(object)
+                                if name == "" || name == "false" {
+                                    let name3 = PDFDownloader.shared.addPercent(fromString: number)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                        object.info!)!)
+                                } else {
+                                    let name3 = PDFDownloader.shared.addPercent(fromString: name)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                        object.info!)!)
+                                }
+                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
+                                UserDefaults.standard.set(encodedData, forKey: "networkPdf")
+                                UserDefaults.standard.synchronize()
+                                
+                                let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
+                                UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
+                                UserDefaults.standard.synchronize()
+                            }
+                        }
+                    } else {
+                        //change
+                        if self.appDelegate.curentPdf.contains(where: {$0.id == id2}) == false {
+                            let object = PdfDocumentInfo(id: id,
+                                                         alerts: alerts,
                                                          model_number: model_number,
                                                          info: info,
                                                          model_name: model_name,
@@ -588,69 +714,9 @@ class CheckDataController: UIViewController {
                                                          max_lead_diameter: max_lead_diameter,
                                                          placement: placement,
                                                          number_of_hv_coils: number_of_hv_coils)
+                            self.timePDF.append(object)
+                            self.appDelegate.networkPdf.append(object)
                             self.appDelegate.curentPdf.append(object)
-                            DispatchQueue.global(qos: .background).async {
-                                if name == "" || name == "false" {
-                                    let name3 = PDFDownloader.shared.addPercent(fromString: number)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                        object.info!)!)
-                                } else {
-                                    let name3 = PDFDownloader.shared.addPercent(fromString: name)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
-                                        object.info!)!)
-                                }
-                                let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
-                                UserDefaults.standard.set(encodedData, forKey: "networkPdf")
-                                UserDefaults.standard.synchronize()
-                                
-                                let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
-                                UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
-                                UserDefaults.standard.synchronize()
-                            }
-                        }
-                    } else {
-                        //change
-                        let object = PdfDocumentInfo(alerts: alerts,
-                                                     model_number: model_number,
-                                                     info: info,
-                                                     model_name: model_name,
-                                                     manufacturer: manufacturer,
-                                                     modified: modified,
-                                                     prodTypeId: prodTypeId,
-                                                     nbg_code: nbg_code,
-                                                     polarity: polarity,
-                                                     sensor_type: sensor_type,
-                                                     dimensions_size: dimensions_size,
-                                                     dimensions_weight: dimensions_weight,
-                                                     connectores_pace_sense: connectores_pace_sense,
-                                                     mri_conditional: mri_conditional,
-                                                     wireless_telemetry: wireless_telemetry,
-                                                     remote_monitoring: remote_monitoring,
-                                                     non_magnet_rate: non_magnet_rate,
-                                                     magnet_rate_bol: magnet_rate_bol,
-                                                     magnet_rate_eri_eol: magnet_rate_eri_eol,
-                                                     patient_alert_feature: patient_alert_feature,
-                                                     detach_tools: detach_tools,
-                                                     x_rey_id: x_rey_id,
-                                                     nbd_code: nbd_code,
-                                                     max_energy: max_energy,
-                                                     hv_waveform: hv_waveform,
-                                                     connectores_hight_voltage: connectores_hight_voltage,
-                                                     eri_notes: eri_notes,
-                                                     bol_characteristics: bol_characteristics,
-                                                     eri_eol_characteristics: eri_eol_characteristics,
-                                                     lead_polarity: lead_polarity,
-                                                     fixation: fixation,
-                                                     insulation_material: insulation_material,
-                                                     max_lead_diameter: max_lead_diameter,
-                                                     placement: placement,
-                                                     number_of_hv_coils: number_of_hv_coils)
-                        
-                        self.appDelegate.networkPdf.append(object)
-                        self.appDelegate.curentPdf.append(object)
-                        DispatchQueue.global(qos: .background).async {
                             if name == "" || name == "false" {
                                 let name3 = PDFDownloader.shared.addPercent(fromString: number)
                                 PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
@@ -689,6 +755,19 @@ class CheckDataController: UIViewController {
                     }
                 }
             }
+            print("ss2 \(self.timePDF.count)")
+            for i in self.timePDF {
+                print("i.... \(i.model_name) \(i.model_number)")
+            }
+            self.appDelegate.curentPdf = self.timePDF
+            self.appDelegate.networkPdf = self.timePDF
+            let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
+            UserDefaults.standard.set(encodedData, forKey: "networkPdf")
+            UserDefaults.standard.synchronize()
+            
+            let encodedData2: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.curentPdf)
+            UserDefaults.standard.set(encodedData2, forKey: "curentPdf")
+            UserDefaults.standard.synchronize()
         }
         //end alamofire
     }

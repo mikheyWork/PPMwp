@@ -83,8 +83,6 @@ class ProductTypes: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func index() {
         
-        print("parent \(parentID)")
-        
         if parentID != nil {
             let resault = appDelegate.childs.filter{$0.parent == parentID}
             for i in resault {

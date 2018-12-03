@@ -28,10 +28,6 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //off
-        appDelegate.subscribtion = true
-        showSub(nameVC: "CheckDataController", alpha: 0.2)
-        
         searchBarLbl.delegate = self
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
@@ -62,6 +58,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     
     override func viewWillAppear(_ animated: Bool) {
+       
         if Reachability.isConnectedToNetwork() == true {
             //requset actual data
             DispatchQueue.global(qos: .userInteractive).async {
@@ -149,7 +146,9 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             self.appDelegate.favourites.removeAll()
             for i in a {
                 if self.appDelegate.favourites.contains(String(i)) == false {
-                    self.appDelegate.favourites.append(String(i))
+                    if appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdfRef.contains(where: {$0.title == String(i)}) || appDelegate.childs.contains(where: {$0.name == String(i)}) || appDelegate.referencesChild.contains(where: {$0.name == String(i)}) {
+                        self.appDelegate.favourites.append(String(i))
+                    }
                 }
             }
         }
@@ -600,7 +599,6 @@ extension CepiaVCiPad {
         let selectedCell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
         let text = selectedCell.nameLbl.text
         var selectedName = appDelegate.parents.filter({$0.name == text})
-        var selectedNameID: Int64!
         if selectedName.isEmpty {
             selectedName = appDelegate.models.filter({$0.name == text})
             if selectedName.isEmpty {
@@ -639,9 +637,7 @@ extension CepiaVCiPad {
                 }
                 
             }
-            
         } else {
-            selectedNameID = selectedName.first?.id
             
             let cell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
             if Reachability.isConnectedToNetwork() {
@@ -661,7 +657,6 @@ extension CepiaVCiPad {
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        appDelegate.subscribtion = true
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.", title: "Confirm Purchase")
         }

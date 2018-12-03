@@ -39,16 +39,12 @@ class Functions: NSObject {
                           headers:headers)
             .responseJSON { [weak self] (response) in
                 guard response.result.value != nil else {
-                    print("json response false: \(response)")
                     return
                 }
                 let json = JSON(response.result.value!)
-                print("json: \(json)")
                 let id: Int!
                 id = json["id"].intValue
-                print("id is \(id)")
                 if id != nil && id != 0 {
-                    print("work0")
                     let user = User(name: json["name"].stringValue,
                                     password: (self?.appDelegate.currentUser.password!)!,
                                     favor: json["description"].stringValue,
@@ -78,8 +74,6 @@ class Functions: NSObject {
         DispatchQueue.global(qos: .userInitiated).async {
             var favor: String!
             if self.appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || self.appDelegate.curentPdfRef.contains(where: {$0.title == name}) == true || self.appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
-                print("name star is \(name)")
-                
                 if self.appDelegate.favourites.contains(name) == true {
                     //delete
                     self.appDelegate.favourites = self.appDelegate.favourites.filter({$0 != name})
@@ -88,7 +82,6 @@ class Functions: NSObject {
                     self.appDelegate.favourites.append(name)
                 }
                 favor = self.appDelegate.favourites.joined(separator: ",")
-                print("favor: \(favor!)")
                 if Reachability.isConnectedToNetwork() {
                     //add to wp
                     let user = self.appDelegate.currentUser.name!
@@ -107,16 +100,12 @@ class Functions: NSObject {
                                       headers:headers)
                         .responseJSON { (response) in
                             guard response.result.value != nil else {
-                                print("json response false: \(response)")
                                 return
                             }
                             let json = JSON(response.result.value!)
-                            print("json: \(json)")
                             let id: Int!
                             id = json["id"].intValue
-                            print("id is \(id)")
                             if id != nil && id != 0 {
-                                print("work0")
                                 let user = User(name: self.appDelegate.currentUser.name,
                                                 password: self.appDelegate.currentUser.password!,
                                                 favor: json["description"].stringValue,

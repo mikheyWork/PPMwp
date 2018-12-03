@@ -29,7 +29,6 @@ class Manufacturers: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         if appDelegate.parents.isEmpty == false {
             rangeChar()
             top5But.layer.cornerRadius = 14

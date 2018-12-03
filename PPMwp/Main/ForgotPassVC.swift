@@ -70,17 +70,13 @@ class ForgotPassVC: UIViewController {
                           headers:headers)
             .responseJSON { (response) in
                 guard response.result.value != nil else {
-                    print("json response false: \(response)")
                     return
                 }
                 
                 let json = JSON(response.result.value!)
                 let resaults = json[].arrayValue
                 if resaults.count == 100 {
-                    print("page is full, page is \(page)")
                     self.forgotReq(page: page + 1)
-                } else {
-                    print("not full page")
                 }
                 for resault in resaults {
                     if self.emailLbl.text == resault["name"].stringValue {

@@ -2341,6 +2341,10 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="zJu-tk-m7l">
+                                <rect key="frame" x="176" y="501" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -2352,6 +2356,7 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                         <viewLayoutGuide key="safeArea" id="Oh1-lk-C4O"/>
                     </view>
                     <connections>
+                        <outlet property="activity" destination="zJu-tk-m7l" id="RfG-VN-xq8"/>
                         <outlet property="nameLbl" destination="2mX-Ss-R1l" id="wa4-91-FM2"/>
                         <outlet property="sendBut" destination="GLk-qg-eLf" id="5u5-An-zGU"/>
                         <outlet property="subjText" destination="Xrb-aK-PdZ" id="Q4M-Qa-zn9"/>

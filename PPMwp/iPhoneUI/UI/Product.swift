@@ -87,24 +87,15 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
     }
     
     func index() {
-        
         if parentID != nil {
-            print("parentID \(parentID)")
-            
             if manufacturer != nil && manufacturer != "" {
-                var allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
+                let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
                 parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
             }
-            print("parentID2 \(parentID)")
             var resault = [CategoryEnt]()
-            var arr1 = [CategoryEnt]()
             if manufacturer != "" && manufacturer != nil {
-                var resArr = [PdfDocumentInfo]()
-                
                 let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
-                
                 for i in pop {
-                    print("pop is \(i.model_name)")
                     if cars.contains(where: {$0 == i.model_name}) == false && cars.contains(where: {$0 == i.model_number}) == false {
                         var name = i.model_name
                         if name == nil || name == "" {
@@ -113,17 +104,12 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
                         cars.append(name!)
                     }
                 }
-                
             } else {
                 let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
                 resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
-                arr1 = appDelegate.childs.filter({$0.name == selectedNameID.first?.name})
                 for i in resault {
-                    print("ipp \(i.name)")
-                    print("ipp \(i.id)")
                     let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
                     for j in resArr {
-                        print("j.\(j.model_name)")
                         if cars.contains(where: {$0 == j.model_name}) == false && cars.contains(where: {$0 == j.model_number}) == false {
                             var name = j.model_name
                             if name == nil || name == "" {
@@ -133,16 +119,12 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
                         }
                     }
                 }
-                for car in cars {
-                    print("carr \(car)")
-                }
             }
         } else {
             for i in appDelegate.curentPdf {
                 cars.append(i.model_name!)
             }
         }
-        //
         for car in cars {
             let carKey = String(car.prefix(1))
             if var carValues = carsDictionary[carKey] {
@@ -173,11 +155,7 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
     
 }
 
-
 extension Product {
-    
-    
-    
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 20
@@ -189,13 +167,9 @@ extension Product {
         footerViewSub.frame =  CGRect(x: 25     , y: 0, width:
             tableView.bounds.size.width - 65 , height: 0.5)
         footerView.backgroundColor = UIColor.white.withAlphaComponent(1)
-        //        footerViewSub.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1)
-        //        footerView.addSubview(footerViewSub)
         return footerView
-        
     }
-    
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var headerLabel = UILabel()
         let headerView = UIView()
@@ -211,22 +185,15 @@ extension Product {
         return headerView
     }
     
-    
-    
-    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return carSectionTitles[section]
     }
     
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        // 1
         return carSectionTitles.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 2
-        
         let carKey = carSectionTitles[section]
         if let carValues = carsDictionary[carKey] {
             return carValues.count
@@ -235,59 +202,42 @@ extension Product {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 3
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell4", for: indexPath) as! ProductsTVCell
-        
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1.0)
         cell.selectedBackgroundView = backgroundView
-        
         cell.separatorInset.left = CGFloat(25)
         cell.separatorInset.right = CGFloat(40)
-        // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
             cell.prodLbl.text = carValues[indexPath.row]
         }
-        
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        
         tableView.sectionIndexColor = UIColor(red: 40/255, green: 36/255, blue: 58/255, alpha: 1)
-        
-        
-        //        return carSectionTitles
         return [" "]
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         var text = " "
-        
         let cell = tableView.cellForRow(at: indexPath) as! ProductsTVCell
-        
         if cell.prodLbl.text != nil {
             text = cell.prodLbl.text!
         }
-        
         performSegue(withIdentifier: "showVitalStatistics", sender: text)
-    }
-    
+    }   
     
     //MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showVitalStatistics" {
-            
             let name = sender as! String
-            
             let vs = segue.destination as! VitalStatVC
             vs.name = name
         }
-        
     }
 }
-
