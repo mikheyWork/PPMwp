@@ -29,6 +29,18 @@ class Manufacturers: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        for i in appDelegate.childs {
+            print("i.name \(i.name)")
+            print("i.id \(i.id)")
+        }
+        
+        for j in appDelegate.curentPdf {
+            print("i.name \(j.model_name)")
+            print("i.id \(j.prodTypeId)")
+        }
+//        for i in appDelegate.parents {
+//            print("i. \(i.name)")
+//        }
         if appDelegate.parents.isEmpty == false {
             rangeChar()
             top5But.layer.cornerRadius = 14

@@ -277,10 +277,18 @@ extension ModelsVC {
             if selectedName.isEmpty {
                 selectedName = appDelegate.curentPdf.filter({$0.model_number == text})
             }
+            print("sel \(selectedName.first?.model_name)")
+            print("selID \(selectedName.first?.prodTypeId)")
+            let arr1 = appDelegate.childs.filter({$0.id == selectedName.first?.prodTypeId})
+            let arr2 = appDelegate.parents.filter({$0.id == arr1.first?.parent})
+            print("arr2 \(arr2.first?.name)")
+            
+            
             let prod = segue.destination as! Product
             prod.name = text
             prod.prodName = text
             prod.parentID = selectedName.first?.prodTypeId
+            prod.manufacturer = arr2.first?.name
         }
     }
 }

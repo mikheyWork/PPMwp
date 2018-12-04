@@ -23,7 +23,6 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        appDelegate.subscribtion = true
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
@@ -611,13 +610,9 @@ extension CepiaVC {
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        appDelegate.subscribtion = true
-        print("appd \(appDelegate.subscribtion)")
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.")
         }
-        
-        //при релизе включить
         if segue.identifier == "showManufacturers" {
             let manuf = segue.destination as! Manufacturers
             manuf.from = from

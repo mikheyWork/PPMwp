@@ -6,7 +6,7 @@ import GTProgressBar
 
 var progressCount2: CGFloat = 0.0 {
     didSet {
-        NotificationCenter.default.post(name: NSNotification.Name("Loader"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("Loader"), object: nil)
     }
 }
 
@@ -31,22 +31,21 @@ class CheckDataController: UIViewController {
         alertView.layer.cornerRadius = 15
         appDelegate.closeCheckData = true
         view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
-        Thread.sleep(forTimeInterval: 1.0)
-        self.point2 = CGFloat(1 / self.appDelegate.allCountDoc)
-        self.checkDataPdfRef(page: 1)
-        self.checkDataPdfProd(page: 1)
-        if self.appDelegate.allCountDoc != 0 {
-            self.checkActualData()
-            
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.point2 = CGFloat(1 / self.appDelegate.allCountDoc)
+            self.checkDataPdfRef(page: 1)
+            self.checkDataPdfProd(page: 1)
+            if self.appDelegate.allCountDoc != 0 {
+                self.checkActualData()
+            }
         }
     }
     
     
     @objc func loader() {
         self.progressBar.animateTo(progress: progressCount2)
-        
-        if self.progressBar.progress >= 0.99 {
-            Thread.sleep(forTimeInterval: 0.45)
+        if CGFloat(self.count10) >= self.appDelegate.allCountDoc {
+            Thread.sleep(forTimeInterval: 0.15)
             DispatchQueue.main.async(flags: .barrier) {
                 self.appDelegate.closeCheckData = true
                 Thread.sleep(forTimeInterval: 0.5)
@@ -263,7 +262,17 @@ class CheckDataController: UIViewController {
                 let id2 = resault["id"].intValue
                 let number = resault["acf"]["model_number"].stringValue
                 let parent = resault["categories"].arrayValue
-                let parentId = parent.last?.int64Value
+                var parentId: Int64!
+                let p1 = parent.first?.int64Value
+                let p2 = parent.last?.int64Value
+                if p1 != nil && p2 != nil {
+                    if p1! < p2! {
+                        parentId = p2
+                    } else {
+                        parentId = p1
+                    }
+                }
+                
                 if name != "false" && name != ""  || number != "false" && number != ""   {
                     var id: Int?
                     var alerts: String?

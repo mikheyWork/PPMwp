@@ -138,13 +138,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        if need
         Store.shared.retrieveInfo()
         
-        Thread.sleep(forTimeInterval: 3.0)
-        
-        
+        Thread.sleep(forTimeInterval: 1.5)
         //if need delete file
         //        removeFile(name: " ")
-        
-        
         
         return true
     }
