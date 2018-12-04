@@ -110,9 +110,10 @@ class AlertsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
         } else {
 
         }
-       
+        
         
         for car in cars {
+            print("alert array is \(car.name)")
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
@@ -298,34 +299,14 @@ extension AlertsVC {
             
             cell.dateLbl.text = "\(date!)   \(time!)"
         } else {
-            var a = cars[indexPath.row].name
-//            if a == nil || a?.isEmpty == true {
-//                a = cars[indexPath.row].name
-//            }
+            let a = cars[indexPath.row].name
             cell.nameLbl.text = a
-            
             let alert = cars[indexPath.row].date
-            
             let date = alert?.dropLast(9)
             let time = alert?.dropFirst(11)
-            
             cell.dateLbl.text = "\(date!)   \(time!)"
         }
         
-        
-//        if self.isAzTabep {
-//            cell.separatorInset.left = CGFloat(25)
-//            cell.separatorInset.right = CGFloat(40)
-            // Configure the cell...
-//            let carKey = carSectionTitles[indexPath.section]
-//            if let carValues = carsDictionary[carKey] {
-//                cell.nameLbl.text = carValues[indexPath.row]
-//            }
-//        } else {
-//            cell.separatorInset.left = CGFloat(25)
-//            cell.separatorInset.right = CGFloat(25)
-//            cell.nameLbl.text = cars[indexPath.row].name
-//        }
         cell.accessoryType = .disclosureIndicator
         return cell
     }

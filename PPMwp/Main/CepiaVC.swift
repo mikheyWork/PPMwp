@@ -33,6 +33,14 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         self.showMenu()
         if Reachability.isConnectedToNetwork() {
           loadDataWp()
+        } else {
+            hidenMenu.isHidden = true
+            if appDelegate.subscribtion == true {
+                hidenMenu.isHidden = true
+            } else {
+                //???
+                hidenMenu.isHidden = false
+            }
         }
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
@@ -72,7 +80,6 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                                       headers:headers)
                         .responseJSON { [weak self] (response) in
                             guard response.result.value != nil else {
-                                print("json response false: \(response)")
                                 return
                             }
                             let json = JSON(response.result.value!)
@@ -126,16 +133,15 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             self.appDelegate.favourites.removeAll()
             for i in a {
                 if self.appDelegate.favourites.contains(String(i)) == false {
-                    self.appDelegate.favourites.append(String(i))
+                    if appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdfRef.contains(where: {$0.title == String(i)}) || appDelegate.childs.contains(where: {$0.name == String(i)}) || appDelegate.referencesChild.contains(where: {$0.name == String(i)}) {
+                        self.appDelegate.favourites.append(String(i))
+                    }
                 }
             }
         }
-        
         if appDelegate.subscribtion == true {
             if showAlert == true {
-                if appDelegate.closeCheckData == false {
                     showSub(nameVC: "CheckDataController", alpha: 0.2)
-                }
             }
         } else {
             showSub(nameVC: "SubscribeAlert", alpha: 0.2)
@@ -173,6 +179,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             }
         }
     }
+    
     func deleteTapGestureToHideKeyboard() {
         let tapGesture = UITapGestureRecognizer(target: view, action: #selector(view.endEditing))
         view.removeGestureRecognizer(tapGesture)
@@ -187,7 +194,6 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             }
         }
         
-        // 1
         for car in cars {
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {
@@ -197,12 +203,9 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                 carsDictionary[carKey] = [car.name]
             }
         }
-        
-        // 2
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
         UserDefaults.standard.set(appDelegate.subscribtion, forKey: "subscribe2")
-        
     }
     
     func showTable() {
@@ -222,7 +225,6 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         } else {
             isSearching = false
         }
-        
         showTable()
         tableView.reloadData()
         carsDictionary.removeAll()
@@ -245,6 +247,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                     cars.append(b)
                 }
             }
+            
             for i in appDelegate.models {
                 let a = appDelegate.models.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
@@ -360,7 +363,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     @objc func showCongr() {
         if Reachability.isConnectedToNetwork() == true {
             if appDelegate.subscribtion == true {
-              showSub(nameVC: "CheckDataController", alpha: 0.2)
+//              showSub(nameVC: "CheckDataController", alpha: 0.2)
             }
         }
     }
@@ -501,28 +504,19 @@ extension CepiaVC {
             
             cell.nameLbl.text = carValues[indexPath.row]
             let text = cell.nameLbl.text
+            
             if appDelegate.parents.contains(where: {$0.name == text}) {
                 let cellName = appDelegate.parents.filter({$0.name == text})
                 let selectedNameID = cellName.first?.id
                 let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                let arr2 = appDelegate.childs.filter({$0.parent == resault.first?.id})
-                var arr3 = [PdfDocumentInfo]()
-                for i in arr2 {
-                    var car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                    if car.isEmpty == false {
-                        if arr3.contains(where: {$0.model_name == i.name}) == false {
-                            arr3.append(car.first!)
-                        }
-                    } else {
-                        car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                        if car.isEmpty == false {
-                            if arr3.contains(where: {$0.model_number == i.name}) == false {
-                                arr3.append(car.first!)
-                            }
-                        }
+                var resaultArr = [PdfDocumentInfo]()
+                for i in resault {
+                    let arr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                    for j in arr {
+                        resaultArr.append(j)
                     }
-                    
                 }
+                let arr3 = resaultArr
                 cell.resultsLbl.text = "\(arr3.count) Results"
             }
             if appDelegate.childs.contains(where: {$0.name == text}) {
@@ -555,7 +549,6 @@ extension CepiaVC {
         let selectedCell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
         let text = selectedCell.nameLbl.text
         var selectedName = appDelegate.parents.filter({$0.name == text})
-        var selectedNameID: Int64!
         if selectedName.isEmpty {
             selectedName = appDelegate.models.filter({$0.name == text})
             if selectedName.isEmpty {
@@ -596,7 +589,6 @@ extension CepiaVC {
             }
             
         } else {
-            selectedNameID = selectedName.first?.id
             
             let cell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
             
@@ -621,8 +613,6 @@ extension CepiaVC {
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.")
         }
-        
-        //при релизе включить
         if segue.identifier == "showManufacturers" {
             let manuf = segue.destination as! Manufacturers
             manuf.from = from
@@ -662,6 +652,7 @@ extension CepiaVC {
         }
         showAlert = false
         searchBarLbl.text = ""
+        loadDataWpBool = false
     }
     
     

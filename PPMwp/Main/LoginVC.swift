@@ -87,8 +87,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
             showAlertError(title: "Sign In Failed", withText: "Complete the fields.")
             return
         }
-        
-        print("aaa2")
         if Reachability.isConnectedToNetwork() {
         logIn()
         } else {
@@ -118,6 +116,15 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if appDelegate.model == "iPhone"{
+            if appDelegate.currentUser != nil {
+                if appDelegate.currentUser.id != 0 {
+                    if appDelegate.currentUser.subs == "+" {
+                        appDelegate.subscribtion = true
+                    } else {
+                        appDelegate.subscribtion = false
+                    }
+                }
+            }
             if segue.identifier == "cepia" {
                 let vs = segue.destination as! CepiaVC
                 vs.showAlert = true
@@ -134,7 +141,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     func logIn() {
         
         guard let user = emailLbl.text, let password = passLbl.text, user != "", password != "" else {
-            print("empty fields")
             return
         }
         let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users/me")
@@ -153,15 +159,12 @@ class LoginVC: UIViewController, UITextFieldDelegate {
                               headers:headers)
                 .responseJSON { (response) in
                     guard response.result.value != nil else {
-                        print("json response false: \(response)")
                         return
                     }
                     let json = JSON(response.result.value!)
-                    print("json: \(json)")
                     //error handle
                     var answer = ""
                     answer = json["code"].stringValue
-                    print("answer is \(answer)")
                     if answer == "invalid_username" || answer == "invalid_email"{
                         self.showAlertError(title: "Sign In Failed", withText: "Username was not found.")
                     } else if answer == "incorrect_password" {
@@ -171,7 +174,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
                     let id: Int!
                     id = json["id"].intValue
                     if id != nil && id != 0 {
-                        //                    print("work0")
                         let user = User(name: json["name"].stringValue,
                                         password: self.passLbl.text!,
                                         favor: json["description"].stringValue,
@@ -183,7 +185,6 @@ class LoginVC: UIViewController, UITextFieldDelegate {
                         let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.currentUser)
                         UserDefaults.standard.set(encodedData, forKey: "currentUser")
                         UserDefaults.standard.synchronize()
-                        print("json disc \(json["last_name"].stringValue)")
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "cepia", sender: nil)
                         }

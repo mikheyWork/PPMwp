@@ -87,57 +87,35 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
     }
     
     func index() {
-        
         if parentID != nil {
-            var arr1 = [CategoryEnt]()
-            if prodName == "" || prodName == nil {
-                arr1 = appDelegate.childs.filter({$0.id == parentID})
-                let arr2 = appDelegate.childs.filter({$0.name == arr1.first?.name})
-                for i in arr2 {
-                    let arr3 = appDelegate.childs.filter({$0.parent == i.id })
-                    for j in arr3 {
-                        if arr1.contains(where: {$0.id == j.id}) == false {
-                            arr1.append(j)
+            if manufacturer != nil && manufacturer != "" {
+                let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
+                parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
+            }
+            var resault = [CategoryEnt]()
+            if manufacturer != "" && manufacturer != nil {
+                let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
+                for i in pop {
+                    if cars.contains(where: {$0 == i.model_name}) == false && cars.contains(where: {$0 == i.model_number}) == false {
+                        var name = i.model_name
+                        if name == nil || name == "" {
+                            name = i.model_number
                         }
-
+                        cars.append(name!)
                     }
-                    
                 }
             } else {
-                arr1 = appDelegate.childs.filter({$0.name == prodName})
-            }
-            for i in arr1 {
-                if manufacturer == nil || manufacturer == "" {
-                        if appDelegate.curentPdf.contains(where: {$0.model_name == i.name}) {
-                            let car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                                if cars.contains((car.first?.model_name)!) == false {
-                                    cars.append((car.first?.model_name)!)
-                                }
-                        } else {
-                            if appDelegate.curentPdf.contains(where: {$0.model_number == i.name}) {
-                                let car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                                if cars.contains((car.first?.model_number)!) == false {
-                                    cars.append((car.first?.model_number)!)
-                                }
+                let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
+                resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
+                for i in resault {
+                    let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                    for j in resArr {
+                        if cars.contains(where: {$0 == j.model_name}) == false && cars.contains(where: {$0 == j.model_number}) == false {
+                            var name = j.model_name
+                            if name == nil || name == "" {
+                                name = j.model_number
                             }
-                        }
-                } else {
-                    if appDelegate.curentPdf.contains(where: {$0.model_name == i.name}) {
-                        let car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                        if manufacturer != nil && manufacturer != "" {
-                            if cars.contains((car.first?.model_name)!) == false {
-                                cars.append((car.first?.model_name)!)
-                            }
-                        } else {
-                            cars.append((car.first?.model_name)!)
-                        }
-                    } else {
-                        if appDelegate.curentPdf.contains(where: {$0.model_number == i.name}) {
-                            
-                            let car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                            if cars.contains((car.first?.model_number)!) == false {
-                                cars.append((car.first?.model_number)!)
-                            }
+                            cars.append(name!)
                         }
                     }
                 }
@@ -177,11 +155,7 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
     
 }
 
-
 extension Product {
-    
-    
-    
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 20
@@ -193,13 +167,9 @@ extension Product {
         footerViewSub.frame =  CGRect(x: 25     , y: 0, width:
             tableView.bounds.size.width - 65 , height: 0.5)
         footerView.backgroundColor = UIColor.white.withAlphaComponent(1)
-        //        footerViewSub.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1)
-        //        footerView.addSubview(footerViewSub)
         return footerView
-        
     }
-    
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var headerLabel = UILabel()
         let headerView = UIView()
@@ -215,22 +185,15 @@ extension Product {
         return headerView
     }
     
-    
-    
-    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return carSectionTitles[section]
     }
     
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        // 1
         return carSectionTitles.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 2
-        
         let carKey = carSectionTitles[section]
         if let carValues = carsDictionary[carKey] {
             return carValues.count
@@ -239,59 +202,42 @@ extension Product {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 3
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell4", for: indexPath) as! ProductsTVCell
-        
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1.0)
         cell.selectedBackgroundView = backgroundView
-        
         cell.separatorInset.left = CGFloat(25)
         cell.separatorInset.right = CGFloat(40)
-        // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
             cell.prodLbl.text = carValues[indexPath.row]
         }
-        
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        
         tableView.sectionIndexColor = UIColor(red: 40/255, green: 36/255, blue: 58/255, alpha: 1)
-        
-        
-        //        return carSectionTitles
         return [" "]
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         var text = " "
-        
         let cell = tableView.cellForRow(at: indexPath) as! ProductsTVCell
-        
         if cell.prodLbl.text != nil {
             text = cell.prodLbl.text!
         }
-        
         performSegue(withIdentifier: "showVitalStatistics", sender: text)
-    }
-    
+    }   
     
     //MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showVitalStatistics" {
-            
             let name = sender as! String
-            
             let vs = segue.destination as! VitalStatVC
             vs.name = name
         }
-        
     }
 }
-

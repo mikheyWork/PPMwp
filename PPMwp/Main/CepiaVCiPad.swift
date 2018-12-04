@@ -58,6 +58,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     
     override func viewWillAppear(_ animated: Bool) {
+       
         if Reachability.isConnectedToNetwork() == true {
             //requset actual data
             DispatchQueue.global(qos: .userInteractive).async {
@@ -145,7 +146,9 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             self.appDelegate.favourites.removeAll()
             for i in a {
                 if self.appDelegate.favourites.contains(String(i)) == false {
-                    self.appDelegate.favourites.append(String(i))
+                    if appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdfRef.contains(where: {$0.title == String(i)}) || appDelegate.childs.contains(where: {$0.name == String(i)}) || appDelegate.referencesChild.contains(where: {$0.name == String(i)}) {
+                        self.appDelegate.favourites.append(String(i))
+                    }
                 }
             }
         }
@@ -551,24 +554,14 @@ extension CepiaVCiPad {
                 let cellName = appDelegate.parents.filter({$0.name == text})
                 let selectedNameID = cellName.first?.id
                 let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                let arr2 = appDelegate.childs.filter({$0.parent == resault.first?.id})
-                var arr3 = [PdfDocumentInfo]()
-                for i in arr2 {
-                    var car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                    if car.isEmpty == false {
-                        if arr3.contains(where: {$0.model_name == i.name}) == false {
-                            arr3.append(car.first!)
-                        }
-                    } else {
-                        car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                        if car.isEmpty == false {
-                            if arr3.contains(where: {$0.model_number == i.name}) == false {
-                                arr3.append(car.first!)
-                            }
-                        }
+                var resaultArr = [PdfDocumentInfo]()
+                for i in resault {
+                    let arr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                    for j in arr {
+                        resaultArr.append(j)
                     }
-                    
                 }
+                let arr3 = resaultArr
                 cell.resultsLbl.text = "\(arr3.count) Results"
             }
             if appDelegate.childs.contains(where: {$0.name == text}) {
@@ -606,7 +599,6 @@ extension CepiaVCiPad {
         let selectedCell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
         let text = selectedCell.nameLbl.text
         var selectedName = appDelegate.parents.filter({$0.name == text})
-        var selectedNameID: Int64!
         if selectedName.isEmpty {
             selectedName = appDelegate.models.filter({$0.name == text})
             if selectedName.isEmpty {
@@ -645,9 +637,7 @@ extension CepiaVCiPad {
                 }
                 
             }
-            
         } else {
-            selectedNameID = selectedName.first?.id
             
             let cell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
             if Reachability.isConnectedToNetwork() {

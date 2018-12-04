@@ -27,10 +27,6 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
         super.viewDidLoad()
         rangeChar()
         indexFunc()
-        
-        for i in appDelegate.childs {
-            print("a is \(i.name)")
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,59 +79,42 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
     
     func index() {
         if parentID != nil {
+            if manufacturer != nil && manufacturer != "" {
+                let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
+                parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
+            }
             var resault = [CategoryEnt]()
-            var arr1 = [CategoryEnt]()
             if manufacturer != "" && manufacturer != nil {
-                let cellName = appDelegate.parents.filter({$0.name == manufacturer})
-                let selectedNameID = cellName.first?.id
-                resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                parentID = resault.first?.id
-                arr1 = appDelegate.childs.filter({$0.parent == parentID})
+                
+                let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
+                
+                for i in pop {
+                    if cars.contains(where: {$0 == i.model_name}) == false && cars.contains(where: {$0 == i.model_number}) == false {
+                        var name = i.model_name
+                        if name == nil || name == "" {
+                            name = i.model_number
+                        }
+                        cars.append(name!)
+                    }
+                }
+                
             } else {
                 let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
                 resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
-                arr1 = appDelegate.childs.filter({$0.name == selectedNameID.first?.name})
-            }
-            for i in arr1 {
-                if manufacturer == nil || manufacturer == "" {
-                let arr2 = appDelegate.childs.filter({$0.parent == i.id})
-                    for i in arr2 {
-                        if appDelegate.curentPdf.contains(where: {$0.model_name == i.name}) {
-                            let car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                            if manufacturer != nil && manufacturer != "" {
-                                if cars.contains((car.first?.model_name)!) == false {
-                                    cars.append((car.first?.model_name)!)
-                                }
-                            } else {
-                                cars.append((car.first?.model_name)!)
+                for i in resault {
+                    let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                    for j in resArr {
+                        if cars.contains(where: {$0 == j.model_name}) == false && cars.contains(where: {$0 == j.model_number}) == false {
+                            var name = j.model_name
+                            if name == nil || name == "" {
+                                name = j.model_number
                             }
-                        } else {
-                            if appDelegate.curentPdf.contains(where: {$0.model_number == i.name}) {
-                                let car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                                if cars.contains((car.first?.model_number)!) == false {
-                                    cars.append((car.first?.model_number)!)
-                                }
-                            }
+                            cars.append(name!)
                         }
                     }
-                } else {
-                    if appDelegate.curentPdf.contains(where: {$0.model_name == i.name}) {
-                        let car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                        if manufacturer != nil && manufacturer != "" {
-                            if cars.contains((car.first?.model_name)!) == false {
-                                cars.append((car.first?.model_name)!)
-                            }
-                        } else {
-                            cars.append((car.first?.model_name)!)
-                        }
-                    } else {
-                        if appDelegate.curentPdf.contains(where: {$0.model_number == i.name}) {
-                            let car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                            if cars.contains((car.first?.model_number)!) == false {
-                                cars.append((car.first?.model_number)!)
-                            }
-                        }
-                    }
+                }
+                for car in cars {
+                    print("carr \(car)")
                 }
             }
         } else {
@@ -143,6 +122,8 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
                     cars.append(i.model_name!)
             }
         }
+        
+        //
         for car in cars {
             let carKey = String(car.prefix(1))
             if var carValues = carsDictionary[carKey] {
@@ -290,16 +271,24 @@ extension ModelsVC {
         }
         
         if segue.identifier == "showProduct" {
-            
             let parentId = sender as! ModelsTVCell
             let text = parentId.text2
-            let selectedName = appDelegate.childs.filter({$0.name == text})
+            var selectedName = appDelegate.curentPdf.filter({$0.model_name == text})
+            if selectedName.isEmpty {
+                selectedName = appDelegate.curentPdf.filter({$0.model_number == text})
+            }
+            print("sel \(selectedName.first?.model_name)")
+            print("selID \(selectedName.first?.prodTypeId)")
+            let arr1 = appDelegate.childs.filter({$0.id == selectedName.first?.prodTypeId})
+            let arr2 = appDelegate.parents.filter({$0.id == arr1.first?.parent})
+            print("arr2 \(arr2.first?.name)")
+            
+            
             let prod = segue.destination as! Product
             prod.name = text
             prod.prodName = text
-            
-            let id = appDelegate.childs.filter({$0.id == selectedName.first?.parent})
-            prod.parentID = id.first?.id
+            prod.parentID = selectedName.first?.prodTypeId
+            prod.manufacturer = arr2.first?.name
         }
     }
 }

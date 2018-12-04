@@ -1,10 +1,15 @@
 import Foundation
+import UIKit
 
 
 class PDFDownloader: NSObject {
     
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     private override init() { }
     static let shared = PDFDownloader()
+    
+   
     
     func dowloandAndSave(name: String, url: URL) {
         let filename = getDocumentsDirectory().appendingPathComponent("\(name)")
@@ -15,13 +20,15 @@ class PDFDownloader: NSObject {
                 }
                 print(response?.suggestedFilename ?? url.lastPathComponent)
                 
-                DispatchQueue.main.async() {
+                DispatchQueue.global(qos: .userInteractive).async() {
                     try? data.write(to: filename)
                     print ("File saved at Path: \(filename)")
                 }
             }
         } else {
+            DispatchQueue.global(qos: .userInteractive).async() {
             print ("File already exist at Path: \(filename)")
+            }
         }
     }
     

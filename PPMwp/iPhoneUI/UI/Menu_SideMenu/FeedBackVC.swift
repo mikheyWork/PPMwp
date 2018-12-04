@@ -8,6 +8,7 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var subjText: UITextField!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var sendBut: UIButton!
+    @IBOutlet weak var activity: UIActivityIndicatorView!
     
     let placeholder = "Message"
     
@@ -19,6 +20,8 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
         textViewChange()
         addTapGestureToHideKeyboard()
         rangeChar()
+        activity.isHidden = true
+        activity.stopAnimating()
     }
     
     
@@ -46,24 +49,6 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     //mail
-//    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-//        dismiss(animated: true, completion: nil)
-//    }
-//
-//    func sendEmail(text: String, email: String, subject: String) {
-//        if MFMailComposeViewController.canSendMail() {
-//            let mail = MFMailComposeViewController()
-//            mail.mailComposeDelegate = self
-//            mail.setToRecipients([email])
-//            mail.setMessageBody("<p>\(text)</p>", isHTML: true)
-//            mail.setSubject(subject)
-//            present(mail, animated: true)
-//            showAlertError(text: "Profit", withText: "Profi2")
-//        } else {
-//            // show failure alert
-//        }
-//    }
-    
     func showAlertError(text: String ,withText: String) {
         let alert = UIAlertController(title: text, message: withText, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
@@ -73,10 +58,23 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     @IBAction func sendBut(_ sender: Any) {
-        guard subjText.text != "", textView.text != "" else {
-            return
+        if Reachability.isConnectedToNetwork() {
+            guard subjText.text != "" && textView.text != "" && textView.text != "Message" else {
+                let alert = UIAlertController(title: "Failed", message: "Complete the fields.", preferredStyle: .alert)
+                let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            activity.isHidden = false
+            activity.startAnimating()
+            MailSender.shared.sendEmail(subject: subjText.text!, body: textView.text!, mail: "vlm.softevol@gmail.com")
+        } else {
+            let alert = UIAlertController(title: "Failed", message: "No internet connection.", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
         }
-        MailSender.shared.sendEmail(subject: subjText.text!, body: textView.text!, mail: "vlm.softevol@gmail.com")
     }
     
     @IBAction func backBut(_ sender: Any) {
@@ -84,16 +82,12 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
     }
     
     @IBAction func menuBut(_ sender: Any) {
-        //sideMenu
+        
     }
-    
-    
 }
 
 extension FeedBackVC: UITextViewDelegate {
-    
     //MARK:- UITextViewDelegates
-    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Message" {
             textView.text = ""
@@ -118,23 +112,21 @@ extension FeedBackVC: UITextViewDelegate {
     }
     
     @objc func showAlert() {
+        activity.isHidden = true
+        activity.stopAnimating()
         let alert = UIAlertController(title: "Success", message: "The letter was sent.", preferredStyle: .alert)
         let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        
         alert.addAction(action)
-        
         self.present(alert, animated: true, completion: nil)
-        
     }
     
     @objc func showAlert2() {
+        activity.isHidden = true
+        activity.stopAnimating()
         let alert = UIAlertController(title: "Failed", message: "Failed request", preferredStyle: .alert)
         let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        
         alert.addAction(action)
-        
         self.present(alert, animated: true, completion: nil)
-        
     }
 }
 

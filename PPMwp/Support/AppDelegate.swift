@@ -48,16 +48,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var closeCheckData = false
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        DispatchQueue.global(qos: .userInteractive).async {
+            if Reachability.isConnectedToNetwork() {
+                self.reqProductsDocCount(page: 1)
+                self.reqRefsDocCount(page: 1)
+            }
+        }
+        Thread.sleep(forTimeInterval: 1.0)
+        if UserDefaults.standard.object(forKey: "networkPdf") != nil {
+            let decoded  = UserDefaults.standard.object(forKey: "networkPdf") as! Data
+            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [PdfDocumentInfo]
+            self.networkPdf = decodedTeams
+        }
+        if UserDefaults.standard.object(forKey: "curentPdf") != nil {
+            let decoded  = UserDefaults.standard.object(forKey: "curentPdf") as! Data
+            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [PdfDocumentInfo]
+            self.curentPdf = decodedTeams
+        }
+        if UserDefaults.standard.object(forKey: "networkPdfRef") != nil {
+            let decoded2  = UserDefaults.standard.object(forKey: "networkPdfRef") as! Data
+            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded2) as! [PdfDocumentInfoRef]
+            self.networkPdfRef = decodedTeams
+        } else {
+            print("dont workl")
+        }
+        
+        if UserDefaults.standard.object(forKey: "curentPdfRef") != nil {
+            let decoded  = UserDefaults.standard.object(forKey: "curentPdfRef") as! Data
+            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [PdfDocumentInfoRef]
+            self.curentPdfRef = decodedTeams
+        } else {
+            print("dont workl2")
+        }
+        
         if Reachability.isConnectedToNetwork() {
             Store.shared.checkSub()
         }
-        DispatchQueue.global(qos: .userInteractive).async {
-            
-            self.reqProductsDocCount(page: 1)
-            self.reqRefsDocCount(page: 1)
-        }
+        subscribtion = UserDefaults.standard.bool(forKey: "subscribe2")
         
-        //storeKit
+//        storeKit
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
             for purchase in purchases {
                 switch purchase.transaction.transactionState {
@@ -77,12 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         model = UIDevice.current.modelName
-
-        
-        //test
-        if UserDefaults.standard.bool(forKey: "disclaimer2") != nil {
-            showDisc = UserDefaults.standard.bool(forKey: "disclaimer2")
-        }
+        showDisc = UserDefaults.standard.bool(forKey: "disclaimer2")
         
         if UserDefaults.standard.array(forKey: "savedPDF") != nil {
             pdfArray2 = UserDefaults.standard.array(forKey: "savedPDF") as! [String]
@@ -96,12 +121,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let decodedUser = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! User
             
             currentUser = decodedUser
-            if currentUser != nil {
-                print("current is \(currentUser.name)")
-            } else {
-                print("curr is empty")
-            }
-            
         } else {
             print("arr is empty")
         }
@@ -112,45 +131,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("favor is empty")
         }
         
-        if UserDefaults.standard.object(forKey: "networkPdf") != nil {
-            let decoded  = UserDefaults.standard.object(forKey: "networkPdf") as! Data
-            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [PdfDocumentInfo]
-            networkPdf = decodedTeams
-        }
-        if UserDefaults.standard.object(forKey: "curentPdf") != nil {
-            let decoded  = UserDefaults.standard.object(forKey: "curentPdf") as! Data
-            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [PdfDocumentInfo]
-            curentPdf = decodedTeams
-        }
-        if UserDefaults.standard.object(forKey: "networkPdfRef") != nil {
-            let decoded2  = UserDefaults.standard.object(forKey: "networkPdfRef") as! Data
-            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded2) as! [PdfDocumentInfoRef]
-            networkPdfRef = decodedTeams
-        } else {
-            print("dont workl")
-        }
         
-        if UserDefaults.standard.object(forKey: "curentPdfRef") != nil {
-            let decoded  = UserDefaults.standard.object(forKey: "curentPdfRef") as! Data
-            let decodedTeams = NSKeyedUnarchiver.unarchiveObject(with: decoded) as! [PdfDocumentInfoRef]
-            curentPdfRef = decodedTeams
-        } else {
-            print("dont workl2")
-        }
         
 //        delete data(core data)
 //                removeDataFrom(entity: "CategoryEnt")
-//        CategoryEnt
 //        if need
         Store.shared.retrieveInfo()
         
-        Thread.sleep(forTimeInterval: 2.0)
-        
-        
+        Thread.sleep(forTimeInterval: 1.5)
         //if need delete file
         //        removeFile(name: " ")
-        
-        
         
         return true
     }
@@ -223,7 +213,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 print("not full page")
             }
-            self?.productsDocCount += CGFloat(resaults.count)
+            self?.allCountDoc += CGFloat(resaults.count)
         }
     }
     
@@ -249,7 +239,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 print("not full page")
             }
-            self?.refsDocCount += CGFloat(resaults.count)
+            self?.allCountDoc += CGFloat(resaults.count)
         }
     }
     
@@ -435,7 +425,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let objects = try! context.fetch(fetchRequest)
         for obj in objects {
             if networkProd.contains(where: {$0 == obj.name}) == false {
-                print("obj.name \(obj.name)")
                             context.delete(obj)
             }
         }
@@ -454,7 +443,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let objects = try! context.fetch(fetchRequest)
         for obj in objects {
             if networkRef.contains(where: {$0 == obj.name}) == false {
-              print("obj.name \(obj.name)")
                             context.delete(obj)
             }
         }

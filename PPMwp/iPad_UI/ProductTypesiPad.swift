@@ -63,7 +63,7 @@ class ProductTypesiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
             let text = aText
             let cellName = appDelegate.childs.filter({$0.name == text})
             let selectedNameID = cellName.first?.id
-            let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
+            let resault = appDelegate.curentPdf.filter{$0.prodTypeId == selectedNameID}
             if resault.count > 0 {
                 cars.append(aText)
             }
@@ -212,7 +212,7 @@ extension ProductTypesiPad {
         if let carValues = carsDictionary[carKey] {
             cell.nameLbl.text = carValues[indexPath.row]
             var cellName = [CategoryEnt]()
-            if manufacturer != "" {
+            if  manufacturer != "" {
                 cellName = appDelegate.parents.filter({$0.name == manufacturer})
             } else {
                 let arr1 = appDelegate.childs.filter({$0.name == cell.nameLbl.text})
@@ -220,46 +220,23 @@ extension ProductTypesiPad {
                     cellName.append(i)
                 }
             }
-            
-            var res2 = [CategoryEnt]()
+            var resArr = [PdfDocumentInfo]()
             if manufacturer != "" {
                 let selectedNameID = cellName.first?.id
                 let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                res2 = appDelegate.childs.filter{$0.parent == resault.first?.id}
+                resArr = appDelegate.curentPdf.filter({$0.prodTypeId == resault.first?.id})
             } else {
-                var resault = [CategoryEnt]()
-                var arr4 = [CategoryEnt]()
                 for i in cellName {
                     let selectedNameID = i.id
-                    resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                    for i in resault {
-                        if arr4.contains(where: {$0.name == i.name}) == false {
-                            arr4.append(contentsOf: resault)
-                        }
-                        
-                    }
-                }
-                res2 = arr4
-            }
-            var arr3 = [PdfDocumentInfo]()
-            for i in res2 {
-                var car = appDelegate.curentPdf.filter({$0.model_name == i.name})
-                
-                if car.isEmpty == false {
-                    for i in car {
-                        arr3.append(i)
-                    }
-                } else {
-                    car = appDelegate.curentPdf.filter({$0.model_number == i.name})
-                    if car.isEmpty == false {
-                        for i in car {
-                            arr3.append(i)
+                    let pop = appDelegate.curentPdf.filter({$0.prodTypeId == selectedNameID})
+                    for i in pop {
+                        if resArr.contains(where: {$0.model_name == i.model_name}) == false {
+                            resArr.append(i)
                         }
                     }
                 }
-                
             }
-            cell.resaultLbl.text = "\(arr3.count) Results"
+            cell.resaultLbl.text = "\(resArr.count) Results"
         }
         
         return cell

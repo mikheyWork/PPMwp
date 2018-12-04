@@ -63,7 +63,6 @@ class Store: NSObject {
                     print("\(self.inAppPurchase) is valid until \(expiryDate)\n\(items) is expired since \(expiryDate)\n\(items)\n")
                 case .notPurchased:
                     self.appDelegate.subscribtion = false
-                    //                    self.appDelegate.subscribtion = false
                     print("The user has never purchased \(self.inAppPurchase)")
                 }
                 
@@ -71,19 +70,21 @@ class Store: NSObject {
                 self.appDelegate.subscribtion = false
                 print("Receipt verification failed: \(error.localizedDescription)")
             }
-            if self.appDelegate.subscribtion == true {
+           
+            print("subs99 is \(self.appDelegate.subscribtion)")
+            UserDefaults.standard.set(self.appDelegate.subscribtion, forKey: "subscribe2")
+            NotificationCenter.default.post(name: NSNotification.Name("CheckSub"), object: nil)
+                if self.appDelegate.currentUser != nil {
                 if self.appDelegate.currentUser.id != 0 {
-                    let parameters = ["first_name" : "+"]
-                    Functions.shared.requestChangeParam(parameters: parameters)
-                } else {
-                    let parameters = ["first_name" : "-"]
-                    Functions.shared.requestChangeParam(parameters: parameters)
+                    if self.appDelegate.subscribtion == true {
+                        let parameters = ["first_name" : "+"]
+                        Functions.shared.requestChangeParam(parameters: parameters)
+                    } else {
+                        let parameters2 = ["first_name" : "-"]
+                        Functions.shared.requestChangeParam(parameters: parameters2)
+                    }
                 }
             }
-            UserDefaults.standard.set(self.appDelegate.subscribtion, forKey: "subscribe2")
-            print("subs99 is \(self.appDelegate.subscribtion)")
-            NotificationCenter.default.post(name: NSNotification.Name("CheckSub"), object: nil)
-            
         }
     }
     
@@ -97,6 +98,7 @@ class Store: NSObject {
                         self.appDelegate.subscribtion = true
                         print("purchased free acc")
                                         if self.appDelegate.closeCheckData == false {
+                                            print("app buy")
                                             NotificationCenter.default.post(name: NSNotification.Name("CheckSub"), object: nil)
                                         }
                                         let parameters = ["first_name" : "+"]

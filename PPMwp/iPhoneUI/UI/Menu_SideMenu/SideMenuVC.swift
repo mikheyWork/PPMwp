@@ -85,7 +85,6 @@ extension SideMenuVC {
             UserDefaults.standard.set(encodedData, forKey: "currentUser")
             UserDefaults.standard.synchronize()
             UserDefaults.standard.setValue(false, forKey: "saved2")
-            
         }
     }
 }

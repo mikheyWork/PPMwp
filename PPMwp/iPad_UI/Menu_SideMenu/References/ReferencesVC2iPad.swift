@@ -44,7 +44,6 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
-        print("name2 \(name2)")
         
         Functions.shared.checkStar(name: name2, button: starBut)
         
@@ -167,10 +166,6 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     @IBAction func starButTaped(_ sender: Any) {
-        print("name2 \(name2)")
-        for i in appDelegate.curentPdfRef {
-            print("i \(i.title)")
-        }
         Functions.shared.sendFavorInfo(name: name2, button: starBut)
     }
     
@@ -189,7 +184,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     @IBAction func beckBut(_ sender: Any) {
-        if name2 != nil && name2 != "" {
+        if  name2 != "" {
             performSegue(withIdentifier: "showFSREF2", sender: name)
         }
         
@@ -308,8 +303,6 @@ extension ReferencesVC2iPad {
         }
         
         let arr1 = appDelegate.referencesChild.filter({$0.name == text})
-        print("arr1 \(arr1.first?.name)")
-        
         let arr2 = appDelegate.referencesChild.filter({$0.parent == arr1.first?.id})
         if arr2.isEmpty == true {
             name2 = text
@@ -325,7 +318,6 @@ extension ReferencesVC2iPad {
             }
         } else {
             parentID = arr2.first?.parent
-            print("parentId \(parentID)")
             cars.removeAll()
             carsDictionary.removeAll()
             carSectionTitles.removeAll()
@@ -341,8 +333,6 @@ extension ReferencesVC2iPad {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showFSREF2" {
-            let name = sender as! String
-            
             let vs = segue.destination as! ReferencesFSVC2
             vs.name = name2
         }
