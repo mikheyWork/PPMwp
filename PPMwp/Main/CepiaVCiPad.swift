@@ -25,7 +25,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     var progressBar = GTProgressBar()
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var loadDataWpBool = false
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBarLbl.delegate = self
@@ -38,7 +38,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         self.hideMenu.isHidden = false
         self.showMenu()
         if Reachability.isConnectedToNetwork() {
-              loadDataWp()
+            loadDataWp()
         }
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
@@ -58,7 +58,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     
     override func viewWillAppear(_ animated: Bool) {
-       
+        
         if Reachability.isConnectedToNetwork() == true {
             //requset actual data
             DispatchQueue.global(qos: .userInteractive).async {
@@ -126,6 +126,15 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     override func viewWillLayoutSubviews() {
         indexFunc()
+    }
+    
+    @objc func showBlock() {
+        hideMenu.isHidden = false
+        hideMenu.backgroundColor = UIColor.white.withAlphaComponent(0.0)
+    }
+    @objc func hideBlock() {
+        hideMenu.isHidden = true
+        hideMenu.backgroundColor = UIColor.white.withAlphaComponent(1.0)
     }
     
     @objc func showMenu() {
@@ -414,80 +423,36 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     
     @IBAction func manufBut(_ sender: Any) {
         from = "Manuf"
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showManufacturers", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showManufacturers", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showManufacturers", sender: (Any).self)
     }
     
     @IBAction func prodBut(_ sender: Any) {
         from = "ProdTypes"
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
     }
     
     @IBAction func modelsBut(_ sender: Any) {
         from = "Models"
-        if Reachability.isConnectedToNetwork() {
-            
-            if appDelegate.closeCheckData == true {
-                
-                performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
     }
     
     
     
     @IBAction func favorTaped(_ sender: Any) {
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showFavourites", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showFavourites", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showFavourites", sender: (Any).self)
     }
     
     @IBAction func AlertsTaped(_ sender: Any) {
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showAlerts", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showAlerts", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showAlerts", sender: (Any).self)
     }
     
     @IBAction func referTaped(_ sender: Any) {
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showRef", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showRef", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showRef", sender: (Any).self)
     }
     
     
     @IBAction func manuBut(_ sender: Any) {
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showSideMenu2", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showSideMenu2", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showSideMenu2", sender: (Any).self)
     }
     
 }
@@ -499,11 +464,8 @@ extension CepiaVCiPad {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
-        
         return footerView
-        
     }
-    
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var headerLabel = UILabel()
@@ -517,7 +479,6 @@ extension CepiaVCiPad {
         headerLabel.text = self.tableView(self.tableView, titleForHeaderInSection: section)
         headerLabel.sizeToFit()
         headerView.addSubview(headerLabel)
-        
         return headerView
     }
     
@@ -602,53 +563,15 @@ extension CepiaVCiPad {
         if selectedName.isEmpty {
             selectedName = appDelegate.models.filter({$0.name == text})
             if selectedName.isEmpty {
-                //                let reflName = selectedName.first?.name
-                if Reachability.isConnectedToNetwork() {
-                    if appDelegate.referencesParent.contains(where: {$0.name == text}) {
-                        if appDelegate.closeCheckData == true {
-                            from = "Models"
-                            performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-                        }
-                    } else {
-                        from = "Models"
-                        performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-                    }
-                } else if Reachability.isConnectedToNetwork() {
-                    if appDelegate.referencesChild.contains(where: {$0.name == text}) {
-                        if appDelegate.closeCheckData == true {
-                            from = "Models"
-                            performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-                        }
-                    } else {
-                        from = "Models"
-                        performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-                    }
-                }
+                performSegue(withIdentifier: "showRefSearch", sender: indexPath)
             } else {
                 let modelName = selectedName.first?.name
-                if Reachability.isConnectedToNetwork() {
-                    if appDelegate.closeCheckData == true {
-                        from = "Models"
-                        performSegue(withIdentifier: "searchCepia", sender: modelName)
-                    }
-                } else {
-                    from = "Models"
-                    performSegue(withIdentifier: "searchCepia", sender: modelName)
-                }
-                
+                performSegue(withIdentifier: "searchCepia", sender: modelName)
             }
         } else {
             
             let cell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
-            if Reachability.isConnectedToNetwork() {
-                if appDelegate.closeCheckData == true {
-                    from = "Models"
-                    performSegue(withIdentifier: "searchProd", sender: cell)
-                }
-            } else {
-                from = "Models"
-                performSegue(withIdentifier: "searchProd", sender: cell)
-            }
+            performSegue(withIdentifier: "searchProd", sender: cell)
             
         }
     }
@@ -703,12 +626,7 @@ extension CepiaVCiPad {
         let alert = UIAlertController(title: title, message: withText, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
         let subscribeAction = UIAlertAction(title: "Subscribe", style: .default) { (subscribe) in
-            Store.shared.purachaseProduct()
-            
-            let alert = UIAlertController(title: "Confirm Purchase", message: "After the subscription, wait until you receive a confirmation of the successful subscription", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true, completion: nil)
+            Store.shared.purachaseProduct()   
         }
         alert.addAction(cancelAction)
         alert.addAction(subscribeAction)

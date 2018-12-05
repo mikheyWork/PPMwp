@@ -89,11 +89,13 @@ class Store: NSObject {
     }
     
     func purachaseProduct() {
+        NotificationCenter.default.post(name: NSNotification.Name("ShowBlock"), object: nil)
         SwiftyStoreKit.retrieveProductsInfo([inAppPurchase]) { result in
             if let product = result.retrievedProducts.first {
                 SwiftyStoreKit.purchaseProduct(product, quantity: 1, atomically: true) { result in
                     switch result {
                     case .success(let purchase):
+                        NotificationCenter.default.post(name: NSNotification.Name("HideBlock"), object: nil)
                         print("Purchase Success: \(purchase.productId)")
                         self.appDelegate.subscribtion = true
                         print("purchased free acc")
@@ -104,6 +106,7 @@ class Store: NSObject {
                                         let parameters = ["first_name" : "+"]
                                     Functions.shared.requestChangeParam(parameters: parameters)
                     case .error(let error):
+                        NotificationCenter.default.post(name: NSNotification.Name("HideBlock"), object: nil)
                         switch error.code {
                         case .unknown: print("Unknown error. Please contact support")
                         case .clientInvalid: print("Not allowed to make the payment")

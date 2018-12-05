@@ -25,19 +25,18 @@ class MailSender: NSObject, SKPSMTPMessageDelegate {
     func messageSent(_ message: SKPSMTPMessage!) {
         print("Successfully sent email!")
         DispatchQueue.main.async{
-        NotificationCenter.default.post(name: NSNotification.Name("AlertTrue"), object: nil)
-        NotificationCenter.default.post(name: NSNotification.Name("soop2"), object: nil)
-        NotificationCenter.default.post(name: NSNotification.Name("Alert2"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("AlertTrue"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("soop2"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("Alert2"), object: nil)
         }
     }
     
     func messageFailed(_ message: SKPSMTPMessage!, error: Error!) {
         print("Sending email failed!")
         DispatchQueue.main.async{
-        NotificationCenter.default.post(name: NSNotification.Name("AlertFalse"), object: nil)
-        
-        NotificationCenter.default.post(name: NSNotification.Name("soop"), object: nil)
-        NotificationCenter.default.post(name: NSNotification.Name("Alert"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("AlertFalse"), object: nil) 
+            NotificationCenter.default.post(name: NSNotification.Name("soop"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name("Alert"), object: nil)
         }
     }
 }
