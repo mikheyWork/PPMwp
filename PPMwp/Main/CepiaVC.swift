@@ -23,6 +23,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        appDelegate.subscribtion = true
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
@@ -371,7 +372,9 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     @IBAction func manufBut(_ sender: Any) {
         from = "Manuf"
+//        performSegue(withIdentifier: "showManufacturers", sender: (Any).self)
         if Reachability.isConnectedToNetwork() {
+            
             if appDelegate.closeCheckData == true {
                 performSegue(withIdentifier: "showManufacturers", sender: (Any).self)
             }
@@ -610,6 +613,7 @@ extension CepiaVC {
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        appDelegate.subscribtion = true
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.")
         }

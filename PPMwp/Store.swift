@@ -12,6 +12,7 @@ class Store: NSObject {
     
     let inAppPurchase = "mikhey.PPM.Genius3.Subscription"
     let secret = "523764ba89824292bc45e96ae17f1137"
+    var state = ""
     
     func retrieveInfo() {
         SwiftyStoreKit.retrieveProductsInfo([inAppPurchase]) { result in
@@ -39,7 +40,6 @@ class Store: NSObject {
                     ofType: .autoRenewable, // or .nonRenewing (see below)
                     productId: self.inAppPurchase,
                     inReceipt: receipt)
-                
                 switch purchaseResult {
                 case .purchased(let expiryDate, let items):
                     self.appDelegate.subscribtion = true
