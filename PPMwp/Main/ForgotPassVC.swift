@@ -12,6 +12,7 @@ class ForgotPassVC: UIViewController {
     @IBOutlet weak var reqBut: UIButton!
     
     @IBOutlet weak var activity: UIActivityIndicatorView!
+    
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var id: Int!
     var mailTrue = true

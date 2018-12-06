@@ -14,6 +14,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableViewIndex: TableViewIndex!
     @IBOutlet weak var hideMenu: UIView!
+    @IBOutlet weak var activity: UIActivityIndicatorView!
     
     var from: String!
     var showAlert = false
@@ -25,7 +26,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     var progressBar = GTProgressBar()
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var loadDataWpBool = false
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBarLbl.delegate = self
@@ -33,12 +34,15 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.showMenu), name: NSNotification.Name("ShowMenu"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.showBlock), name: NSNotification.Name("ShowBlock"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.hideBlock), name: NSNotification.Name("HideBlock"), object: nil)
         }
         
-        self.hideMenu.isHidden = false
-        self.showMenu()
+        hideMenu.isHidden = false
+        showMenu()
+        activity.isHidden = true
         if Reachability.isConnectedToNetwork() {
-              loadDataWp()
+            loadDataWp()
         }
         if appDelegate.childs.count == 0 {
             appDelegate.fetchCoreDataRef()
@@ -58,7 +62,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     
     override func viewWillAppear(_ animated: Bool) {
-       
+        
         if Reachability.isConnectedToNetwork() == true {
             //requset actual data
             DispatchQueue.global(qos: .userInteractive).async {
@@ -126,6 +130,19 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     }
     override func viewWillLayoutSubviews() {
         indexFunc()
+    }
+    
+    @objc func showBlock() {
+        hideMenu.isHidden = false
+        hideMenu.backgroundColor = UIColor.white.withAlphaComponent(0.0)
+        activity.isHidden = false
+        activity.startAnimating()
+    }
+    @objc func hideBlock() {
+        hideMenu.isHidden = true
+        hideMenu.backgroundColor = UIColor.white.withAlphaComponent(1.0)
+        activity.isHidden = true
+        activity.stopAnimating()
     }
     
     @objc func showMenu() {
@@ -274,7 +291,11 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBar.text = searchText
         if searchText != "" {
+            if appDelegate.subscribtion == true {
             isSearching = true
+            }
+        }  else {
+            isSearching = false
         }
         
         showTable()
@@ -288,6 +309,18 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
                     let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!)
                     cars.append(b)
+                }
+            }
+            
+            for i in appDelegate.curentPdf {
+                if cars.contains(where: {$0.id == i.id}) == false {
+                    if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
+                        let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!)
+                        cars.append(b)
+                    } else {
+                        let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!)
+                        cars.append(b)
+                    }
                 }
             }
             
@@ -414,80 +447,36 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     
     @IBAction func manufBut(_ sender: Any) {
         from = "Manuf"
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showManufacturers", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showManufacturers", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showManufacturers", sender: (Any).self)
     }
     
     @IBAction func prodBut(_ sender: Any) {
         from = "ProdTypes"
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
     }
     
     @IBAction func modelsBut(_ sender: Any) {
         from = "Models"
-        if Reachability.isConnectedToNetwork() {
-            
-            if appDelegate.closeCheckData == true {
-                
-                performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showProductTypes", sender: (Any).self)
     }
     
     
     
     @IBAction func favorTaped(_ sender: Any) {
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showFavourites", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showFavourites", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showFavourites", sender: (Any).self)
     }
     
     @IBAction func AlertsTaped(_ sender: Any) {
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showAlerts", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showAlerts", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showAlerts", sender: (Any).self)
     }
     
     @IBAction func referTaped(_ sender: Any) {
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showRef", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showRef", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showRef", sender: (Any).self)
     }
     
     
     @IBAction func manuBut(_ sender: Any) {
-        if Reachability.isConnectedToNetwork() {
-            if appDelegate.closeCheckData == true {
-                performSegue(withIdentifier: "showSideMenu2", sender: (Any).self)
-            }
-        } else {
-            performSegue(withIdentifier: "showSideMenu2", sender: (Any).self)
-        }
+        performSegue(withIdentifier: "showSideMenu2", sender: (Any).self)
     }
     
 }
@@ -499,11 +488,8 @@ extension CepiaVCiPad {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
-        
         return footerView
-        
     }
-    
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var headerLabel = UILabel()
@@ -517,7 +503,6 @@ extension CepiaVCiPad {
         headerLabel.text = self.tableView(self.tableView, titleForHeaderInSection: section)
         headerLabel.sizeToFit()
         headerView.addSubview(headerLabel)
-        
         return headerView
     }
     
@@ -550,6 +535,17 @@ extension CepiaVCiPad {
             
             cell.nameLbl.text = carValues[indexPath.row]
             let text = cell.nameLbl.text
+            cell.text2 = text!
+            if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text}) {
+                
+                var cellName = appDelegate.curentPdf.filter({$0.model_name == text})
+                if cellName.isEmpty {
+                    cellName = appDelegate.curentPdf.filter({$0.model_number == text})
+                }
+                cell.nameLbl.text = carValues[indexPath.row] + " \(cellName.first?.model_number ?? "")"
+                cell.resultsLbl.text = cellName.first?.manufacturer
+            }
+            
             if appDelegate.parents.contains(where: {$0.name == text}) {
                 let cellName = appDelegate.parents.filter({$0.name == text})
                 let selectedNameID = cellName.first?.id
@@ -565,25 +561,29 @@ extension CepiaVCiPad {
                 cell.resultsLbl.text = "\(arr3.count) Results"
             }
             if appDelegate.childs.contains(where: {$0.name == text}) {
-                var arr1 = appDelegate.curentPdf.filter({$0.model_name == text})
-                if arr1.isEmpty {
-                    arr1 = appDelegate.curentPdf.filter({$0.model_number == text})
+                if appDelegate.models.contains(where: {$0.name == text}) == false {
+                    var arr1 = appDelegate.curentPdf.filter({$0.model_name == text})
+                    if arr1.isEmpty {
+                        arr1 = appDelegate.curentPdf.filter({$0.model_number == text})
+                    }
+                    cell.resultsLbl.text = "\(arr1.count) Results"
+                } else {
+                    let arr1 = appDelegate.childs.filter({$0.name == text})
+                    var arr2 = [PdfDocumentInfo]()
+                    for i in arr1 {
+                        let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                        arr2 += arr3
+                    }
+                    cell.resultsLbl.text = "\(arr2.count) Results"
                 }
-                cell.resultsLbl.text = "\(arr1.count) Results"
             }
             if appDelegate.referencesParent.contains(where: {$0.name == text}) {
                 let arr1 = appDelegate.referencesParent.filter({$0.name == text})
                 cell.resultsLbl.text = arr1.first?.description2!
             }
-            if appDelegate.referencesChild.contains(where: {$0.name == text}) {
-                let arr1 = appDelegate.referencesChild.filter({$0.name == text})
-                cell.resultsLbl.text = arr1.first?.description2!
-            }
         }
         cell.accessoryType = .disclosureIndicator
         return cell
-        
-        
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
@@ -597,59 +597,17 @@ extension CepiaVCiPad {
         
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
-        let text = selectedCell.nameLbl.text
-        var selectedName = appDelegate.parents.filter({$0.name == text})
-        if selectedName.isEmpty {
-            selectedName = appDelegate.models.filter({$0.name == text})
-            if selectedName.isEmpty {
-                //                let reflName = selectedName.first?.name
-                if Reachability.isConnectedToNetwork() {
-                    if appDelegate.referencesParent.contains(where: {$0.name == text}) {
-                        if appDelegate.closeCheckData == true {
-                            from = "Models"
-                            performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-                        }
-                    } else {
-                        from = "Models"
-                        performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-                    }
-                } else if Reachability.isConnectedToNetwork() {
-                    if appDelegate.referencesChild.contains(where: {$0.name == text}) {
-                        if appDelegate.closeCheckData == true {
-                            from = "Models"
-                            performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-                        }
-                    } else {
-                        from = "Models"
-                        performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-                    }
-                }
-            } else {
-                let modelName = selectedName.first?.name
-                if Reachability.isConnectedToNetwork() {
-                    if appDelegate.closeCheckData == true {
-                        from = "Models"
-                        performSegue(withIdentifier: "searchCepia", sender: modelName)
-                    }
-                } else {
-                    from = "Models"
-                    performSegue(withIdentifier: "searchCepia", sender: modelName)
-                }
-                
-            }
-        } else {
-            
+        let text = selectedCell.text2
+        if appDelegate.parents.contains(where: {$0.name == text}) {
             let cell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
-            if Reachability.isConnectedToNetwork() {
-                if appDelegate.closeCheckData == true {
-                    from = "Models"
-                    performSegue(withIdentifier: "searchProd", sender: cell)
-                }
-            } else {
-                from = "Models"
-                performSegue(withIdentifier: "searchProd", sender: cell)
-            }
-            
+            performSegue(withIdentifier: "searchProd", sender: cell)
+        } else if appDelegate.models.contains(where: {$0.name == text}) {
+            let modelName = appDelegate.models.filter({$0.name == text})
+            performSegue(withIdentifier: "showModels", sender: modelName.first?.name)
+        } else if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text}) {
+            performSegue(withIdentifier: "searchCepia", sender: text)
+        } else {
+            performSegue(withIdentifier: "showRefSearch", sender: indexPath)
         }
     }
     
@@ -660,7 +618,20 @@ extension CepiaVCiPad {
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.", title: "Confirm Purchase")
         }
-        
+        if segue.identifier == "searchCepia" {
+            let name = sender as! String
+            let vs = segue.destination as! VitalStatVCiPad
+            var arr1 = appDelegate.curentPdf.filter({$0.model_name == name})
+            if arr1.isEmpty {
+                arr1 = appDelegate.curentPdf.filter({$0.model_number == name})
+            }
+            let arr2 = appDelegate.childs.filter({$0.id == arr1.first?.prodTypeId})
+            let arr3 = appDelegate.parents.filter({$0.id == arr2.first?.parent})
+            vs.parentID = arr1.first?.prodTypeId
+            vs.manufacturer = (arr3.first?.name)!
+            vs.name = name
+            
+        }
         if segue.identifier == "showManufacturers" {
             let manuf = segue.destination as! ManufacturersiPad
             manuf.from = from
@@ -677,26 +648,31 @@ extension CepiaVCiPad {
             types.parentID = arr.first?.id
             types.manufacturer = (arr.first?.name)!
         }
-        if segue.identifier == "searchCepia" {
+        if segue.identifier == "showModels" {
             let nameModel = sender as! String
-            let types = segue.destination as! VitalStatVCiPad
-            types.name = nameModel
+            let types = segue.destination as! ModelsVCiPad
+            let arr1 = appDelegate.models.filter({$0.name == nameModel})
+            types.parentID = arr1.first?.id
         }
-        
         if segue.identifier == "showRefSearch" {
             let indexPath = sender as! IndexPath
             let selectedCell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
             let text = selectedCell.nameLbl.text
-            let selectedName = appDelegate.referencesParent.filter({$0.name == text})
-            let selectedNameID = selectedName.first?.id
-            
-            let vc = segue.destination as! ReferencesVC2iPad
-            vc.parentID = selectedNameID
-            
+            var selectedName = appDelegate.referencesParent.filter({$0.name == text})
+            if selectedName.isEmpty == false {
+                let selectedNameID = selectedName.first?.id
+                let vc = segue.destination as! ReferencesVC2iPad
+                vc.parentID = selectedNameID
+            } else {
+                selectedName = appDelegate.referencesChild.filter({$0.name == text})
+                let selectedNameID = selectedName.first?.parent
+                let vc = segue.destination as! ReferencesVC2iPad
+                vc.parentID = selectedNameID
+            }
         }
-        
         showAlert = false
         searchBarLbl.text = ""
+        loadDataWpBool = false
     }
     
     func showAlertError(withText: String, title: String) {
@@ -704,11 +680,6 @@ extension CepiaVCiPad {
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
         let subscribeAction = UIAlertAction(title: "Subscribe", style: .default) { (subscribe) in
             Store.shared.purachaseProduct()
-            
-            let alert = UIAlertController(title: "Confirm Purchase", message: "After the subscription, wait until you receive a confirmation of the successful subscription", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true, completion: nil)
         }
         alert.addAction(cancelAction)
         alert.addAction(subscribeAction)
