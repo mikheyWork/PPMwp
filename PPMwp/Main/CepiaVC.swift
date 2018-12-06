@@ -9,6 +9,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     @IBOutlet weak var searchBarLbl: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var hidenMenu: UIView!
+    @IBOutlet weak var activity: UIActivityIndicatorView!
     
     var from: String!
     var showAlert = false
@@ -23,7 +24,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                appDelegate.subscribtion = true
+        appDelegate.subscribtion = true
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
@@ -31,8 +32,9 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             NotificationCenter.default.addObserver(self, selector: #selector(self.showBlock), name: NSNotification.Name("ShowBlock"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.hideBlock), name: NSNotification.Name("HideBlock"), object: nil)
         }
-        self.hidenMenu.isHidden = false
-        self.showMenu()
+        hidenMenu.isHidden = false
+        activity.isHidden = true
+        showMenu()
         if Reachability.isConnectedToNetwork() {
             loadDataWp()
         } else {
@@ -165,10 +167,14 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     @objc func showBlock() {
         hidenMenu.isHidden = false
         hidenMenu.backgroundColor = UIColor.white.withAlphaComponent(0.0)
+        activity.isHidden = false
+        activity.startAnimating()
     }
     @objc func hideBlock() {
         hidenMenu.isHidden = true
         hidenMenu.backgroundColor = UIColor.white.withAlphaComponent(1.0)
+        activity.isHidden = true
+        activity.stopAnimating()
     }
     
     
@@ -234,7 +240,9 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         searchBar.text = searchText
         
         if searchText != "" {
-            isSearching = true
+            if appDelegate.subscribtion == true {
+               isSearching = true
+            }
         } else {
             isSearching = false
         }
@@ -253,15 +261,27 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                 }
             }
             
+            for i in appDelegate.curentPdf {
+                if cars.contains(where: {$0.id == i.id}) == false {
+                    if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
+                        let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!)
+                        cars.append(b)
+                    } else {
+                       let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!)
+                        cars.append(b)
+                    }
+                }
+            }
+            
             for i in appDelegate.parents {
-                let a = appDelegate.parents.filter({$0.id == i.id})
-                if cars.contains(where: {$0.id == a.first!.id}) == false {
+                if cars.contains(where: {$0.id == i.id}) == false {
                     let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
                     cars.append(b)
                 }
             }
             
             for i in appDelegate.models {
+                print("i.model \(i.name)")
                 let a = appDelegate.models.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
                     let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
@@ -475,6 +495,16 @@ extension CepiaVC {
             
             cell.nameLbl.text = carValues[indexPath.row]
             let text = cell.nameLbl.text
+            cell.text2 = text!
+            if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text}) {
+                
+                var cellName = appDelegate.curentPdf.filter({$0.model_name == text})
+                if cellName.isEmpty {
+                    cellName = appDelegate.curentPdf.filter({$0.model_number == text})
+                }
+                cell.nameLbl.text = carValues[indexPath.row] + " \(cellName.first?.model_number ?? "")"
+                cell.resultsLbl.text = cellName.first?.manufacturer
+            }
             
             if appDelegate.parents.contains(where: {$0.name == text}) {
                 let cellName = appDelegate.parents.filter({$0.name == text})
@@ -491,13 +521,21 @@ extension CepiaVC {
                 cell.resultsLbl.text = "\(arr3.count) Results"
             }
             if appDelegate.childs.contains(where: {$0.name == text}) {
-                var arr1 = appDelegate.curentPdf.filter({$0.model_name == text})
-                if arr1.isEmpty {
-                    arr1 = appDelegate.curentPdf.filter({$0.model_number == text})
+                if appDelegate.models.contains(where: {$0.name == text}) == false {
+                    var arr1 = appDelegate.curentPdf.filter({$0.model_name == text})
+                    if arr1.isEmpty {
+                        arr1 = appDelegate.curentPdf.filter({$0.model_number == text})
+                    }
+                    cell.resultsLbl.text = "\(arr1.count) Results"
+                } else {
+                    let arr1 = appDelegate.childs.filter({$0.name == text})
+                    var arr2 = [PdfDocumentInfo]()
+                    for i in arr1 {
+                        let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                        arr2 += arr3
+                    }
+                    cell.resultsLbl.text = "\(arr2.count) Results"
                 }
-                cell.resultsLbl.text = "\(arr1.count) Results"
-                
-                
             }
             if appDelegate.referencesParent.contains(where: {$0.name == text}) {
                 let arr1 = appDelegate.referencesParent.filter({$0.name == text})
@@ -518,29 +556,31 @@ extension CepiaVC {
         
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
-        let text = selectedCell.nameLbl.text
-        var selectedName = appDelegate.parents.filter({$0.name == text})
-        if selectedName.isEmpty {
-            selectedName = appDelegate.models.filter({$0.name == text})
-            if selectedName.isEmpty {
-                performSegue(withIdentifier: "showRefSearch", sender: indexPath)
-            } else {
-                let modelName = selectedName.first?.name
-                performSegue(withIdentifier: "searchCepia", sender: modelName)
-            }
-            
-        } else {
+        let text = selectedCell.text2
+        if appDelegate.parents.contains(where: {$0.name == text}) {
             let cell = tableView.cellForRow(at: indexPath) as! CepiaTVCell
             performSegue(withIdentifier: "searchProd", sender: cell)
+        } else if appDelegate.models.contains(where: {$0.name == text}) {
+            let modelName = appDelegate.models.filter({$0.name == text})
+             performSegue(withIdentifier: "showModels", sender: modelName.first?.name)
+        } else if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text}) {
+            performSegue(withIdentifier: "searchCepia", sender: text)
+        } else {
+            performSegue(withIdentifier: "showRefSearch", sender: indexPath)
         }
     }
     
     //        MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-                appDelegate.subscribtion = true
         if appDelegate.subscribtion == false {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.")
+        }
+        if segue.identifier == "searchCepia" {
+            let name = sender as! String
+            let vs = segue.destination as! VitalStatVC
+                print("nammm \(name)")
+            vs.name = name
         }
         if segue.identifier == "showManufacturers" {
             let manuf = segue.destination as! Manufacturers
@@ -558,10 +598,11 @@ extension CepiaVC {
             types.parentID = arr.first?.id
             types.manufacturer = arr.first?.name
         }
-        if segue.identifier == "searchCepia" {
+        if segue.identifier == "showModels" {
             let nameModel = sender as! String
-            let types = segue.destination as! VitalStatVC
-            types.name = nameModel
+            let types = segue.destination as! ModelsVC
+            let arr1 = appDelegate.models.filter({$0.name == nameModel})
+            types.parentID = arr1.first?.id
         }
         if segue.identifier == "showRefSearch" {
             let indexPath = sender as! IndexPath

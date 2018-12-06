@@ -272,8 +272,16 @@ extension ProductiPad {
             if name2 != nil {
                 vs.name = name2!
                 vs.parentID = filterArr.first?.prodTypeId
-                vs.prodName = name2
-        
+                print("nammm \(name)")
+                var arr1 = appDelegate.curentPdf.filter({$0.model_name == name})
+                if arr1.isEmpty {
+                    arr1 = appDelegate.curentPdf.filter({$0.model_number == name})
+                }
+                let arr2 = appDelegate.childs.filter({$0.id == arr1.first?.prodTypeId})
+                let arr3 = appDelegate.parents.filter({$0.id == arr2.first?.parent})
+                print("manuf \(arr3.first?.name)")
+                vs.name = name2!
+                vs.manufacturer = arr3.first?.name ?? ""
             }
             
         }

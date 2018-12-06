@@ -238,6 +238,7 @@ extension Product {
             let name = sender as! String
             let vs = segue.destination as! VitalStatVC
             vs.name = name
+            
         }
     }
 }

@@ -270,7 +270,7 @@ extension ModelsVCiPad {
             performSegue(withIdentifier: "ShowVital2", sender: selectedNameID)
         }
         if from == "Models" {
-            performSegue(withIdentifier: "showProduct", sender: selectedNameID)
+            performSegue(withIdentifier: "showProduct", sender: selectedCell)
         }
     }
     
@@ -280,17 +280,19 @@ extension ModelsVCiPad {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "showProduct" {
-            
-            let parentId = sender as! Int
-            let prod = segue.destination as! ProductiPad
-            let filterArr = appDelegate.curentPdf.filter({$0.id == parentId})
-            
-            var name2 = filterArr.first?.model_name
-            if name2 == "" {
-                name2 = filterArr.first?.model_number
+            let parentId = sender as! ModelsTVCell
+            let text = parentId.text2
+            var selectedName = appDelegate.curentPdf.filter({$0.model_name == text})
+            if selectedName.isEmpty {
+                selectedName = appDelegate.curentPdf.filter({$0.model_number == text})
             }
-            prod.prodName = name2
-            prod.parentID = filterArr.first?.prodTypeId
+            let arr1 = appDelegate.childs.filter({$0.id == selectedName.first?.prodTypeId})
+            let arr2 = appDelegate.parents.filter({$0.id == arr1.first?.parent})
+            let prod = segue.destination as! ProductiPad
+            prod.name = text
+            prod.prodName = text
+            prod.parentID = selectedName.first?.prodTypeId
+            prod.manufacturer = (arr2.first?.name)!
         }
         
         if segue.identifier == "ShowVital2" {

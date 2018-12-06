@@ -2789,12 +2789,18 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                                             <action selector="menuBut:" destination="Mw8-ZR-kIx" eventType="touchUpInside" id="xAj-t9-s0E"/>
                                         </connections>
                                     </button>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="67k-qf-bY5">
+                                        <rect key="frame" x="177" y="0.0" width="20" height="20"/>
+                                    </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="67k-qf-bY5" secondAttribute="trailing" constant="178" id="Gpf-QM-9hI"/>
                                     <constraint firstAttribute="width" secondItem="bp2-dr-Jfe" secondAttribute="height" multiplier="375:85" id="NIk-vv-TeE"/>
                                     <constraint firstAttribute="trailing" secondItem="1oS-c7-ejf" secondAttribute="trailing" constant="13" id="eVa-uU-fVk"/>
+                                    <constraint firstItem="67k-qf-bY5" firstAttribute="leading" secondItem="bp2-dr-Jfe" secondAttribute="leading" constant="177" id="lnu-Do-AHv"/>
                                     <constraint firstAttribute="bottom" secondItem="1oS-c7-ejf" secondAttribute="bottom" constant="19" id="rk2-Wv-wMl"/>
+                                    <constraint firstItem="67k-qf-bY5" firstAttribute="top" secondItem="bp2-dr-Jfe" secondAttribute="top" id="ssn-uy-0sk"/>
                                 </constraints>
                             </view>
                             <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="30" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="3oN-k2-1dN">
@@ -2901,6 +2907,7 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                     </view>
                     <navigationItem key="navigationItem" id="gJC-ov-ecT"/>
                     <connections>
+                        <outlet property="activity" destination="67k-qf-bY5" id="A83-4Q-ZW3"/>
                         <outlet property="hidenMenu" destination="Hi2-h0-zto" id="lMe-Un-I8q"/>
                         <outlet property="nameLbl" destination="8Vt-2w-JQ0" id="5S1-io-WOd"/>
                         <outlet property="searchBarLbl" destination="vi1-9c-hNw" id="0ma-Bs-ijV"/>
@@ -2914,6 +2921,7 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                         <segue destination="rTR-rm-ZH8" kind="show" identifier="showFavourites" id="do6-9I-KNb"/>
                         <segue destination="FPM-vb-uNU" kind="show" identifier="showRef" id="M9s-x2-Hn4"/>
                         <segue destination="fA1-Yt-z8b" kind="show" identifier="showSideMenu2" id="jvs-qd-sBY"/>
+                        <segue destination="4XH-yS-6RB" kind="show" identifier="showModels" id="ze8-jM-v3U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3kk-qV-xIE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3117,6 +3125,7 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
         <segue reference="Ves-11-4jC"/>
         <segue reference="nwL-6g-w7n"/>
         <segue reference="eWs-QG-U0T"/>
+        <segue reference="ze8-jM-v3U"/>
         <segue reference="A98-F5-V1U"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -696,6 +696,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="MSH-RT-PHz">
+                                <rect key="frame" x="502" y="660" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -718,6 +722,7 @@
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="activity" destination="MSH-RT-PHz" id="o2p-L9-Dm6"/>
                         <outlet property="hideMenu" destination="BYe-GL-MgW" id="QaH-7z-yeP"/>
                         <outlet property="nameLbl" destination="SCk-bb-dCT" id="xZN-rq-NwE"/>
                         <outlet property="searchBarLbl" destination="8Et-vF-Wm0" id="cZU-BI-kEz"/>
@@ -733,6 +738,7 @@
                         <segue destination="mFV-zH-HLe" kind="show" identifier="showRef" animates="NO" id="ES2-b4-06W"/>
                         <segue destination="DoA-C3-JSz" kind="show" identifier="showFavourites" animates="NO" id="4Yh-20-M10"/>
                         <segue destination="WTC-v6-deK" kind="show" identifier="showAlerts" animates="NO" id="Rqy-aI-R8Z"/>
+                        <segue destination="4ZR-rV-JqQ" kind="show" identifier="showModels" animates="NO" id="w8D-MZ-VGc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f7a-LP-GWY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5305,6 +5311,7 @@ Cg
         <segue reference="ES2-b4-06W"/>
         <segue reference="dPM-OT-Mds"/>
         <segue reference="6hJ-8f-ajb"/>
+        <segue reference="w8D-MZ-VGc"/>
         <segue reference="ZVy-Pl-eSS"/>
         <segue reference="WE7-3G-mQz"/>
         <segue reference="XJV-cS-Qsu"/>
