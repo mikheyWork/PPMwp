@@ -13,7 +13,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     var from: String!
     var showAlert = false
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [SearchItem]]()
     var carSectionTitles = [String]()
     var cars = [SearchItem]()
     var cars2 = [SearchItem]()
@@ -137,9 +137,11 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         if a.isEmpty == false {
             self.appDelegate.favourites.removeAll()
             for i in a {
+                
                 if self.appDelegate.favourites.contains(String(i)) == false {
-                    if appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdfRef.contains(where: {$0.title == String(i)}) || appDelegate.childs.contains(where: {$0.name == String(i)}) || appDelegate.referencesChild.contains(where: {$0.name == String(i)}) {
+                    if appDelegate.curentPdf.contains(where: {$0.id == Int(String(i))}) || appDelegate.curentPdfRef.contains(where: {$0.id == Int(String(i))}) || appDelegate.childs.contains(where: {$0.id == Int64(String(i))}) || appDelegate.referencesChild.contains(where: {$0.id == Int64(String(i))})  {
                         self.appDelegate.favourites.append(String(i))
+                        print("favor id is \(i)")
                     }
                 }
             }
@@ -205,10 +207,26 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     func index() {
+//        for i in appDelegate.parents {
+//
+//            let arr1 = appDelegate.childs.filter({$0.parent == i.id})
+//            var count = 0
+//            for j in arr1 {
+//                let arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == j.id})
+//                count += arr2.count
+//            }
+//            if count != 0 {
+//                if cars.contains(where: {$0.id == i.id}) == false {
+//                    cars.append(SearchItem(id: Int(i.id), name: i.name ?? "", discription: "", number: "", manufacturer: ""))
+//                }
+//            }
+//
+//        }
+        
         for i in appDelegate.parents {
             let a = appDelegate.parents.filter({$0.name == i.name})
             if cars.contains(where: {$0.name == a.first!.name!}) == false {
-                let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                 cars.append(b)
             }
         }
@@ -216,10 +234,10 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         for car in cars {
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {
-                carValues.append(car.name)
+                carValues.append(car)
                 carsDictionary[carKey] = carValues
             } else {
-                carsDictionary[carKey] = [car.name]
+                carsDictionary[carKey] = [car]
             }
         }
         carSectionTitles = [String](carsDictionary.keys)
@@ -256,7 +274,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             for i in appDelegate.referencesParent {
                 let a = appDelegate.referencesParent.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!)
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!, number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
@@ -264,10 +282,10 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             for i in appDelegate.curentPdf {
                 if cars.contains(where: {$0.id == i.id}) == false {
                     if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
-                        let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!)
+                        let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "")
                         cars.append(b)
                     } else {
-                       let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!)
+                        let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "")
                         cars.append(b)
                     }
                 }
@@ -275,7 +293,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             
             for i in appDelegate.parents {
                 if cars.contains(where: {$0.id == i.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
@@ -284,7 +302,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
                 print("i.model \(i.name)")
                 let a = appDelegate.models.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
@@ -295,14 +313,14 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             for i in appDelegate.parents {
                 let a = appDelegate.parents.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
             for i in appDelegate.models {
                 let a = appDelegate.models.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
@@ -310,10 +328,10 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         for car in cars {
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {
-                carValues.append(car.name)
+                carValues.append(car)
                 carsDictionary[carKey] = carValues
             } else {
-                carsDictionary[carKey] = [car.name]
+                carsDictionary[carKey] = [car]
             }
         }
         
@@ -492,22 +510,18 @@ extension CepiaVC {
         // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
-            
-            cell.nameLbl.text = carValues[indexPath.row]
-            let text = cell.nameLbl.text
-            cell.text2 = text!
-            if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text}) {
-                
-                var cellName = appDelegate.curentPdf.filter({$0.model_name == text})
-                if cellName.isEmpty {
-                    cellName = appDelegate.curentPdf.filter({$0.model_number == text})
-                }
-                cell.nameLbl.text = carValues[indexPath.row] + " \(cellName.first?.model_number ?? "")"
-                cell.resultsLbl.text = cellName.first?.manufacturer
+            let prod =  carValues[indexPath.row]
+            cell.nameLbl.text = prod.name
+            cell.text2 = cell.nameLbl.text ?? ""
+            let id = prod.id ?? 0
+            cell.id = id
+            if appDelegate.curentPdf.contains(where: {$0.id == id}) {
+                cell.nameLbl.text = prod.name + " \(prod.number ?? "")"
+                cell.resultsLbl.text = prod.manufacturer
             }
             
-            if appDelegate.parents.contains(where: {$0.name == text}) {
-                let cellName = appDelegate.parents.filter({$0.name == text})
+            if appDelegate.parents.contains(where: {$0.id == id}) {
+                let cellName = appDelegate.parents.filter({$0.id == id})
                 let selectedNameID = cellName.first?.id
                 let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
                 var resaultArr = [PdfDocumentInfo]()
@@ -520,26 +534,33 @@ extension CepiaVC {
                 let arr3 = resaultArr
                 cell.resultsLbl.text = "\(arr3.count) Results"
             }
-            if appDelegate.childs.contains(where: {$0.name == text}) {
-                if appDelegate.models.contains(where: {$0.name == text}) == false {
-                    var arr1 = appDelegate.curentPdf.filter({$0.model_name == text})
+            if appDelegate.childs.contains(where: {$0.id == id}) {
+                if appDelegate.models.contains(where: {$0.id == id}) == false {
+                    var arr1 = appDelegate.curentPdf.filter({$0.id == id})
                     if arr1.isEmpty {
-                        arr1 = appDelegate.curentPdf.filter({$0.model_number == text})
+                        arr1 = appDelegate.curentPdf.filter({$0.id == id})
                     }
                     cell.resultsLbl.text = "\(arr1.count) Results"
                 } else {
-                    let arr1 = appDelegate.childs.filter({$0.name == text})
+                    let arr1 = appDelegate.childs.filter({$0.id == id})
+                    let arr4 = appDelegate.childs.filter({$0.name == arr1.first?.name})
+                    
+                    
+                    for i in arr4 {
+                        print("j \(i.name)")
+                    }
+                    
                     var arr2 = [PdfDocumentInfo]()
-                    for i in arr1 {
+                    for i in arr4 {
                         let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
                         arr2 += arr3
                     }
-                    cell.resultsLbl.text = "\(arr2.count) Results"
+                    cell.resultsLbl.text = "\(arr2.count) RResults"
                 }
             }
-            if appDelegate.referencesParent.contains(where: {$0.name == text}) {
-                let arr1 = appDelegate.referencesParent.filter({$0.name == text})
-                cell.resultsLbl.text = arr1.first?.description2!
+            if appDelegate.referencesParent.contains(where: {$0.id == id}) {
+                let arr1 = appDelegate.referencesParent.filter({$0.id == id})
+                cell.resultsLbl.text = arr1.first?.description2 ?? ""
             }
         }
         
@@ -564,7 +585,7 @@ extension CepiaVC {
             let modelName = appDelegate.models.filter({$0.name == text})
              performSegue(withIdentifier: "showModels", sender: modelName.first?.name)
         } else if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text}) {
-            performSegue(withIdentifier: "searchCepia", sender: text)
+            performSegue(withIdentifier: "searchCepia", sender: selectedCell)
         } else {
             performSegue(withIdentifier: "showRefSearch", sender: indexPath)
         }
@@ -577,10 +598,10 @@ extension CepiaVC {
             showAlertError(withText: "Buy an annual subscription of $ 9.99 AUD for PPM Genius applications.")
         }
         if segue.identifier == "searchCepia" {
-            let name = sender as! String
+            let name = sender as! CepiaTVCell
             let vs = segue.destination as! VitalStatVC
-                print("nammm \(name)")
-            vs.name = name
+                print("nammm \(name.nameLbl)")
+            vs.id = name.id
         }
         if segue.identifier == "showManufacturers" {
             let manuf = segue.destination as! Manufacturers
@@ -657,10 +678,14 @@ class SearchItem {
     var id: Int!
     var name: String!
     var discription: String?
+    var number: String?
+    var manufacturer: String?
     
-    init(id: Int, name: String, discription: String) {
+    init(id: Int, name: String, discription: String, number: String, manufacturer: String) {
         self.id = id
         self.name = name
         self.discription = discription
+        self.number = number
+        self.manufacturer = manufacturer
     }
 }

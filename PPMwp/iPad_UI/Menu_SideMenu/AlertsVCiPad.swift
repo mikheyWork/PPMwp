@@ -78,16 +78,15 @@ class AlertsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
             if i.alerts != nil && i.alerts != "false" && i.alerts != "" {
                 var a: Alert!
                 if i.model_name != "" && i.model_name != "_" && i.model_name != "false" {
-                    a = Alert(name: i.model_name!, date: i.modified!)
+                    a = Alert(name: i.model_name!, date: i.modified!, id: i.id ?? 0, number:  i.model_number ?? "")
                 } else {
-                    a = Alert(name: i.model_number!, date: i.modified!)
+                    a = Alert(name: i.model_number!, date: i.modified!, id: i.id ?? 0, number:  i.model_number ?? "")
                 }
                 
                 if cars.contains(where: {$0.name == i.model_name}) == false {
                     cars.append(a)
                 }
             }
-            
         }
         
         if isAzTabep {

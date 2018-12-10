@@ -29,18 +29,6 @@ class Manufacturers: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        for i in appDelegate.childs {
-            print("i.name \(i.name)")
-            print("i.id \(i.id)")
-        }
-        
-        for j in appDelegate.curentPdf {
-            print("i.name \(j.model_name)")
-            print("i.id \(j.prodTypeId)")
-        }
-//        for i in appDelegate.parents {
-//            print("i. \(i.name)")
-//        }
         if appDelegate.parents.isEmpty == false {
             rangeChar()
             top5But.layer.cornerRadius = 14
@@ -72,9 +60,19 @@ class Manufacturers: UIViewController, UITableViewDelegate, UITableViewDataSourc
     func index() {
         
         for i in appDelegate.parents {
-            if cars.contains(i) == false {
-                cars.append(i)
+            
+            let arr1 = appDelegate.childs.filter({$0.parent == i.id})
+            var count = 0
+            for j in arr1 {
+                let arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == j.id})
+                count += arr2.count
             }
+            if count != 0 {
+                if cars.contains(i) == false {
+                    cars.append(i)
+                }
+            }
+            
         }
         
         for car in cars {

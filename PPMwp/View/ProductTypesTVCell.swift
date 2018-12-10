@@ -14,6 +14,7 @@ class ProductTypesTVCell: UITableViewCell {
     
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var resaultLbl: UILabel!
+
     
     override func awakeFromNib() {
         super.awakeFromNib()

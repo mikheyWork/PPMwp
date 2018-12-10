@@ -366,7 +366,7 @@ class CheckDataController: UIViewController {
                         sensor_type = "_"
                     }
                     if resault["acf"]["dimensions_size"] != "" &&  resault["acf"]["dimensions_size"] != "false" {
-                        dimensions_size = resault["acf"]["dimensions"].stringValue
+                        dimensions_size = resault["acf"]["dimensions_size"].stringValue
                     } else {
                         dimensions_size = "_"
                     }
@@ -415,8 +415,8 @@ class CheckDataController: UIViewController {
                     } else {
                         patient_alert_feature = "_"
                     }
-                    if resault["acf"]["detach_tools"] != "" &&  resault["acf"]["detach_tools"] != "false" {
-                        detach_tools = resault["acf"]["detach_tools"].stringValue
+                    if resault["acf"]["detach_tool"] != "" &&  resault["acf"]["detach_tool"] != "false" {
+                        detach_tools = resault["acf"]["detach_tool"].stringValue
                     } else {
                         detach_tools = "_"
                     }

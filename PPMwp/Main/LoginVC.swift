@@ -13,12 +13,11 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var checkBut: UIButton!
     @IBOutlet weak var goBut: UIButton!
     
-    var isChecmarkTaped = UserDefaults.standard.bool(forKey: "saved")
+    
     var a: Int! = 0
     var path = UserDefaults.standard.bool(forKey: "saved2")
-    
+    var isChecmarkTaped = UserDefaults.standard.bool(forKey: "saved")
     var showSubAlert = false
-    
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -26,6 +25,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        //check sub
         activity.isHidden = true
         rangeChar()
         addTapGestureToHideKeyboard()
@@ -34,14 +34,7 @@ class LoginVC: UIViewController, UITextFieldDelegate {
         textFieldFont(text: "Email", textField: emailLbl, fontName: "Lato", fontSize: 14.0)
         textFieldFont(text: "Password", textField: passLbl, fontName: "Lato", fontSize: 14.0)
         
-        //check sub
-        if isChecmarkTaped == true {
-            if appDelegate.currentUser != nil {
-                if appDelegate.currentUser.id != 0 {
-                    performSegue(withIdentifier: "cepia", sender: nil)
-                }
-            }
-        }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

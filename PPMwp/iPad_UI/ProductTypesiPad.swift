@@ -210,9 +210,10 @@ extension ProductTypesiPad {
         // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
+            
             cell.nameLbl.text = carValues[indexPath.row]
             var cellName = [CategoryEnt]()
-            if  manufacturer != "" {
+            if manufacturer != "" {
                 cellName = appDelegate.parents.filter({$0.name == manufacturer})
             } else {
                 let arr1 = appDelegate.childs.filter({$0.name == cell.nameLbl.text})
@@ -221,7 +222,7 @@ extension ProductTypesiPad {
                 }
             }
             var resArr = [PdfDocumentInfo]()
-            if manufacturer != "" {
+            if  manufacturer != "" {
                 let selectedNameID = cellName.first?.id
                 let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
                 resArr = appDelegate.curentPdf.filter({$0.prodTypeId == resault.first?.id})
@@ -230,7 +231,7 @@ extension ProductTypesiPad {
                     let selectedNameID = i.id
                     let pop = appDelegate.curentPdf.filter({$0.prodTypeId == selectedNameID})
                     for i in pop {
-                        if resArr.contains(where: {$0.model_name == i.model_name}) == false {
+                        if resArr.contains(where: {$0.id == i.id}) == false {
                             resArr.append(i)
                         }
                     }
@@ -238,7 +239,6 @@ extension ProductTypesiPad {
             }
             cell.resaultLbl.text = "\(resArr.count) Results"
         }
-        
         return cell
     }
     

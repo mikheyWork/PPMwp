@@ -217,7 +217,7 @@ extension ProductTypes {
                     let selectedNameID = i.id
                     let pop = appDelegate.curentPdf.filter({$0.prodTypeId == selectedNameID})
                     for i in pop {
-                        if resArr.contains(where: {$0.model_name == i.model_name}) == false {
+                        if resArr.contains(where: {$0.id == i.id}) == false {
                             resArr.append(i)
                         }
                     }
@@ -230,8 +230,6 @@ extension ProductTypes {
         
         cell.accessoryType = .disclosureIndicator
         return cell
-        
-        
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {

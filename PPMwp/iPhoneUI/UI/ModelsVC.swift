@@ -12,9 +12,9 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
     var from: String!
     var parentID: Int64?
     var filterArray: [CategoryEnt] = []
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [PdfDocumentInfo]]()
     var carSectionTitles = [String]()
-    var cars = [String]()
+    var cars = [PdfDocumentInfo]()
     
     //    var childs: [Categ] = []
     var fltrChilds: [CategoryEnt] = []
@@ -89,12 +89,10 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
                 let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
                 
                 for i in pop {
-                    if cars.contains(where: {$0 == i.model_name}) == false && cars.contains(where: {$0 == i.model_number}) == false {
-                        var name = i.model_name
-                        if name == nil || name == "" {
-                            name = i.model_number
-                        }
-                        cars.append(name!)
+                    print("pop \(i.model_name) \(i.model_number)")
+                    if cars.contains(where: {$0.id == i.id}) == false {
+                        cars.append(i)
+                        print("\(i.model_name) \(i.model_number)")
                     }
                 }
                 
@@ -104,34 +102,42 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
                 for i in resault {
                     let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
                     for j in resArr {
-                        if cars.contains(where: {$0 == j.model_name}) == false && cars.contains(where: {$0 == j.model_number}) == false {
-                            var name = j.model_name
-                            if name == nil || name == "" {
-                                name = j.model_number
-                            }
-                            cars.append(name!)
+                        if cars.contains(where: {$0.id == j.id}) == false {
+                            cars.append(j)
                         }
                     }
                 }
                 for car in cars {
-                    print("carr \(car)")
+                    print("carr \(car.model_name)")
                 }
             }
         } else {
             for i in appDelegate.curentPdf {
-                    cars.append(i.model_name!)
+                    cars.append(i)
             }
         }
         
         //
         for car in cars {
-            let carKey = String(car.prefix(1))
-            if var carValues = carsDictionary[carKey] {
-                carValues.append(car)
-                carsDictionary[carKey] = carValues
+            var carKey = ""
+            if car.model_name != "" && car.model_name != "_" {
+                carKey = String(car.model_name?.prefix(1) ?? "")
+                if var carValues = carsDictionary[carKey] {
+                    carValues.append(car)
+                    carsDictionary[carKey] = carValues
+                } else {
+                    carsDictionary[carKey] = [car]
+                }
             } else {
-                carsDictionary[carKey] = [car]
+                carKey = String(car.model_number?.prefix(1) ?? "q")
+                if var carValues = carsDictionary[carKey] {
+                    carValues.append(car)
+                    carsDictionary[carKey] = carValues
+                } else {
+                    carsDictionary[carKey] = [car]
+                }
             }
+           
         }
         
         carSectionTitles = [String](carsDictionary.keys)
@@ -220,21 +226,28 @@ extension ModelsVC {
         // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
-            cell.nameLbl.text = carValues[indexPath.row]
-            cell.text2 = carValues[indexPath.row]
+            let product = carValues[indexPath.row]
+            cell.id = product.id ?? 0
+            if product.model_name != "" && product.model_name != "_" {
+                cell.nameLbl.text = product.model_name
+                cell.text2 = product.model_name ?? ""
+            } else {
+                cell.nameLbl.text = product.model_number
+                cell.text2 = product.model_number ?? ""
+            }
+            
             let text = cell.nameLbl.text
             var cellName = appDelegate.curentPdf.filter({$0.model_name == text})
             if cellName.isEmpty == true {
                 cellName = appDelegate.curentPdf.filter({$0.model_number == text})
             }
-            let selectedNameID = cellName.first?.manufacturer
-                let a = cellName.first?.model_number!
-                cell.resaultLbl.text = selectedNameID
+                let a = product.model_number
+                cell.resaultLbl.text = product.manufacturer
                 if a != nil {
                     if cell.text2 == a {
-                        cell.nameLbl.text = carValues[indexPath.row]
+                        cell.nameLbl.text = product.model_number
                     } else {
-                        cell.nameLbl.text = "\(carValues[indexPath.row]) \(a!)"
+                        cell.nameLbl.text = "\(String(describing: product.model_name!)) \(a!)"
                     }
                 }
         }
@@ -261,18 +274,17 @@ extension ModelsVC {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //        let parentId = sender as! Int64
-        
+
         if segue.identifier == "ShowVital2" {
-            
             let parentId = sender as! ModelsTVCell
-            let text = parentId.text2
             let vitalStat = segue.destination as! VitalStatVC
-            vitalStat.name = text
+            vitalStat.id = parentId.id
         }
         
         if segue.identifier == "showProduct" {
             let parentId = sender as! ModelsTVCell
             let text = parentId.text2
+            print("sel \(text)")
             var selectedName = appDelegate.curentPdf.filter({$0.model_name == text})
             if selectedName.isEmpty {
                 selectedName = appDelegate.curentPdf.filter({$0.model_number == text})

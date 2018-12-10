@@ -14,6 +14,8 @@ class ModelsTVCell: UITableViewCell {
     @IBOutlet weak var resaultLbl: UILabel!
     
     var text2 = ""
+    var id = 0
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }

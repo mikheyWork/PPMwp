@@ -8,9 +8,9 @@ class ReferencesVC2: UIViewController, UITableViewDataSource, UITableViewDelegat
     @IBOutlet weak var tableViewIndex: TableViewIndex!
     
     var nameVC = "ReferencesVC2"
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [ReferEnt]]()
     var carSectionTitles = [String]()
-    var cars = [String]()
+    var cars = [ReferEnt]()
     var showIndex = false
     var parentID: Int64!
     
@@ -76,19 +76,19 @@ class ReferencesVC2: UIViewController, UITableViewDataSource, UITableViewDelegat
         if parentID != nil {
             let resault = appDelegate.referencesChild.filter{$0.parent == parentID}
             for i in resault {
-                if cars.contains(i.name!) == false {
-                    cars.append(i.name!)
+                if cars.contains(i) == false {
+                    cars.append(i)
                 }
             }
         } else {
             for i in appDelegate.referencesChild {
-                if cars.contains(i.name!) == false {
-                    cars.append(i.name!)
+                if cars.contains(i) == false {
+                    cars.append(i)
                 }
             }
         }
         for car in cars {
-            let carKey = String(car.prefix(1))
+            let carKey = String(car.name?.prefix(1) ?? "")
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
                 carsDictionary[carKey] = carValues
@@ -176,7 +176,9 @@ extension ReferencesVC2 {
         // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
-            cell.nameLbl.text = carValues[indexPath.row]
+            let prod = carValues[indexPath.row]
+            cell.nameLbl.text = prod.name
+            cell.id = Int(prod.id)
             let text = cell.nameLbl.text
             let cellName = appDelegate.referencesChild.filter({$0.name == text})
             let description = cellName.first?.description2
@@ -201,11 +203,11 @@ extension ReferencesVC2 {
         if cell.nameLbl.text != nil {
             text = cell.nameLbl.text!
         }
-        
+        print("text \(text)")
         let arr1 = appDelegate.referencesChild.filter({$0.name == text})
         let arr2 = appDelegate.referencesChild.filter({$0.parent == arr1.first?.id})
         if arr2.isEmpty == true {
-           performSegue(withIdentifier: "showRefPdf", sender: text)
+           performSegue(withIdentifier: "showRefPdf", sender: cell.id)
         } else {
             parentID = arr2.first?.parent
             cars.removeAll()
@@ -220,10 +222,9 @@ extension ReferencesVC2 {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showRefPdf" {
-            let name = sender as! String
-            
+            let name = sender as! Int
             let vs = segue.destination as! PDFviewerVC
-            vs.name = name
+            vs.id = name
         }
     }
 }

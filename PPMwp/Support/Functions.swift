@@ -70,10 +70,12 @@ class Functions: NSObject {
         }
     }
     
-    func sendFavorInfo(name: String, button: UIButton) {
+    func sendFavorInfo(id: Int, button: UIButton) {
         DispatchQueue.global(qos: .userInitiated).async {
             var favor: String!
-            if self.appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || self.appDelegate.curentPdfRef.contains(where: {$0.title == name}) == true || self.appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
+            var name = String(id)
+            if self.appDelegate.curentPdf.contains(where: {$0.id == id}) == true || self.appDelegate.curentPdfRef.contains(where: {$0.id == id}) == true {
+                print("name \(id)")
                 if self.appDelegate.favourites.contains(name) == true {
                     //delete
                     self.appDelegate.favourites = self.appDelegate.favourites.filter({$0 != name})
@@ -142,7 +144,7 @@ class Functions: NSObject {
                 }
             }
         DispatchQueue.main.async {
-            Functions.shared.checkStar(name: name, button: button)
+            Functions.shared.checkStar(name: String(id), button: button)
         }
         }
 }

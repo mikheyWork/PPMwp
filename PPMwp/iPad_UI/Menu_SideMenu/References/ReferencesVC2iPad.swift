@@ -166,7 +166,8 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     @IBAction func starButTaped(_ sender: Any) {
-        Functions.shared.sendFavorInfo(name: name2, button: starBut)
+        //change
+        Functions.shared.sendFavorInfo(id: 0, button: starBut)
     }
     
     func checkState() {

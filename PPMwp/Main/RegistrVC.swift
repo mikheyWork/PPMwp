@@ -84,7 +84,7 @@ class RegistrVC: UIViewController {
                             self.activity.isHidden = true
                         }
                     } else if answer == "existing_user_email" || answer == "existing_user_login"  {
-                        self.showAlertError(title: "Create Account Failed", withText: "Sorry, that email already exists.")
+                        self.showAlertError(title: "Create Account Failed", withText: "Email already exists.")
                         DispatchQueue.main.async {
                             self.activity.stopAnimating()
                             self.activity.isHidden = true
@@ -128,7 +128,7 @@ class RegistrVC: UIViewController {
                 
                 self.register()
             } else {
-                self.showAlertError(title: "Sign In Failed", withText: "No internet connection.")
+                self.showAlertError(title: "Create Account Failed", withText: "No internet connection.")
             }
             
         } else {

@@ -213,7 +213,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         for i in appDelegate.parents {
             let a = appDelegate.parents.filter({$0.name == i.name})
             if cars.contains(where: {$0.name == a.first!.name!}) == false {
-                let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                 cars.append(b)
             }
         }
@@ -307,7 +307,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             for i in appDelegate.referencesParent {
                 let a = appDelegate.referencesParent.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!)
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!, number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
@@ -315,10 +315,10 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             for i in appDelegate.curentPdf {
                 if cars.contains(where: {$0.id == i.id}) == false {
                     if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
-                        let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!)
+                        let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "")
                         cars.append(b)
                     } else {
-                        let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!)
+                        let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer! , number: i.model_number ?? "", manufacturer: i.manufacturer ?? "")
                         cars.append(b)
                     }
                 }
@@ -327,14 +327,14 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             for i in appDelegate.parents {
                 let a = appDelegate.parents.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
             for i in appDelegate.models {
                 let a = appDelegate.models.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
@@ -345,14 +345,14 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             for i in appDelegate.parents {
                 let a = appDelegate.parents.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                     cars.append(b)
                 }
             }
             for i in appDelegate.models {
                 let a = appDelegate.models.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
                     cars.append(b)
                 }
             }

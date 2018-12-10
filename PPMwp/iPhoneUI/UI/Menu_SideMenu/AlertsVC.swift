@@ -91,12 +91,12 @@ class AlertsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
             if i.alerts != nil && i.alerts != "false" && i.alerts != "" {
                 var a: Alert!
                 if i.model_name != "" && i.model_name != "_" && i.model_name != "false" {
-                    a = Alert(name: i.model_name!, date: i.modified!)
+                    a = Alert(name: i.model_name!, date: i.modified!, id: i.id ?? 0, number: i.model_number ?? "")
                 } else {
-                    a = Alert(name: i.model_number!, date: i.modified!)
+                    a = Alert(name: i.model_number!, date: i.modified!, id: i.id ?? 0, number:  i.model_number ?? "")
                 }
                 
-                if cars.contains(where: {$0.name == i.model_name}) == false {
+                if cars.contains(where: {$0.id == i.id}) == false {
                     cars.append(a)
                 }
             }
@@ -113,7 +113,6 @@ class AlertsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
         
         
         for car in cars {
-            print("alert array is \(car.name)")
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
@@ -284,23 +283,24 @@ extension AlertsVC {
         backgroundView.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1.0)
         cell.selectedBackgroundView = backgroundView
         
+        var prod = Alert(name: "", date: "", id: 0, number: "")
         
         if isAzTabep == true {
             let carKey = carSectionTitles[indexPath.section]
             if let carValues = carsDictionary[carKey] {
-                cell.nameLbl.text = carValues[indexPath.row].name
+                prod = carValues[indexPath.row]
+                cell.nameLbl.text = prod.name + " \(prod.number ?? "")"
             }
-            let text = cell.nameLbl.text
-            let arr = cars.filter({$0.name == text})
-            let alert = arr.first?.date
-            
+            cell.id = prod.id
+            let alert = prod.date
             let date = alert?.dropLast(9)
             let time = alert?.dropFirst(11)
-            
             cell.dateLbl.text = "\(date!)   \(time!)"
+            
         } else {
-            let a = cars[indexPath.row].name
-            cell.nameLbl.text = a
+            prod = cars[indexPath.row]
+            cell.id = prod.id
+            cell.nameLbl.text = prod.name + " \(prod.number ?? "")"
             let alert = cars[indexPath.row].date
             let date = alert?.dropLast(9)
             let time = alert?.dropFirst(11)
@@ -323,30 +323,23 @@ extension AlertsVC {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        var text = " "
-        
         let cell = tableView.cellForRow(at: indexPath) as! AlertsTVCell
-        
-        if cell.nameLbl.text != nil {
-            text = cell.nameLbl.text!
-        }
-            performSegue(withIdentifier: "showAlertsPdf", sender: text)
+            performSegue(withIdentifier: "showAlertsPdf", sender: cell)
     }
     
     //MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showAlertsPdf" {
-            let name = sender as! String
-            
+            let name = sender as! AlertsTVCell
             let vs = segue.destination as! VitalStatVC
-            vs.name = name
+            vs.id = name.id
+            print("id \(name.id)")
         }
         if segue.identifier == "showAlertsRef" {
-            let name = sender as! String
-            
+            let name = sender as! AlertsTVCell
             let vs = segue.destination as! PDFviewerVC
-            vs.name = name
+            vs.id = name.id
         }
     }
 }
@@ -355,9 +348,13 @@ extension AlertsVC {
 class Alert {
     var name: String!
     var date: String!
+    var id: Int!
+    var number: String!
     
-    init(name: String, date: String) {
+    init(name: String, date: String, id: Int, number: String) {
+        self.id = id
         self.date = date
         self.name = name
+        self.number = number
     }
 }

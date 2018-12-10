@@ -148,7 +148,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     @IBAction func starBut(_ sender: Any) {
-        Functions.shared.sendFavorInfo(name: name, button: starBut)
+//        Functions.shared.sendFavorInfo(name: name, button: starBut)
     }
     
     func read(nameFile: String) {
@@ -363,20 +363,20 @@ extension VitalFullScrennVC {
             prodArr = appDelegate.curentPdf.filter({$0.model_number == name})
         }
         
-        
         //start
         if prodArr.first?.manufacturer != "" && prodArr.first?.manufacturer != "_" {
             fieldsDict["Manufacturer"] = prodArr.first?.manufacturer
             keysAZ.append("Manufacturer")
         }
         if prodArr.first?.model_number != "" && prodArr.first?.model_number != "_" {
-            fieldsDict["Model number"] = prodArr.first?.model_number
-            keysAZ.append("Model number")
+            fieldsDict["Model Number"] = prodArr.first?.model_number
+            keysAZ.append("Model Number")
         }
         if prodArr.first?.model_name != "" && prodArr.first?.model_name != "_" {
-            fieldsDict["Model name"] = prodArr.first?.model_name
-            keysAZ.append("Model name")
+            fieldsDict["Model Name"] = prodArr.first?.model_name
+            keysAZ.append("Model Name")
         }
+        //
         if prodArr.first?.nbg_code != "" && prodArr.first?.nbg_code != "_" {
             fieldsDict["NBG Code"] = prodArr.first?.nbg_code
             keysAZ.append("NBG Code")
@@ -386,8 +386,8 @@ extension VitalFullScrennVC {
             keysAZ.append("NBD Code")
         }
         if prodArr.first?.sensor_type != "" && prodArr.first?.sensor_type != "_" {
-            fieldsDict["Sensor type"] = prodArr.first?.sensor_type
-            keysAZ.append("Sensor type")
+            fieldsDict["Sensor Type"] = prodArr.first?.sensor_type
+            keysAZ.append("Sensor Type")
         }
         if prodArr.first?.number_of_hv_coils != "" && prodArr.first?.number_of_hv_coils != "_" {
             fieldsDict["Number of HW coils"] = prodArr.first?.number_of_hv_coils
@@ -401,6 +401,18 @@ extension VitalFullScrennVC {
             fieldsDict["Max energy(Joules)"] = prodArr.first?.max_energy
             keysAZ.append("Max energy(Joules)")
         }
+        if prodArr.first?.hv_waveform != "" && prodArr.first?.hv_waveform != "_" {
+            fieldsDict["HV Waveform"] = prodArr.first?.hv_waveform
+            keysAZ.append("HV Waveform")
+        }
+        if prodArr.first?.dimensions_size != "" && prodArr.first?.dimensions_size != "_" {
+            fieldsDict["Dimensions: Size(H x W x D in mm)"] = prodArr.first?.dimensions_size
+            keysAZ.append("Dimensions: Size(H x W x D in mm)")
+        }
+        if prodArr.first?.dimensions_weight != "" && prodArr.first?.dimensions_weight != "_" {
+            fieldsDict["Dimensions: Weight(g)/Voltage(cc)"] = prodArr.first?.dimensions_weight
+            keysAZ.append("Dimensions: Weight(g)/Voltage(cc)")
+        }
         if prodArr.first?.lead_polarity != "" && prodArr.first?.lead_polarity != "_" {
             fieldsDict["Lead Polarity"] = prodArr.first?.lead_polarity
             keysAZ.append("Lead Polarity")
@@ -413,21 +425,9 @@ extension VitalFullScrennVC {
             fieldsDict["Insulation Material"] = prodArr.first?.insulation_material
             keysAZ.append("Insulation Material")
         }
-        if prodArr.first?.dimensions_size != "" && prodArr.first?.dimensions_size != "_" {
-            fieldsDict["Dimensions: Size(H x W x D in mm)"] = prodArr.first?.dimensions_size
-            keysAZ.append("Dimensions: Size(H x W x D in mm)")
-        }
         if prodArr.first?.max_lead_diameter != "" && prodArr.first?.max_lead_diameter != "_" {
             fieldsDict["Max Lead Diameter(Fr)/ Min Introducer Siz(Fr)"] = prodArr.first?.max_lead_diameter
             keysAZ.append("Max Lead Diameter(Fr)/ Min Introducer Siz(Fr)")
-        }
-        if prodArr.first?.dimensions_weight != "" && prodArr.first?.dimensions_weight != "_" {
-            fieldsDict["Dimensions: Weight(g)/Voltage(cc)"] = prodArr.first?.dimensions_weight
-            keysAZ.append("Dimensions: Weight(g)/Voltage(cc)")
-        }
-        if prodArr.first?.placement != "" && prodArr.first?.placement != "_" {
-            fieldsDict["Placement"] = prodArr.first?.placement
-            keysAZ.append("Placement")
         }
         if prodArr.first?.connectores_pace_sense != "" && prodArr.first?.connectores_pace_sense != "_" {
             fieldsDict["Connectores Pace/Sense"] = prodArr.first?.connectores_pace_sense
@@ -437,9 +437,25 @@ extension VitalFullScrennVC {
             fieldsDict["Connectores Hight Voltage"] = prodArr.first?.connectores_hight_voltage
             keysAZ.append("Connectores Hight Voltage")
         }
+        if prodArr.first?.placement != "" && prodArr.first?.placement != "_" {
+            fieldsDict["Placement"] = prodArr.first?.placement
+            keysAZ.append("Placement")
+        }
         if prodArr.first?.mri_conditional != "" && prodArr.first?.mri_conditional != "_" {
             fieldsDict["MRI Conditional"] = prodArr.first?.mri_conditional
             keysAZ.append("MRI Conditional")
+        }
+        if prodArr.first?.wireless_telemetry != "" && prodArr.first?.wireless_telemetry != "_" {
+            fieldsDict["Wireless Telemetry"] = prodArr.first?.wireless_telemetry
+            keysAZ.append("Wireless Telemetry")
+        }
+        if prodArr.first?.remote_monitoring != "" && prodArr.first?.remote_monitoring != "_" {
+            fieldsDict["Remote Monitoring"] = prodArr.first?.remote_monitoring
+            keysAZ.append("Remote Monitoring")
+        }
+        if prodArr.first?.eri_notes != "" && prodArr.first?.eri_notes != "_" {
+            fieldsDict["ERI Notes"] = prodArr.first?.eri_notes
+            keysAZ.append("ERI Notes")
         }
         if prodArr.first?.bol_characteristics != "" && prodArr.first?.bol_characteristics != "_" {
             fieldsDict["BOL Characteristics"] = prodArr.first?.bol_characteristics
@@ -449,33 +465,21 @@ extension VitalFullScrennVC {
             fieldsDict["Non Magnet Rate: BOL/(ERI/EOL)"] = prodArr.first?.non_magnet_rate
             keysAZ.append("Non Magnet Rate: BOL/(ERI/EOL)")
         }
-        if prodArr.first?.wireless_telemetry != "" && prodArr.first?.wireless_telemetry != "_" {
-            fieldsDict["Wireless telemetry"] = prodArr.first?.wireless_telemetry
-            keysAZ.append("Wireless telemetry")
-        }
-        if prodArr.first?.eri_eol_characteristics != "" && prodArr.first?.eri_eol_characteristics != "_" {
-            fieldsDict["ERI/EOL Characteristics"] = prodArr.first?.eri_eol_characteristics
-            keysAZ.append("ERI/EOL Characteristics")
-        }
         if prodArr.first?.magnet_rate_bol != "" && prodArr.first?.magnet_rate_bol != "_" {
             fieldsDict["Magnet Rate:BOL"] = prodArr.first?.magnet_rate_bol
             keysAZ.append("Magnet Rate:BOL")
-        }
-        if prodArr.first?.remote_monitoring != "" && prodArr.first?.remote_monitoring != "_" {
-            fieldsDict["Remote Monitoring"] = prodArr.first?.remote_monitoring
-            keysAZ.append("Remote Monitoring")
-        }
-        if prodArr.first?.patient_alert_feature != "" && prodArr.first?.patient_alert_feature != "_" {
-            fieldsDict["Patient Alert Feature"] = prodArr.first?.patient_alert_feature
-            keysAZ.append("Patient Alert Feature")
         }
         if prodArr.first?.magnet_rate_eri_eol != "" && prodArr.first?.magnet_rate_eri_eol != "_" {
             fieldsDict["Magnet Rate:ERI/EOL"] = prodArr.first?.magnet_rate_eri_eol
             keysAZ.append("Magnet Rate:ERI/EOL")
         }
-        if prodArr.first?.eri_notes != "" && prodArr.first?.eri_notes != "_" {
-            fieldsDict["ERI Notes"] = prodArr.first?.eri_notes
-            keysAZ.append("ERI Notes")
+        if prodArr.first?.eri_eol_characteristics != "" && prodArr.first?.eri_eol_characteristics != "_" {
+            fieldsDict["ERI/EOL Characteristics"] = prodArr.first?.eri_eol_characteristics
+            keysAZ.append("ERI/EOL Characteristics")
+        }
+        if prodArr.first?.patient_alert_feature != "" && prodArr.first?.patient_alert_feature != "_" {
+            fieldsDict["Patient Alert Feature"] = prodArr.first?.patient_alert_feature
+            keysAZ.append("Patient Alert Feature")
         }
         if prodArr.first?.detach_tools != "" && prodArr.first?.detach_tools != "_" {
             fieldsDict["Detach Tool"] = prodArr.first?.detach_tools

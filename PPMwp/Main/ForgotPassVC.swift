@@ -31,7 +31,7 @@ class ForgotPassVC: UIViewController {
     }
     
     @objc func soop2() {
-        showAlertError(title: "Succsess", withText: "Request is succsess")
+        showAlertError(title: "Sent", withText: "An email has been sent to you.")
     }
     
     //nameLbl char range
@@ -90,7 +90,7 @@ class ForgotPassVC: UIViewController {
                         UserDefaults.standard.set(encodedData, forKey: "currentUser")
                         UserDefaults.standard.synchronize()
                         UserDefaults.standard.setValue(false, forKey: "saved2")
-                        let text =  "Hello, \n \nYou have requested a password reset, follow the link below to reset it. \n \nChange Password: https://ppm.customertests.com/forgot-password/ \nThanks, \nCEPIA Team"
+                        let text =  "Hello, \n \nYou have requested a password reset, follow the link below to reset it. \n \nChange Password: https://ppm.customertests.com/forgot-password/ \n \nThanks, \n \nCEPIA Team"
                         MailSender.shared.sendEmail(subject: "Reset password", body: text, mail: self.emailLbl.text!)
                         
                         
