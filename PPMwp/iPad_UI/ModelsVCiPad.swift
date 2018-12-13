@@ -13,13 +13,13 @@ class ModelsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
     var from: String!
     
     var parentID: Int64?
-//    var category: [Categ] = []
+    //    var category: [Categ] = []
     var filterArray: [CategoryEnt] = []
     
     //test
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [PdfDocumentInfo]]()
     var carSectionTitles = [String]()
-    var cars = [String]()
+    var cars = [PdfDocumentInfo]()
     var manufacturer = ""
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -42,22 +42,20 @@ class ModelsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func index() {
         if parentID != nil {
-            if  manufacturer != "" {
+            if manufacturer != nil && manufacturer != "" {
                 let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
                 parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
             }
             var resault = [CategoryEnt]()
-            if manufacturer != "" {
+            if manufacturer != "" && manufacturer != nil {
                 
                 let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
                 
                 for i in pop {
-                    if cars.contains(where: {$0 == i.model_name}) == false && cars.contains(where: {$0 == i.model_number}) == false {
-                        var name = i.model_name
-                        if name == nil || name == "" {
-                            name = i.model_number
-                        }
-                        cars.append(name!)
+                    print("pop \(i.model_name) \(i.model_number)")
+                    if cars.contains(where: {$0.id == i.id}) == false {
+                        cars.append(i)
+                        print("\(i.model_name) \(i.model_number)")
                     }
                 }
                 
@@ -67,37 +65,46 @@ class ModelsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
                 for i in resault {
                     let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
                     for j in resArr {
-                        if cars.contains(where: {$0 == j.model_name}) == false && cars.contains(where: {$0 == j.model_number}) == false {
-                            var name = j.model_name
-                            if name == nil || name == "" {
-                                name = j.model_number
-                            }
-                            cars.append(name!)
+                        if cars.contains(where: {$0.id == j.id}) == false {
+                            cars.append(j)
                         }
                     }
+                }
+                for car in cars {
+                    print("carr \(car.model_name)")
                 }
             }
         } else {
             for i in appDelegate.curentPdf {
-                cars.append(i.model_name!)
+                cars.append(i)
             }
         }
         
-        // 1
+        //
         for car in cars {
-            let carKey = String(car.prefix(1))
-            if var carValues = carsDictionary[carKey] {
-                carValues.append(car)
-                carsDictionary[carKey] = carValues
+            var carKey = ""
+            if car.model_name != "" && car.model_name != "_" {
+                carKey = String(car.model_name?.prefix(1) ?? "")
+                if var carValues = carsDictionary[carKey] {
+                    carValues.append(car)
+                    carsDictionary[carKey] = carValues
+                } else {
+                    carsDictionary[carKey] = [car]
+                }
             } else {
-                carsDictionary[carKey] = [car]
+                carKey = String(car.model_number?.prefix(1) ?? "q")
+                if var carValues = carsDictionary[carKey] {
+                    carValues.append(car)
+                    carsDictionary[carKey] = carValues
+                } else {
+                    carsDictionary[carKey] = [car]
+                }
             }
+            
         }
         
-        // 2
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-        
     }
     
     func indexFunc() {
@@ -222,25 +229,30 @@ extension ModelsVCiPad {
         // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
-            cell.nameLbl.text = carValues[indexPath.row]
-            cell.text2 = carValues[indexPath.row]
+            let product = carValues[indexPath.row]
+            cell.id = product.id ?? 0
+            if product.model_name != "" && product.model_name != "_" {
+                cell.nameLbl.text = product.model_name
+                cell.text2 = product.model_name ?? ""
+            } else {
+                cell.nameLbl.text = product.model_number
+                cell.text2 = product.model_number ?? ""
+            }
+            
             let text = cell.nameLbl.text
             var cellName = appDelegate.curentPdf.filter({$0.model_name == text})
             if cellName.isEmpty == true {
                 cellName = appDelegate.curentPdf.filter({$0.model_number == text})
             }
-            let selectedNameID = cellName.first?.manufacturer
-            let a = cellName.first?.model_number!
-            cell.resaultLbl.text = selectedNameID
+            let a = product.model_number
+            cell.resaultLbl.text = product.manufacturer
             if a != nil {
                 if cell.text2 == a {
-                    cell.nameLbl.text = carValues[indexPath.row]
+                    cell.nameLbl.text = product.model_number
                 } else {
-                    cell.nameLbl.text = "\(carValues[indexPath.row]) \(a!)"
+                    cell.nameLbl.text = "\(String(describing: product.model_name!)) \(a!)"
                 }
-                
             }
-            
         }
         return cell
     }
@@ -255,19 +267,14 @@ extension ModelsVCiPad {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
+        
         
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! ModelsTVCell
-        let text = selectedCell.text2
-        var selectedName = appDelegate.curentPdf.filter({$0.model_name == text})
-        if selectedName.isEmpty {
-            selectedName = appDelegate.curentPdf.filter({$0.model_number == text})
-        }
-        let selectedNameID = selectedName.first?.id
+        
         if from == "Manuf" {
             
-            performSegue(withIdentifier: "ShowVital2", sender: selectedNameID)
+            performSegue(withIdentifier: "ShowVital2", sender: selectedCell)
         }
         if from == "Models" {
             performSegue(withIdentifier: "showProduct", sender: selectedCell)
@@ -296,24 +303,13 @@ extension ModelsVCiPad {
         }
         
         if segue.identifier == "ShowVital2" {
-            let parentId = sender as! Int
-            let vs = segue.destination as! VitalStatVCiPad
-            let filterArr = appDelegate.curentPdf.filter({$0.id == parentId})
-            
-            var name2 = filterArr.first?.model_name
-            if name2 == "" {
-                name2 = filterArr.first?.model_number
-            }
-            if name2 != nil {
-                vs.name = name2!
-                vs.parentID = filterArr.first?.prodTypeId
-                vs.manufacturer = manufacturer
-                vs.prodName = name2
-            }
-            
+            let parentId = sender as! ModelsTVCell
+            let vitalStat = segue.destination as! VitalStatVCiPad
+            vitalStat.id = parentId.id
+            let a = appDelegate.curentPdf.filter({$0.id == parentId.id})
+            vitalStat.manufacturer = a.first?.manufacturer ?? ""
+            vitalStat.parentID = a.first?.prodTypeId ?? 0
         }
-        
-        }
-    
+    }
 }
 

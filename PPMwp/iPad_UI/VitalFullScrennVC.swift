@@ -32,6 +32,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
     var readed = false
     var name2 = ""
     var nameRead = ""
+    var id = 0
        let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
@@ -47,9 +48,9 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         addDataToDict()
         trueName = name
-        
+        changeName()
         rangeChar(label: nameLbl)
-        Functions.shared.checkStar(name: name, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
         
        
         
@@ -59,6 +60,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
         if a.isEmpty == true {
             b = appDelegate.referencesChild.filter({$0.name == name })
         }
+        changeName()
         
         
     }
@@ -117,6 +119,19 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
         
     }
     
+    fileprivate func changeName() {
+        let arr1 = appDelegate.curentPdf.filter({$0.id == id})
+        var timeName = ""
+        if arr1.first?.model_name != "" && arr1.first?.model_name != "" {
+            timeName = arr1.first?.model_name ?? ""
+        } else {
+            timeName = arr1.first?.model_number ?? ""
+        }
+        namePdf = PDFDownloader.shared.addPercent(fromString: timeName)
+        if arr1.first?.model_number != "" && arr1.first?.model_number != "_" {
+            namePdf += PDFDownloader.shared.addPercent(fromString: arr1.first?.model_number ?? "")
+        }
+    }
     
     //    nameLbl char range
     fileprivate func rangeChar(label: UILabel) {
@@ -148,7 +163,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     @IBAction func starBut(_ sender: Any) {
-        Functions.shared.sendFavorInfo(name: name, button: starBut)
+        Functions.shared.sendFavorInfo(id: id, button: starBut)
     }
     
     func read(nameFile: String) {
@@ -224,10 +239,7 @@ extension VitalFullScrennVC {
                 if arr.isEmpty == false {
                     arr.removeAll()
                 }
-                arr = appDelegate.curentPdf.filter({$0.model_name == name})
-                if arr.isEmpty == true {
-                    arr = appDelegate.curentPdf.filter({$0.model_number == name})
-                }
+                arr = appDelegate.curentPdf.filter({$0.id == id})
                 let info = arr.first?.modified
                 if info != nil && info != "" {
                     if arr.first?.alerts != nil && arr.first?.alerts != "" && arr.first?.alerts != "false" {
@@ -256,19 +268,13 @@ extension VitalFullScrennVC {
                 }
             } else {
                 if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true  {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
-                    if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
-                    }
+                    let a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.first?.info != nil && a.first?.info != "false" && a.first?.info != "" {
-                        
-                        //
                         cell6.imgView.image = UIImage(named: "Info")
                         cell6.nameLbl.text = "MRI Conditional"
                         cell6.accessoryType = .disclosureIndicator
                         cell6.selectionStyle = .default
                         cell6.hideView.isHidden = true
-                        //                        cell5.separatorColor.isHidden = false
                     } else {
                         cell6.nameLbl.text = ""
                         cell6.imgView.image = nil
@@ -294,10 +300,10 @@ extension VitalFullScrennVC {
             
             if indexPath.row == 0 {
                 //search in current
-                if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
+                if appDelegate.curentPdf.contains(where: {$0.id == id}) == true  {
+                    var a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
+                        a = appDelegate.curentPdf.filter({$0.id == id})
                     }
                     if a.first?.alerts != nil && a.first?.alerts != "" && a.first?.alerts != "false" {
                         //open pdf
@@ -312,10 +318,10 @@ extension VitalFullScrennVC {
                     cell.selectionStyle = .none
                 }
             } else {
-                if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
+                if appDelegate.curentPdf.contains(where: {$0.id == id}) == true {
+                    var a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
+                        a = appDelegate.curentPdf.filter({$0.id == id})
                     }
                     if a.first?.info != nil && a.first?.info != "" && a.first?.info != "false" {
                         //open pdf
@@ -357,12 +363,7 @@ extension VitalFullScrennVC {
             keysAZ2.removeAll()
         }
         
-        prodArr = appDelegate.curentPdf.filter({$0.model_name == name})
-        prodArr = appDelegate.curentPdf.filter({$0.model_name == name})
-        if prodArr.isEmpty == true {
-            prodArr = appDelegate.curentPdf.filter({$0.model_number == name})
-        }
-        
+        prodArr = appDelegate.curentPdf.filter({$0.id == id})
         
         //start
         if prodArr.first?.manufacturer != "" && prodArr.first?.manufacturer != "_" {
@@ -370,13 +371,14 @@ extension VitalFullScrennVC {
             keysAZ.append("Manufacturer")
         }
         if prodArr.first?.model_number != "" && prodArr.first?.model_number != "_" {
-            fieldsDict["Model number"] = prodArr.first?.model_number
-            keysAZ.append("Model number")
+            fieldsDict["Model Number"] = prodArr.first?.model_number
+            keysAZ.append("Model Number")
         }
         if prodArr.first?.model_name != "" && prodArr.first?.model_name != "_" {
-            fieldsDict["Model name"] = prodArr.first?.model_name
-            keysAZ.append("Model name")
+            fieldsDict["Model Name"] = prodArr.first?.model_name
+            keysAZ.append("Model Name")
         }
+        //
         if prodArr.first?.nbg_code != "" && prodArr.first?.nbg_code != "_" {
             fieldsDict["NBG Code"] = prodArr.first?.nbg_code
             keysAZ.append("NBG Code")
@@ -386,8 +388,8 @@ extension VitalFullScrennVC {
             keysAZ.append("NBD Code")
         }
         if prodArr.first?.sensor_type != "" && prodArr.first?.sensor_type != "_" {
-            fieldsDict["Sensor type"] = prodArr.first?.sensor_type
-            keysAZ.append("Sensor type")
+            fieldsDict["Sensor Type"] = prodArr.first?.sensor_type
+            keysAZ.append("Sensor Type")
         }
         if prodArr.first?.number_of_hv_coils != "" && prodArr.first?.number_of_hv_coils != "_" {
             fieldsDict["Number of HW coils"] = prodArr.first?.number_of_hv_coils
@@ -401,6 +403,18 @@ extension VitalFullScrennVC {
             fieldsDict["Max energy(Joules)"] = prodArr.first?.max_energy
             keysAZ.append("Max energy(Joules)")
         }
+        if prodArr.first?.hv_waveform != "" && prodArr.first?.hv_waveform != "_" {
+            fieldsDict["HV Waveform"] = prodArr.first?.hv_waveform
+            keysAZ.append("HV Waveform")
+        }
+        if prodArr.first?.dimensions_size != "" && prodArr.first?.dimensions_size != "_" {
+            fieldsDict["Dimensions: Size(H x W x D in mm)"] = prodArr.first?.dimensions_size
+            keysAZ.append("Dimensions: Size(H x W x D in mm)")
+        }
+        if prodArr.first?.dimensions_weight != "" && prodArr.first?.dimensions_weight != "_" {
+            fieldsDict["Dimensions: Weight(g)/Voltage(cc)"] = prodArr.first?.dimensions_weight
+            keysAZ.append("Dimensions: Weight(g)/Voltage(cc)")
+        }
         if prodArr.first?.lead_polarity != "" && prodArr.first?.lead_polarity != "_" {
             fieldsDict["Lead Polarity"] = prodArr.first?.lead_polarity
             keysAZ.append("Lead Polarity")
@@ -413,21 +427,9 @@ extension VitalFullScrennVC {
             fieldsDict["Insulation Material"] = prodArr.first?.insulation_material
             keysAZ.append("Insulation Material")
         }
-        if prodArr.first?.dimensions_size != "" && prodArr.first?.dimensions_size != "_" {
-            fieldsDict["Dimensions: Size(H x W x D in mm)"] = prodArr.first?.dimensions_size
-            keysAZ.append("Dimensions: Size(H x W x D in mm)")
-        }
         if prodArr.first?.max_lead_diameter != "" && prodArr.first?.max_lead_diameter != "_" {
             fieldsDict["Max Lead Diameter(Fr)/ Min Introducer Siz(Fr)"] = prodArr.first?.max_lead_diameter
             keysAZ.append("Max Lead Diameter(Fr)/ Min Introducer Siz(Fr)")
-        }
-        if prodArr.first?.dimensions_weight != "" && prodArr.first?.dimensions_weight != "_" {
-            fieldsDict["Dimensions: Weight(g)/Voltage(cc)"] = prodArr.first?.dimensions_weight
-            keysAZ.append("Dimensions: Weight(g)/Voltage(cc)")
-        }
-        if prodArr.first?.placement != "" && prodArr.first?.placement != "_" {
-            fieldsDict["Placement"] = prodArr.first?.placement
-            keysAZ.append("Placement")
         }
         if prodArr.first?.connectores_pace_sense != "" && prodArr.first?.connectores_pace_sense != "_" {
             fieldsDict["Connectores Pace/Sense"] = prodArr.first?.connectores_pace_sense
@@ -437,9 +439,25 @@ extension VitalFullScrennVC {
             fieldsDict["Connectores Hight Voltage"] = prodArr.first?.connectores_hight_voltage
             keysAZ.append("Connectores Hight Voltage")
         }
+        if prodArr.first?.placement != "" && prodArr.first?.placement != "_" {
+            fieldsDict["Placement"] = prodArr.first?.placement
+            keysAZ.append("Placement")
+        }
         if prodArr.first?.mri_conditional != "" && prodArr.first?.mri_conditional != "_" {
             fieldsDict["MRI Conditional"] = prodArr.first?.mri_conditional
             keysAZ.append("MRI Conditional")
+        }
+        if prodArr.first?.wireless_telemetry != "" && prodArr.first?.wireless_telemetry != "_" {
+            fieldsDict["Wireless Telemetry"] = prodArr.first?.wireless_telemetry
+            keysAZ.append("Wireless Telemetry")
+        }
+        if prodArr.first?.remote_monitoring != "" && prodArr.first?.remote_monitoring != "_" {
+            fieldsDict["Remote Monitoring"] = prodArr.first?.remote_monitoring
+            keysAZ.append("Remote Monitoring")
+        }
+        if prodArr.first?.eri_notes != "" && prodArr.first?.eri_notes != "_" {
+            fieldsDict["ERI Notes"] = prodArr.first?.eri_notes
+            keysAZ.append("ERI Notes")
         }
         if prodArr.first?.bol_characteristics != "" && prodArr.first?.bol_characteristics != "_" {
             fieldsDict["BOL Characteristics"] = prodArr.first?.bol_characteristics
@@ -449,33 +467,21 @@ extension VitalFullScrennVC {
             fieldsDict["Non Magnet Rate: BOL/(ERI/EOL)"] = prodArr.first?.non_magnet_rate
             keysAZ.append("Non Magnet Rate: BOL/(ERI/EOL)")
         }
-        if prodArr.first?.wireless_telemetry != "" && prodArr.first?.wireless_telemetry != "_" {
-            fieldsDict["Wireless telemetry"] = prodArr.first?.wireless_telemetry
-            keysAZ.append("Wireless telemetry")
-        }
-        if prodArr.first?.eri_eol_characteristics != "" && prodArr.first?.eri_eol_characteristics != "_" {
-            fieldsDict["ERI/EOL Characteristics"] = prodArr.first?.eri_eol_characteristics
-            keysAZ.append("ERI/EOL Characteristics")
-        }
         if prodArr.first?.magnet_rate_bol != "" && prodArr.first?.magnet_rate_bol != "_" {
             fieldsDict["Magnet Rate:BOL"] = prodArr.first?.magnet_rate_bol
             keysAZ.append("Magnet Rate:BOL")
-        }
-        if prodArr.first?.remote_monitoring != "" && prodArr.first?.remote_monitoring != "_" {
-            fieldsDict["Remote Monitoring"] = prodArr.first?.remote_monitoring
-            keysAZ.append("Remote Monitoring")
-        }
-        if prodArr.first?.patient_alert_feature != "" && prodArr.first?.patient_alert_feature != "_" {
-            fieldsDict["Patient Alert Feature"] = prodArr.first?.patient_alert_feature
-            keysAZ.append("Patient Alert Feature")
         }
         if prodArr.first?.magnet_rate_eri_eol != "" && prodArr.first?.magnet_rate_eri_eol != "_" {
             fieldsDict["Magnet Rate:ERI/EOL"] = prodArr.first?.magnet_rate_eri_eol
             keysAZ.append("Magnet Rate:ERI/EOL")
         }
-        if prodArr.first?.eri_notes != "" && prodArr.first?.eri_notes != "_" {
-            fieldsDict["ERI Notes"] = prodArr.first?.eri_notes
-            keysAZ.append("ERI Notes")
+        if prodArr.first?.eri_eol_characteristics != "" && prodArr.first?.eri_eol_characteristics != "_" {
+            fieldsDict["ERI/EOL Characteristics"] = prodArr.first?.eri_eol_characteristics
+            keysAZ.append("ERI/EOL Characteristics")
+        }
+        if prodArr.first?.patient_alert_feature != "" && prodArr.first?.patient_alert_feature != "_" {
+            fieldsDict["Patient Alert Feature"] = prodArr.first?.patient_alert_feature
+            keysAZ.append("Patient Alert Feature")
         }
         if prodArr.first?.detach_tools != "" && prodArr.first?.detach_tools != "_" {
             fieldsDict["Detach Tool"] = prodArr.first?.detach_tools

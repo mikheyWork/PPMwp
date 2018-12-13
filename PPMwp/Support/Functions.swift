@@ -70,10 +70,12 @@ class Functions: NSObject {
         }
     }
     
-    func sendFavorInfo(name: String, button: UIButton) {
+    func sendFavorInfo(id: Int, button: UIButton) {
         DispatchQueue.global(qos: .userInitiated).async {
             var favor: String!
-            if self.appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || self.appDelegate.curentPdfRef.contains(where: {$0.title == name}) == true || self.appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
+            let name = String(id)
+            if self.appDelegate.curentPdf.contains(where: {$0.id == id}) == true || self.appDelegate.curentPdfRef.contains(where: {$0.id == id}) == true {
+                
                 if self.appDelegate.favourites.contains(name) == true {
                     //delete
                     self.appDelegate.favourites = self.appDelegate.favourites.filter({$0 != name})
@@ -142,7 +144,61 @@ class Functions: NSObject {
                 }
             }
         DispatchQueue.main.async {
-            Functions.shared.checkStar(name: name, button: button)
+            Functions.shared.checkStar(name: String(id), button: button)
         }
         }
+    
+    func filterSearch( cars: inout Array<SearchItem>, searchText: String) {
+        for i in appDelegate.referencesParent {
+            let a = appDelegate.referencesParent.filter({$0.id == i.id})
+            if cars.contains(where: {$0.id == a.first!.id}) == false {
+                let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!, number: "", manufacturer: "")
+                cars.append(b)
+            }
+        }
+        
+        for i in appDelegate.curentPdf {
+            if cars.contains(where: {$0.id == i.id}) == false {
+                if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
+                    let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "")
+                    cars.append(b)
+                } else {
+                    let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "")
+                    cars.append(b)
+                }
+            }
+        }
+        
+        for i in appDelegate.parents {
+            
+            let arr1 = appDelegate.parents.filter({$0.name == i.name})
+            let arr2 = appDelegate.childs.filter({$0.parent == arr1.first?.id})
+            let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == arr2.first?.id})
+            if arr3.count > 0 {
+                if cars.contains(where: {$0.id == i.id}) == false {
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
+                    cars.append(b)
+                }
+            }
+        }
+        
+        for i in appDelegate.models {
+            let arr1 = appDelegate.childs.filter({$0.id == i.id})
+            var arr2 = [PdfDocumentInfo]()
+            if arr1.isEmpty == false{
+                arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == arr1.first?.id})
+            }
+            if arr2.count > 0 {
+                let a = appDelegate.models.filter({$0.id == i.id})
+                if cars.contains(where: {$0.id == a.first!.id}) == false {
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
+                    cars.append(b)
+                }
+            }
+        }
+        cars = cars.filter({ (elemt: SearchItem) -> Bool in
+            elemt.name.lowercased().contains(searchText.lowercased())
+        })
+    }
+    
 }

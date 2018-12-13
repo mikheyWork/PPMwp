@@ -3,14 +3,24 @@ import UIKit
 class FavouriteFSVC: UIViewController {
 
     @IBOutlet weak var webView: UIWebView!
+    @IBOutlet weak var imgView: UIImageView!
     
     var name = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        name = PDFDownloader.shared.addPercent(fromString: name)
-        read(nameFile: name)
+        if name != "" {
+            name = PDFDownloader.shared.addPercent(fromString: name)
+            read(nameFile: name)
+            self.view.backgroundColor = UIColor.white
+            imgView.isHidden = true
+            webView.isHidden = false
+        } else {
+            webView.isHidden = true
+            imgView.isHidden = false
+            self.view.backgroundColor = UIColor(red: 234/255, green: 34/255, blue: 37/255, alpha: 1)
+        }
     }
     
     func read(nameFile: String) {

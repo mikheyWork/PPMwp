@@ -24,8 +24,6 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
         activity.stopAnimating()
     }
     
-    
-    
     //nameLbl char range
     fileprivate func rangeChar() {
         let attributedString = nameLbl.attributedText as! NSMutableAttributedString
@@ -68,7 +66,7 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
             }
             activity.isHidden = false
             activity.startAnimating()
-            MailSender.shared.sendEmail(subject: subjText.text!, body: textView.text!, mail: "vlm.softevol@gmail.com")
+            MailSender.shared.sendEmail(subject: subjText.text!, body: textView.text!, mail: "team@qubasoft.com")
         } else {
             let alert = UIAlertController(title: "Failed", message: "No internet connection.", preferredStyle: .alert)
             let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
@@ -114,7 +112,7 @@ extension FeedBackVC: UITextViewDelegate {
     @objc func showAlert() {
         activity.isHidden = true
         activity.stopAnimating()
-        let alert = UIAlertController(title: "Success", message: "The letter was sent.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Sent", message: "Your message was sent.", preferredStyle: .alert)
         let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)

@@ -13,6 +13,8 @@ class Ref2TVCell: UITableViewCell {
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var resultLbl: UILabel!
     
+    var id = 0
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

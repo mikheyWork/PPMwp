@@ -23,7 +23,11 @@ class RegistrVC: UIViewController {
         rangeChar()
         emailText.layer.cornerRadius = 5
         addTapGestureToHideKeyboard()
-        
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        activity.stopAnimating()
+        activity.isHidden = true
     }
     
     //nameLbl char range
@@ -43,7 +47,6 @@ class RegistrVC: UIViewController {
     }
     
     func register() {
-        
         let user = "so_se"
         let password = "q>ezaOBCPj0T"
         let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users")
@@ -84,7 +87,7 @@ class RegistrVC: UIViewController {
                             self.activity.isHidden = true
                         }
                     } else if answer == "existing_user_email" || answer == "existing_user_login"  {
-                        self.showAlertError(title: "Create Account Failed", withText: "Sorry, that email already exists.")
+                        self.showAlertError(title: "Create Account Failed", withText: "Email already exists.")
                         DispatchQueue.main.async {
                             self.activity.stopAnimating()
                             self.activity.isHidden = true
@@ -128,7 +131,7 @@ class RegistrVC: UIViewController {
                 
                 self.register()
             } else {
-                self.showAlertError(title: "Sign In Failed", withText: "No internet connection.")
+                self.showAlertError(title: "Create Account Failed", withText: "No internet connection.")
             }
             
         } else {

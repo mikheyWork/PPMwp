@@ -50,12 +50,18 @@ class SubscribeAlert: UIViewController {
     
     @IBAction func cancelButTapped(_ sender: Any) {
         
-        for controller in self.navigationController!.viewControllers as Array {
-            if controller.isKind(of: LoginVC.self) {
-                self.navigationController!.popToViewController(controller, animated: true)
-                break
-            }
-        }
+        self.navigationController?.popViewController(animated: true)
+        
+//        for controller in self.navigationController!.viewControllers as Array {
+//            if controller.isKind(of: LoginVC.self) {
+//                self.navigationController!.popToViewController(controller, animated: true)
+//                break
+//            }
+//            } else {
+//                self.navigationController?.popToRootViewController(animated: true)
+//                break
+//            }
+//        }
         
         let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")
         self.appDelegate.currentUser = user

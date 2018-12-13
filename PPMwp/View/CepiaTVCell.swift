@@ -14,6 +14,7 @@ class CepiaTVCell: UITableViewCell {
     @IBOutlet weak var resultsLbl: UILabel!
     
     var text2 = ""
+    var id = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()

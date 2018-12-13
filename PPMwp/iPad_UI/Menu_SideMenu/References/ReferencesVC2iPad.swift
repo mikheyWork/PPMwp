@@ -30,6 +30,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     var name2 = ""
     var state = false
     var namePDFF = ""
+    var id: Int64 = 0
     
     
     override func viewDidLoad() {
@@ -38,15 +39,13 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
         rangeChar()
         name2 = name
         checkState()
-        Functions.shared.checkStar(name: name2, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
-        
-        Functions.shared.checkStar(name: name2, button: starBut)
-        
+        Functions.shared.checkStar(name: String(id), button: starBut)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -55,7 +54,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     
     override func viewWillLayoutSubviews() {
         self.tableView.reloadData()
-        Functions.shared.checkStar(name: name2, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
         indexFunc()
     }
     
@@ -80,6 +79,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func index() {
+        print("parent \(parentID)")
         if parentID != nil {
             let resault = appDelegate.referencesChild.filter{$0.parent == parentID}
             for i in resault {
@@ -95,6 +95,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
             }
         }
         for car in cars {
+            print("name \(car)")
             let carKey = String(car.prefix(1))
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
@@ -106,6 +107,10 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
         
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
+        
+        for i in carSectionTitles {
+            print("sss \(i)")
+        }
     }
     
     func indexFunc() {
@@ -133,6 +138,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
         index()
         return carSectionTitles.map{ title -> UIView in
+            print(StringItem(text: title))
             return StringItem(text: title)
         }
     }
@@ -143,9 +149,6 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
             let indexPath = NSIndexPath(row: 0, section: index)
             tableView.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
         }
-        
-        
-        
         return true // return true to produce haptic feedback on capable devices
     }
     
@@ -166,7 +169,8 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     @IBAction func starButTaped(_ sender: Any) {
-        Functions.shared.sendFavorInfo(name: name2, button: starBut)
+        //change
+        Functions.shared.sendFavorInfo(id: Int(id), button: starBut)
     }
     
     func checkState() {
@@ -184,10 +188,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     @IBAction func beckBut(_ sender: Any) {
-        if  name2 != "" {
             performSegue(withIdentifier: "showFSREF2", sender: name)
-        }
-        
     }
 }
 
@@ -303,6 +304,10 @@ extension ReferencesVC2iPad {
         }
         
         let arr1 = appDelegate.referencesChild.filter({$0.name == text})
+        for i in arr1 {
+            print("arr1 \(arr1.first?.name)")
+        }
+        id = arr1.first?.id ?? 0
         let arr2 = appDelegate.referencesChild.filter({$0.parent == arr1.first?.id})
         if arr2.isEmpty == true {
             name2 = text
@@ -322,9 +327,10 @@ extension ReferencesVC2iPad {
             carsDictionary.removeAll()
             carSectionTitles.removeAll()
             index()
+            indexFunc()
             tableView.reloadData()
         }
-        Functions.shared.checkStar(name: name2, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
         checkState()
         tableView.reloadData()
     }

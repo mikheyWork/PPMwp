@@ -9,6 +9,8 @@ class VitalTVCell: UITableViewCell {
     
     @IBOutlet weak var seperatorColor: UIView!
     
+    var doc = ""
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
