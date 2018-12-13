@@ -18,6 +18,7 @@ class PDFviewerVC: UIViewController {
     var downloadProgress: Double!
     var id = 0
     var doc = ""
+    var modelNumber = ""
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
@@ -28,8 +29,10 @@ class PDFviewerVC: UIViewController {
         var name = ""
         if elem1.first?.model_name != "" && elem1.first?.model_name != "_" {
             name = elem1.first?.model_name ?? ""
+            modelNumber = elem1.first?.model_number ?? ""
         } else {
             name = elem1.first?.model_number ?? ""
+            modelNumber = elem1.first?.model_number ?? ""
         }
         
         if elem1.isEmpty {
@@ -38,6 +41,8 @@ class PDFviewerVC: UIViewController {
         }
         var name2 = PDFDownloader.shared.addPercent(fromString: name)
         if doc != "" {
+            modelNumber = PDFDownloader.shared.addPercent(fromString: modelNumber)
+            name2 += modelNumber
             name2 += doc
         }
         
@@ -148,12 +153,10 @@ class PDFviewerVC: UIViewController {
     
     @IBAction func menuBut(_ sender: Any) {
         //sideMenu
-        if UIDevice.current.orientation == .portrait || UIDevice.current.orientation == .portraitUpsideDown {
+        //fix 1 done
+//        if UIDevice.current.orientation == .portrait || UIDevice.current.orientation == .portraitUpsideDown {
             performSegue(withIdentifier: "showPDFSideMenu", sender: nil)
-            
-        } else {
-            
-        }
+//        }
     }
     
     @IBAction func starBut(_ sender: Any) {

@@ -113,7 +113,6 @@ extension FavouritesVC {
             element = arr1.first?.model_number
         }
         number = arr1.first?.model_number
-        
         if arr1.isEmpty {
             let arr2 = appDelegate.curentPdfRef.filter({$0.id == Int(current)})
             element = arr2.first?.title
@@ -123,18 +122,20 @@ extension FavouritesVC {
         let backgroundView = UIView()
         backgroundView.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1.0)
         cell.selectedBackgroundView = backgroundView
+        
         Functions.shared.checkStar(name: String(id), button: cell.starBut)
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-                let cell = tableView.cellForRow(at: indexPath) as! FavorTVCell
-                if appDelegate.curentPdf.contains(where: {$0.id == cell.id})  {
-                   performSegue(withIdentifier: "showFavourVital", sender: cell)
-                } else {
-                    performSegue(withIdentifier: "showFavRefer", sender: cell)
-                }
+        let cell = tableView.cellForRow(at: indexPath) as! FavorTVCell
+       
+        if appDelegate.curentPdf.contains(where: {$0.id == cell.id})  {
+            performSegue(withIdentifier: "showFavourVital", sender: cell)
+        } else {
+            performSegue(withIdentifier: "showFavRefer", sender: cell)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

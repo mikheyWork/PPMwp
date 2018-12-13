@@ -32,6 +32,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
     var readed = false
     var name2 = ""
     var nameRead = ""
+    var id = 0
        let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
@@ -47,9 +48,9 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         addDataToDict()
         trueName = name
-        
+        changeName()
         rangeChar(label: nameLbl)
-        Functions.shared.checkStar(name: name, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
         
        
         
@@ -59,6 +60,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
         if a.isEmpty == true {
             b = appDelegate.referencesChild.filter({$0.name == name })
         }
+        changeName()
         
         
     }
@@ -117,6 +119,19 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
         
     }
     
+    fileprivate func changeName() {
+        let arr1 = appDelegate.curentPdf.filter({$0.id == id})
+        var timeName = ""
+        if arr1.first?.model_name != "" && arr1.first?.model_name != "" {
+            timeName = arr1.first?.model_name ?? ""
+        } else {
+            timeName = arr1.first?.model_number ?? ""
+        }
+        namePdf = PDFDownloader.shared.addPercent(fromString: timeName)
+        if arr1.first?.model_number != "" && arr1.first?.model_number != "_" {
+            namePdf += PDFDownloader.shared.addPercent(fromString: arr1.first?.model_number ?? "")
+        }
+    }
     
     //    nameLbl char range
     fileprivate func rangeChar(label: UILabel) {
@@ -148,7 +163,7 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     @IBAction func starBut(_ sender: Any) {
-//        Functions.shared.sendFavorInfo(name: name, button: starBut)
+        Functions.shared.sendFavorInfo(id: id, button: starBut)
     }
     
     func read(nameFile: String) {
@@ -224,10 +239,7 @@ extension VitalFullScrennVC {
                 if arr.isEmpty == false {
                     arr.removeAll()
                 }
-                arr = appDelegate.curentPdf.filter({$0.model_name == name})
-                if arr.isEmpty == true {
-                    arr = appDelegate.curentPdf.filter({$0.model_number == name})
-                }
+                arr = appDelegate.curentPdf.filter({$0.id == id})
                 let info = arr.first?.modified
                 if info != nil && info != "" {
                     if arr.first?.alerts != nil && arr.first?.alerts != "" && arr.first?.alerts != "false" {
@@ -256,19 +268,13 @@ extension VitalFullScrennVC {
                 }
             } else {
                 if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true  {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
-                    if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
-                    }
+                    let a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.first?.info != nil && a.first?.info != "false" && a.first?.info != "" {
-                        
-                        //
                         cell6.imgView.image = UIImage(named: "Info")
                         cell6.nameLbl.text = "MRI Conditional"
                         cell6.accessoryType = .disclosureIndicator
                         cell6.selectionStyle = .default
                         cell6.hideView.isHidden = true
-                        //                        cell5.separatorColor.isHidden = false
                     } else {
                         cell6.nameLbl.text = ""
                         cell6.imgView.image = nil
@@ -294,10 +300,10 @@ extension VitalFullScrennVC {
             
             if indexPath.row == 0 {
                 //search in current
-                if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
+                if appDelegate.curentPdf.contains(where: {$0.id == id}) == true  {
+                    var a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
+                        a = appDelegate.curentPdf.filter({$0.id == id})
                     }
                     if a.first?.alerts != nil && a.first?.alerts != "" && a.first?.alerts != "false" {
                         //open pdf
@@ -312,10 +318,10 @@ extension VitalFullScrennVC {
                     cell.selectionStyle = .none
                 }
             } else {
-                if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
+                if appDelegate.curentPdf.contains(where: {$0.id == id}) == true {
+                    var a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
+                        a = appDelegate.curentPdf.filter({$0.id == id})
                     }
                     if a.first?.info != nil && a.first?.info != "" && a.first?.info != "false" {
                         //open pdf
@@ -357,11 +363,7 @@ extension VitalFullScrennVC {
             keysAZ2.removeAll()
         }
         
-        prodArr = appDelegate.curentPdf.filter({$0.model_name == name})
-        prodArr = appDelegate.curentPdf.filter({$0.model_name == name})
-        if prodArr.isEmpty == true {
-            prodArr = appDelegate.curentPdf.filter({$0.model_number == name})
-        }
+        prodArr = appDelegate.curentPdf.filter({$0.id == id})
         
         //start
         if prodArr.first?.manufacturer != "" && prodArr.first?.manufacturer != "_" {

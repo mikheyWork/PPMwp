@@ -81,8 +81,6 @@ class AlertsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
     }
     
     func index() {
-        
-        
         carsDictionary.removeAll()
         carSectionTitles.removeAll()
         cars.removeAll()
@@ -104,11 +102,11 @@ class AlertsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
         }
         
         if isAzTabep {
-            cars = cars.sorted(by: {$0.name > $1.name})
+            cars = cars.sorted(by: {$0.name < $1.name})
+            print("1 1 1")
         } else if isTop5Taped {
             cars = cars.sorted(by: {$0.date > $1.date})
-        } else {
-
+            print("2 2 2")
         }
         
         

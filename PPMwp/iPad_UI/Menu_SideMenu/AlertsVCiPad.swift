@@ -51,7 +51,6 @@ class AlertsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
             view.backgroundColor = UIColor(red: 234/255, green: 34/255, blue: 37/255, alpha: 1)
             imageView.image = UIImage(named: "CEPIA Splash 1")
         }
-        
     }
     
     override func viewWillLayoutSubviews() {
@@ -68,8 +67,6 @@ class AlertsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func index() {
-        
-        
         carsDictionary.removeAll()
         carSectionTitles.removeAll()
         cars.removeAll()
@@ -78,15 +75,16 @@ class AlertsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
             if i.alerts != nil && i.alerts != "false" && i.alerts != "" {
                 var a: Alert!
                 if i.model_name != "" && i.model_name != "_" && i.model_name != "false" {
-                    a = Alert(name: i.model_name!, date: i.modified!, id: i.id ?? 0, number:  i.model_number ?? "")
+                    a = Alert(name: i.model_name!, date: i.modified!, id: i.id ?? 0, number: i.model_number ?? "")
                 } else {
                     a = Alert(name: i.model_number!, date: i.modified!, id: i.id ?? 0, number:  i.model_number ?? "")
                 }
                 
-                if cars.contains(where: {$0.name == i.model_name}) == false {
+                if cars.contains(where: {$0.id == i.id}) == false {
                     cars.append(a)
                 }
             }
+            
         }
         
         if isAzTabep {
@@ -110,7 +108,6 @@ class AlertsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-        
     }
     
     func indexFunc() {
@@ -172,10 +169,7 @@ class AlertsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     @IBAction func goToFS(_ sender: Any) {
-        if name != "" {
          performSegue(withIdentifier: "showAlertPdf", sender: name)
-        }
-        
     }
     @IBAction func top5Tap(_ sender: Any) {
         if isTop5Taped == false {
@@ -303,38 +297,30 @@ extension AlertsVCiPad {
         cell.separatorInset.left = CGFloat(30)
         cell.separatorInset.right = CGFloat(30)
     
+        var prod = Alert(name: "", date: "", id: 0, number: "")
+        
         if isAzTabep == true {
-            cell.separatorInset.left = CGFloat(30)
-            cell.separatorInset.right = CGFloat(50)
             let carKey = carSectionTitles[indexPath.section]
             if let carValues = carsDictionary[carKey] {
-                cell.nameLbl.text = carValues[indexPath.row].name
+                prod = carValues[indexPath.row]
+                cell.nameLbl.text = prod.name + " \(prod.number ?? "")"
             }
-            let text = cell.nameLbl.text
-            let arr = cars.filter({$0.name == text})
-            let alert = arr.first?.date
-            
+            cell.id = prod.id
+            let alert = prod.date
             let date = alert?.dropLast(9)
             let time = alert?.dropFirst(11)
-            
             cell.dateLbl.text = "\(date!)   \(time!)"
+            
         } else {
-            cell.separatorInset.left = CGFloat(30)
-            cell.separatorInset.right = CGFloat(30)
-            cell.nameLbl.text = cars[indexPath.row].name
+            prod = cars[indexPath.row]
+            cell.id = prod.id
+            cell.nameLbl.text = prod.name + " \(prod.number ?? "")"
             let alert = cars[indexPath.row].date
-            
             let date = alert?.dropLast(9)
             let time = alert?.dropFirst(11)
-            
             cell.dateLbl.text = "\(date!)   \(time!)"
         }
-    
-        if cell.nameLbl.text == name2 {
-            cell.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1)
-        } else {
-            cell.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 0)
-        }
+        
         
         return cell
     }
@@ -348,35 +334,14 @@ extension AlertsVCiPad {
             //        return carSectionTitles
             return [" "]
         }
-        
         return []
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        var text = " "
-        
         let cell = tableView.cellForRow(at: indexPath) as! AlertsTVCell
-        
-        if cell.nameLbl.text != nil {
-            text = cell.nameLbl.text!
-        }
-        
-        name2 = text
-//        if appDelegate.curentPdf.contains(where: {$0.model_name == text}) {
-            performSegue(withIdentifier: "showAlertsPdf", sender: text)
-//        } else {
-//            progressView.isHidden = false
-//            webView.isHidden = false
-//            view.backgroundColor = UIColor.white
-//            imageView.image = nil
-//            progressShow()
-//            var pdfname = PDFDownloader.shared.addPercent(fromString: text)
-//            name = pdfname
-//            read(nameFile: pdfname)
-//            tableView.reloadData()
-//        }
+            performSegue(withIdentifier: "showAlertsPdf", sender: cell)
     }
     
     func read(nameFile: String) {
@@ -414,20 +379,13 @@ extension AlertsVCiPad {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showAlertsPdf" {
-            let name = sender as! String
-            
+            let name = sender as! AlertsTVCell
             let vs = segue.destination as! VitalStatVCiPad
-            vs.name = name
-            let arr = appDelegate.childs.filter({$0.name == name})
-            vs.parentID = arr.first?.parent
-        }
-        
-        if segue.identifier == "showAlertPdf" {
-            let name = sender as! String
-            
-            let vs = segue.destination as! AlertsFSVC
-            vs.name = name
-            
+            vs.id = name.id
+            let a = appDelegate.curentPdf.filter({$0.id == name.id})
+            vs.parentID = a.first?.prodTypeId
+            vs.manufacturer = a.first?.manufacturer ?? ""
+            print("id \(name.id)")
         }
         
     }

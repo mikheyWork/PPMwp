@@ -15,7 +15,11 @@ class ForgotPassVC: UIViewController {
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var id: Int!
-    var mailTrue = true
+    var mailTrue = false {
+        didSet {
+            print("change \(mailTrue)")
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,12 +30,14 @@ class ForgotPassVC: UIViewController {
         activity.isHidden = true
     }
     
-    @objc func soop() {
+    @objc func soop2() {
         showAlertError(title: "Request Failed", withText: "Invalid Email Address")
+        mailTrue = false
     }
     
-    @objc func soop2() {
+    @objc func soop() {
         showAlertError(title: "Sent", withText: "An email has been sent to you.")
+        mailTrue = false
     }
     
     //nameLbl char range
@@ -82,6 +88,7 @@ class ForgotPassVC: UIViewController {
                 for resault in resaults {
                     if self.emailLbl.text == resault["name"].stringValue {
                         self.id = resault["id"].intValue
+                        print("email \(resault["name"].stringValue)")
                         self.mailTrue = true
                         //delete current user
                         let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")
@@ -92,19 +99,18 @@ class ForgotPassVC: UIViewController {
                         UserDefaults.standard.setValue(false, forKey: "saved2")
                         let text =  "Hello, \n \nYou have requested a password reset, follow the link below to reset it. \n \nChange Password: https://ppm.customertests.com/forgot-password/ \n \nThanks, \n \nCEPIA Team"
                         MailSender.shared.sendEmail(subject: "Reset password", body: text, mail: self.emailLbl.text!)
-                        
-                        
                     } else {
-                        self.mailTrue = false
+//                        self.mailTrue = false
                     }
                 }
                 if resaults.count < 100 {
+                    print(self.mailTrue)
                     if self.mailTrue ==  false {
-                        DispatchQueue.main.async {
-                            self.showAlertError(title: "Request Failed", withText: "Username was not found.")
-                            self.activity.isHidden = true
-                            self.activity.stopAnimating()
-                        }
+                                                DispatchQueue.main.async {
+                        self.showAlertError(title: "Request Failed", withText: "Username was not found.")
+                        self.activity.isHidden = true
+                        self.activity.stopAnimating()
+                                                }
                     } else {
                     }
                 }

@@ -24,8 +24,6 @@ class FeedBackVC: UIViewController, MFMailComposeViewControllerDelegate {
         activity.stopAnimating()
     }
     
-    
-    
     //nameLbl char range
     fileprivate func rangeChar() {
         let attributedString = nameLbl.attributedText as! NSMutableAttributedString

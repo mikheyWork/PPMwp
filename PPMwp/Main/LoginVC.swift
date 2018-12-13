@@ -40,6 +40,9 @@ class LoginVC: UIViewController, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         emailLbl.text = ""
         passLbl.text = ""
+        
+        activity.stopAnimating()
+        activity.isHidden = true
     }
     
     //nameLbl char range

@@ -1,7 +1,7 @@
 import UIKit
 
 class ModelController: UIViewController {
-
+    
     var isChecmarkTaped = UserDefaults.standard.bool(forKey: "saved")
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     let model = UIDevice.current.model
@@ -21,6 +21,12 @@ class ModelController: UIViewController {
                     } else {
                         performSegue(withIdentifier: "showiPad2", sender: nil)
                     }
+                } else {
+                    if model == "iPhone" {
+                        performSegue(withIdentifier: "showiPhone", sender: nil)
+                    } else {
+                        performSegue(withIdentifier: "showiPad", sender: nil)
+                    }
                 }
             } else {
                 if model == "iPhone" {
@@ -29,7 +35,7 @@ class ModelController: UIViewController {
                     performSegue(withIdentifier: "showiPad", sender: nil)
                 }
             }
-        } else {
+        }  else {
             if model == "iPhone" {
                 performSegue(withIdentifier: "showiPhone", sender: nil)
             } else {
@@ -38,7 +44,7 @@ class ModelController: UIViewController {
         }
         
     }
- 
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if appDelegate.currentUser != nil {
             if appDelegate.currentUser.id != 0 {

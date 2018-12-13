@@ -32,11 +32,11 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     var cell: UITableViewCell!
     var starIsTaped = false
     var name = " "
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [PdfDocumentInfo]]()
     var carSectionTitles = [String]()
-    var cars = [String]()
+    var cars = [PdfDocumentInfo]()
     
-    var a = [CategoryEnt]()
+    var a = [PdfDocumentInfo]()
     var b = [ReferEnt]()
     
     var prodArr = [PdfDocumentInfo]()
@@ -47,44 +47,46 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     var keysAZ2 = [String]()
     var keysCount1 = 0
     var keysCount2 = 0
-    
-    
     var trueName = ""
-    
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var orientation = false
     var namePdf = ""
-    
     var readed = false
     var nameTr = ""
     var name2 = ""
     var manufacturer = ""
-    
     var prodName: String!
+    var id = 0
+    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.isHidden = true
         progressView.isHidden = true
-        
-        namePdf = PDFDownloader.shared.addPercent(fromString: name)
+        changeName()
         addDataToDict()
         trueName = name
         
         rangeChar(label: nameLbl)
         rangeChar(label: nameLbl2)
-        Functions.shared.checkStar(name: name, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
         indexFunc()
 //        checkStar()
-
+        print("idd \(id)")
         //find element
-        a = appDelegate.childs.filter({$0.name == name })
+        a = appDelegate.curentPdf.filter({$0.id == id })
         b = [ReferEnt]()
         if a.isEmpty == true {
             b = appDelegate.referencesChild.filter({$0.name == name })
         }
         orient()
         
+//        if parentID
+        
+         print("1id \(id)")
+        print("2 \(parentID)")
+        print("3 \(manufacturer)")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,8 +94,8 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         self.tableView2.reloadData()
         orient()
         name2 = name
-//        checkStar()
-        Functions.shared.checkStar(name: name, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
+        
     }
     
     override func viewWillLayoutSubviews() {
@@ -104,6 +106,21 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         orient()
+    }
+    
+    
+    fileprivate func changeName() {
+        let arr1 = appDelegate.curentPdf.filter({$0.id == id})
+        var timeName = ""
+        if arr1.first?.model_name != "" && arr1.first?.model_name != "" {
+            timeName = arr1.first?.model_name ?? ""
+        } else {
+            timeName = arr1.first?.model_number ?? ""
+        }
+        namePdf = PDFDownloader.shared.addPercent(fromString: timeName)
+        if arr1.first?.model_number != "" && arr1.first?.model_number != "_" {
+            namePdf += PDFDownloader.shared.addPercent(fromString: arr1.first?.model_number ?? "")
+        }
     }
     
     func progressShow() {
@@ -144,53 +161,51 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func index() {
-        
+        print("par \(parentID)")
         if parentID != nil {
-            
-            if  manufacturer != "" {
+            if manufacturer != "" {
                 let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
                 parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
             }
             var resault = [CategoryEnt]()
-            if manufacturer != "" {
-                
+            if manufacturer != "" && manufacturer != nil {
                 let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
                 
                 for i in pop {
-                    if cars.contains(where: {$0 == i.model_name}) == false && cars.contains(where: {$0 == i.model_number}) == false {
-                        var name = i.model_name
-                        if name == nil || name == "" {
-                            name = i.model_number
-                        }
-                        cars.append(name!)
+                    if cars.contains(where: {$0.id == i.id}) == false {
+                        cars.append(i)
                     }
                 }
-                
             } else {
                 let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
                 resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
                 for i in resault {
                     let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
                     for j in resArr {
-                        if cars.contains(where: {$0 == j.model_name}) == false && cars.contains(where: {$0 == j.model_number}) == false {
-                            var name = j.model_name
-                            if name == nil || name == "" {
-                                name = j.model_number
-                            }
-                            cars.append(name!)
+                        if cars.contains(where: {$0.id == j.id}) == false {
+                            cars.append(j)
                         }
                     }
+                }
+                for car in cars {
+                    print("carr \(car.model_name)")
                 }
             }
         } else {
             for i in appDelegate.curentPdf {
-                cars.append(i.model_name!)
+                cars.append(i)
             }
         }
         
         // 1
         for car in cars {
-            let carKey = String(car.prefix(1))
+            var name2 = ""
+            if car.model_name != "" && car.model_name != "_" {
+                name2 = car.model_name ?? ""
+            } else {
+                name2 = car.model_number ?? ""
+            }
+            let carKey = String(name2.prefix(1))
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
                 carsDictionary[carKey] = carValues
@@ -198,7 +213,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
                 carsDictionary[carKey] = [car]
             }
         }
-        
         // 2
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
@@ -207,7 +221,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     func indexFunc() {
         //index
-        
         var display: CGFloat
         display = view.bounds.height
         if display < 800 {
@@ -223,7 +236,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
             tableViewIndex.font = UIFont(name: "Lato", size: 15)!
             tableViewIndex.itemSpacing = 24
         } else {
-            
             tableViewIndex.font = UIFont(name: "Lato", size: 13)!
             tableViewIndex.itemSpacing = 5
         }
@@ -242,8 +254,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         if index < carSectionTitles.count {
             let indexPath = NSIndexPath(row: 0, section: index)
             tableView2.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
-        } else {
-            
         }
         return true // return true to produce haptic feedback on capable devices
     }
@@ -268,7 +278,7 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     @IBAction func starBut(_ sender: Any) {
-//        Functions.shared.sendFavorInfo(name: name, button: starBut)
+        Functions.shared.sendFavorInfo(id: id, button: starBut)
     }
     
     func checkStar() {
@@ -282,6 +292,7 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     func read(nameFile: String) {
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fileURL = dir.appendingPathComponent("\(nameFile).pdf")
+            print("\(nameFile).pdf")
             //reading
             let request = URLRequest(url: fileURL)
             self.webView.loadRequest(request)
@@ -422,30 +433,33 @@ extension VitalStatVCiPad {
             cell2.separatorInset.right = CGFloat(50)
             // Configure the cell...
             let carKey = carSectionTitles[indexPath.section]
+            var prod: PdfDocumentInfo!
             if let carValues = carsDictionary[carKey] {
-                cell2.prodLbl.text = carValues[indexPath.row]
-                cell2.text2 = carValues[indexPath.row]
-                let text = cell2.prodLbl.text
-                var cellName = appDelegate.curentPdf.filter({$0.model_name == text})
-                if cellName.isEmpty == true {
-                    cellName = appDelegate.curentPdf.filter({$0.model_number == text})
+                prod = carValues[indexPath.row]
+                var name3 = ""
+                if prod.model_name != "" && prod.model_name != "_" {
+                    name3 = prod.model_name ?? ""
+                } else {
+                    name3 = prod.model_number ?? ""
                 }
-                let selectedNameID = cellName.first?.manufacturer
-                let a = cellName.first?.model_number!
+                cell2.prodLbl.text = name3
+                cell2.text2 = name3
+                cell2.id = prod.id ?? 0
+                let selectedNameID = prod.manufacturer
+                let a = prod.model_number
                 cell2.resultLbl.text = selectedNameID
                 if a != nil {
                     if cell2.text2 == a {
-                        cell2.prodLbl.text = carValues[indexPath.row]
+                        cell2.prodLbl.text = name3
                     } else {
-                        cell2.prodLbl.text = "\(carValues[indexPath.row]) \(a!)"
+                        cell2.prodLbl.text = "\(name3) \(a!)"
                     }
                     
                 }
                 
             }
-            
-            if cell2.text2 == name {
-                
+            print("id \(id) \(prod.id)")
+            if cell2.id == id {
                 cell2.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1)
             } else {
                 cell2.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 0)
@@ -505,11 +519,7 @@ extension VitalStatVCiPad {
                 if arr.isEmpty == false {
                     arr.removeAll()
                 }
-                arr = appDelegate.curentPdf.filter({$0.model_name == name})
-                if arr.isEmpty == true {
-                    arr = appDelegate.curentPdf.filter({$0.model_number == name})
-                }
-            
+                arr = appDelegate.curentPdf.filter({$0.id == id})
                 let info = arr.first?.modified
                 if info != nil && info != "" {
                     if arr.first?.alerts != nil && arr.first?.alerts != "" && arr.first?.alerts != "false" {
@@ -536,11 +546,8 @@ extension VitalStatVCiPad {
                     cell5.accessoryType = .none
                 }
             } else {
-                if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true  {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
-                    if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
-                    }
+                if appDelegate.curentPdf.contains(where: {$0.id == id}) == true {
+                    let a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.first?.info != nil && a.first?.info != "false" && a.first?.info != "" {
                         cell5.imgView.image = UIImage(named: "Info")
                         cell5.nameLbl.text = "MRI Conditional"
@@ -568,15 +575,11 @@ extension VitalStatVCiPad {
         if tableView == tableView6 {
             let cell6 = tableView.dequeueReusableCell(withIdentifier: "CellTable6", for: indexPath) as! VitalStatSeg
             if indexPath.row == 0 {
-                //                name = PDFDownloader.shared.addPercent(fromString: name)
                 var arr = [PdfDocumentInfo]()
                 if arr.isEmpty == false {
                     arr.removeAll()
                 }
-                arr = appDelegate.curentPdf.filter({$0.model_name == name})
-                if arr.isEmpty == true {
-                    arr = appDelegate.curentPdf.filter({$0.model_number == name})
-                }
+                arr = appDelegate.curentPdf.filter({$0.id == id})
                 let info = arr.first?.modified
                 if info != nil && info != "" {
                     if arr.first?.alerts != nil && arr.first?.alerts != "" && arr.first?.alerts != "false" {
@@ -604,11 +607,8 @@ extension VitalStatVCiPad {
                     cell6.accessoryType = .none
                 }
             } else {
-                if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true  {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
-                    if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
-                    }
+                if appDelegate.curentPdf.contains(where: {$0.id == id}) == true {
+                    var a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.first?.info != nil && a.first?.info != "false" && a.first?.info != "" {
                         
                         //
@@ -645,9 +645,11 @@ extension VitalStatVCiPad {
                         let cell = tableView.cellForRow(at: indexPath) as! ProdVitalTableViewCell
             name = cell.text2
             name2 = name
+            id = cell.id
             webView.isHidden = true
             readed = false
             addDataToDict()
+            changeName()
             tableView2.reloadData()
             tableView3.reloadData()
             tableView4.reloadData()
@@ -660,10 +662,10 @@ extension VitalStatVCiPad {
             if indexPath.row == 0 {
                 //search in current
                 
-                if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
+                if appDelegate.curentPdf.contains(where: {$0.id == id}) == true {
+                    var a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
+                        a = appDelegate.curentPdf.filter({$0.id == id})
                     }
                     if a.first?.alerts != nil && a.first?.alerts != "" && a.first?.alerts != "false" {
                         //open pdf
@@ -683,10 +685,10 @@ extension VitalStatVCiPad {
                     cell.selectionStyle = .none
                 }
             } else {
-                if appDelegate.curentPdf.contains(where: {$0.model_name == name}) == true || appDelegate.curentPdf.contains(where: {$0.model_number == name}) == true {
-                    var a = appDelegate.curentPdf.filter({$0.model_name == name})
+                if appDelegate.curentPdf.contains(where: {$0.id == id}) == true {
+                    var a = appDelegate.curentPdf.filter({$0.id == id})
                     if a.isEmpty == true {
-                        a = appDelegate.curentPdf.filter({$0.model_number == name})
+                        a = appDelegate.curentPdf.filter({$0.id == id})
                     }
                     if a.first?.info != nil && a.first?.info != "" && a.first?.info != "false" {
                         //open pdf
@@ -705,8 +707,7 @@ extension VitalStatVCiPad {
                 }
             }
         }
-//        checkStar()
-        Functions.shared.checkStar(name: name, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
     }
     
     
@@ -717,6 +718,7 @@ extension VitalStatVCiPad {
             vc.readed = readed
             vc.name2 = name2
             vc.nameRead = nameTr
+            vc.id = id
         }
     }
     
@@ -741,11 +743,7 @@ extension VitalStatVCiPad {
             keysAZ2.removeAll()
         }
         
-        prodArr = appDelegate.curentPdf.filter({$0.model_name == name})
-        if prodArr.isEmpty == true {
-            prodArr = appDelegate.curentPdf.filter({$0.model_number == name})
-        }
-        
+        prodArr = appDelegate.curentPdf.filter({$0.id == id})
         
         //start
         if prodArr.first?.manufacturer != "" && prodArr.first?.manufacturer != "_" {

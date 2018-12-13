@@ -70,6 +70,7 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     @IBAction func starBut(_ sender: Any) {
         Functions.shared.sendFavorInfo(id: id, button: starBut)
+        Functions.shared.checkStar(name: String(id), button: starBut)
     }
 }
 

@@ -20,9 +20,9 @@ class ProductiPad: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     var parentID: Int64?
     var name = " "
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [PdfDocumentInfo]]()
     var carSectionTitles = [String]()
-    var cars = [String]()
+    var cars = [PdfDocumentInfo]()
     var manufacturer = ""
     var prodName: String!
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -31,7 +31,6 @@ class ProductiPad: UIViewController, UITableViewDataSource, UITableViewDelegate,
         super.viewDidLoad()
         rangeChar()
         indexFunc()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,62 +45,59 @@ class ProductiPad: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     func index() {
         if parentID != nil {
-            
-            if manufacturer != "" {
+            if manufacturer != nil && manufacturer != "" {
                 let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
                 parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
             }
             var resault = [CategoryEnt]()
-            if manufacturer != "" {
-                
+            if manufacturer != "" && manufacturer != nil {
                 let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
-                
                 for i in pop {
-                    if cars.contains(where: {$0 == i.model_name}) == false && cars.contains(where: {$0 == i.model_number}) == false {
-                        var name = i.model_name
-                        if name == nil || name == "" {
-                            name = i.model_number
-                        }
-                        cars.append(name!)
+                    if cars.contains(where: {$0.id == i.id}) == false {
+                        cars.append(i)
                     }
                 }
-                
             } else {
                 let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
                 resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
                 for i in resault {
                     let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
                     for j in resArr {
-                        if cars.contains(where: {$0 == j.model_name}) == false && cars.contains(where: {$0 == j.model_number}) == false {
-                            var name = j.model_name
-                            if name == nil || name == "" {
-                                name = j.model_number
-                            }
-                            cars.append(name!)
+                        if cars.contains(where: {$0.id == j.id}) == false {
+                            cars.append(j)
                         }
                     }
                 }
             }
         } else {
             for i in appDelegate.curentPdf {
-                cars.append(i.model_name!)
+                cars.append(i)
             }
         }
-        // 1
+        //
         for car in cars {
-            let carKey = String(car.prefix(1))
-            if var carValues = carsDictionary[carKey] {
-                carValues.append(car)
-                carsDictionary[carKey] = carValues
+            var carKey = ""
+            if car.model_name != "" && car.model_name != "_" {
+                carKey = String(car.model_name?.prefix(1) ?? "")
+                if var carValues = carsDictionary[carKey] {
+                    carValues.append(car)
+                    carsDictionary[carKey] = carValues
+                } else {
+                    carsDictionary[carKey] = [car]
+                }
             } else {
-                carsDictionary[carKey] = [car]
+                carKey = String(car.model_number?.prefix(1) ?? "q")
+                if var carValues = carsDictionary[carKey] {
+                    carValues.append(car)
+                    carsDictionary[carKey] = carValues
+                } else {
+                    carsDictionary[carKey] = [car]
+                }
             }
+            
         }
-        
-        // 2
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-        
     }
     
     func indexFunc() {
@@ -219,19 +215,26 @@ extension ProductiPad {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 3
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell4", for: indexPath) as! ProductsTVCell
-        
-        cell.separatorInset.left = CGFloat(30)
-        cell.separatorInset.right = CGFloat(30)
-        
-        
         cell.separatorInset.left = CGFloat(30)
         cell.separatorInset.right = CGFloat(50)
         // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
-            cell.prodLbl.text = carValues[indexPath.row]
+            let prod = carValues[indexPath.row]
+            var name = ""
+            var number = ""
+            cell.id = prod.id ?? 0
+            if prod.model_name != "" && prod.model_name != "_" {
+                name = prod.model_name ?? ""
+            } else {
+                name = prod.model_number ?? ""
+                
+            }
+            if prod.model_number != "" && prod.model_number != "_" {
+                number = prod.model_number ?? "1"
+            }
+            cell.prodLbl.text = name + " \( number)"
         }
-        
         return cell
     }
     
@@ -248,44 +251,23 @@ extension ProductiPad {
         
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! ProductsTVCell
-        let text = selectedCell.prodLbl.text
-        var selectedName = appDelegate.curentPdf.filter({$0.model_name == text})
-        if selectedName.isEmpty {
-            selectedName = appDelegate.curentPdf.filter({$0.model_number == text})
-        }
-        let selectedNameID = selectedName.first?.id
-        performSegue(withIdentifier: "showVitalStatistics", sender: selectedNameID)
+        performSegue(withIdentifier: "showVitalStatistics", sender: selectedCell)
     }
     
     
     //MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showVitalStatistics" {
-            let parentId = sender as! Int
-            let filterArr = appDelegate.curentPdf.filter({$0.id == parentId})
-            var name2 = filterArr.first?.model_name
-            if name2 == "" {
-                name2 = filterArr.first?.model_number
-            }
-            let vs = segue.destination as! VitalStatVCiPad
-            if name2 != nil {
-                vs.name = name2!
-                vs.parentID = filterArr.first?.prodTypeId
-                print("nammm \(name)")
-                var arr1 = appDelegate.curentPdf.filter({$0.model_name == name})
-                if arr1.isEmpty {
-                    arr1 = appDelegate.curentPdf.filter({$0.model_number == name})
-                }
-                let arr2 = appDelegate.childs.filter({$0.id == arr1.first?.prodTypeId})
-                let arr3 = appDelegate.parents.filter({$0.id == arr2.first?.parent})
-                print("manuf \(arr3.first?.name)")
-                vs.name = name2!
-                vs.manufacturer = arr3.first?.name ?? ""
-            }
-            
-        }
         
+        if segue.identifier == "showVitalStatistics" {
+            let name = sender as! ProductsTVCell
+            let vs = segue.destination as! VitalStatVCiPad
+            vs.id = name.id
+            let a = appDelegate.curentPdf.filter({$0.id == name.id})
+            vs.manufacturer = a.first?.manufacturer ?? ""
+            vs.parentID = a.first?.prodTypeId ?? 0
+            print("111 \(a.first?.model_name) \(a.first?.model_number)")
+        }
     }
 }
 

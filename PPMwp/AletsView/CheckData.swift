@@ -323,7 +323,7 @@ class CheckDataController: UIViewController {
                     if resault["acf"]["model_number"] != "" &&  resault["acf"]["model_number"] != "false" {
                         model_number = resault["acf"]["model_number"].stringValue
                     } else {
-                        model_number = "_"
+                        model_number = ""
                     }
                     if resault["acf"]["info"] != "" &&  resault["acf"]["info"] != "false" {
                         info = resault["acf"]["info"].stringValue
@@ -496,7 +496,7 @@ class CheckDataController: UIViewController {
                         number_of_hv_coils = "_"
                     }
                     
-                    
+                    var modelNumber2 = PDFDownloader.shared.addPercent(fromString: model_number ?? "")
                     if self.appDelegate.networkPdf.contains(where: {$0.id == id}) {
                         
                         if self.appDelegate.curentPdf.contains(where: {$0.id == id}) {
@@ -566,12 +566,12 @@ class CheckDataController: UIViewController {
                                 if name == "" || name == "false" {
                                     let name3 = PDFDownloader.shared.addPercent(fromString: number)
                                     PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Info.pdf", url: URL(string:
                                         object.info!)!)
                                 } else {
                                     let name3 = PDFDownloader.shared.addPercent(fromString: name)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Info.pdf", url: URL(string:
                                         object.info!)!)
                                 }
                                 
@@ -666,13 +666,13 @@ class CheckDataController: UIViewController {
                                 self.timePDF.append(object)
                                 if name == "" || name == "false" {
                                     let name3 = PDFDownloader.shared.addPercent(fromString: number)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Info.pdf", url: URL(string:
                                         object.info!)!)
                                 } else {
                                     let name3 = PDFDownloader.shared.addPercent(fromString: name)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Alert.pdf", url: URL(string: object.alerts!)!)
+                                    PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Info.pdf", url: URL(string:
                                         object.info!)!)
                                 }
                                 let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)
@@ -728,13 +728,13 @@ class CheckDataController: UIViewController {
                             self.appDelegate.curentPdf.append(object)
                             if name == "" || name == "false" {
                                 let name3 = PDFDownloader.shared.addPercent(fromString: number)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Alert.pdf", url: URL(string: object.alerts!)!)
+                                PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Info.pdf", url: URL(string:
                                     object.info!)!)
                             } else {
                                 let name3 = PDFDownloader.shared.addPercent(fromString: name)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Alert.pdf", url: URL(string: object.alerts!)!)
-                                PDFDownloader.shared.dowloandAndSave(name: "\(name3)Info.pdf", url: URL(string:
+                                PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Alert.pdf", url: URL(string: object.alerts!)!)
+                                PDFDownloader.shared.dowloandAndSave(name: "\(name3 + modelNumber2)Info.pdf", url: URL(string:
                                     object.info!)!)
                             }
                             

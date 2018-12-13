@@ -24,7 +24,7 @@ class ManufacturersiPad: UIViewController, UITableViewDelegate, UITableViewDataS
     var showIndex = false
     var carsDictionary = [String: [String]]()
     var carSectionTitles = [String]()
-    var cars = [String]()
+    var cars = [CategoryEnt]()
     var arr1 = ["Biotronik", "Boston Scientific", "Medtronic", "Sorin Group", "St. Jude Medical"]
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -32,9 +32,7 @@ class ManufacturersiPad: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
-        
+    
         if appDelegate.parents.isEmpty == false {
             rangeChar()
             top5But.layer.cornerRadius = 15
@@ -44,9 +42,6 @@ class ManufacturersiPad: UIViewController, UITableViewDelegate, UITableViewDataS
         } else {
             showAlert()
         }
-        
-        
-        
         showIndexView()
     }
     
@@ -61,24 +56,33 @@ class ManufacturersiPad: UIViewController, UITableViewDelegate, UITableViewDataS
         self.tableView.reloadData()
         indexFunc()
     }
-    
     //MARK: -MEthods
     
     func index() {
+        cars.removeAll()
         for i in appDelegate.parents {
-            if cars.contains(i.name!) == false {
-                cars.append(i.name!)
+            
+            let arr3 = appDelegate.childs.filter({$0.parent == i.id})
+            var count = 0
+            for j in arr3 {
+                let arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == j.id})
+                count += arr2.count
+            }
+            if count != 0 {
+                if cars.contains(where: {$0.id == i.id}) == false {
+                    cars.append(i)
+                }
             }
         }
         
         // 1
         for car in cars {
-            let carKey = String(car.prefix(1))
+            let carKey = String(car.name?.prefix(1) ?? "a")
             if var carValues = carsDictionary[carKey] {
-                carValues.append(car)
+                carValues.append(car.name ?? "")
                 carsDictionary[carKey] = carValues
             } else {
-                carsDictionary[carKey] = [car]
+                carsDictionary[carKey] = [car.name] as? [String]
             }
         }
         
@@ -329,19 +333,13 @@ extension ManufacturersiPad {
             }
         }
         cell.resaultLabel.text = "\(resaultArr.count) Results"
-        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         if self.isAzTabep {
-            tableView.sectionIndexColor = UIColor.white
-            
-            
-            //        return carSectionTitles
             return [" "]
         }
-        
         return []
     }
     

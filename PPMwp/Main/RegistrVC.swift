@@ -23,7 +23,11 @@ class RegistrVC: UIViewController {
         rangeChar()
         emailText.layer.cornerRadius = 5
         addTapGestureToHideKeyboard()
-        
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        activity.stopAnimating()
+        activity.isHidden = true
     }
     
     //nameLbl char range
@@ -43,7 +47,6 @@ class RegistrVC: UIViewController {
     }
     
     func register() {
-        
         let user = "so_se"
         let password = "q>ezaOBCPj0T"
         let url = URL(string: "https://ppm.customertests.com/wp-json/wp/v2/users")

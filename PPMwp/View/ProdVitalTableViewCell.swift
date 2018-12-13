@@ -13,7 +13,7 @@ class ProdVitalTableViewCell: UITableViewCell {
     @IBOutlet weak var prodLbl: UILabel!
     @IBOutlet weak var resultLbl: UILabel!
     var text2 = ""
-    
+    var id = 0
     override func awakeFromNib() {
         super.awakeFromNib()
     }

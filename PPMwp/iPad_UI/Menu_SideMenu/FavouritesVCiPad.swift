@@ -26,24 +26,25 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var name = ""
     var name2 = ""
+    var id = 0
     override func viewDidLoad() {
+        super.viewDidLoad()
         appDelegate.favourites.removeAll()
         let a  = self.appDelegate.currentUser.favor.split(separator: ",")
         if a.isEmpty == false {
             self.appDelegate.favourites.removeAll()
             for i in a {
+                
                 if self.appDelegate.favourites.contains(String(i)) == false {
-                    if appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdf.contains(where: {$0.model_name == String(i)}) || appDelegate.curentPdfRef.contains(where: {$0.title == String(i)}) || appDelegate.childs.contains(where: {$0.name == String(i)}) || appDelegate.referencesChild.contains(where: {$0.name == String(i)}) {
+                    if appDelegate.curentPdf.contains(where: {$0.id == Int(String(i))}) || appDelegate.curentPdfRef.contains(where: {$0.id == Int(String(i))}) || appDelegate.childs.contains(where: {$0.id == Int64(String(i))}) || appDelegate.referencesChild.contains(where: {$0.id == Int64(String(i))})  {
                         self.appDelegate.favourites.append(String(i))
+                        print("favor id is \(i)")
                     }
                 }
             }
         }
-        
         NotificationCenter.default.addObserver(self, selector: #selector(updateData ), name: NSNotification.Name("Star"), object: nil)
-        
         progressView.isHidden = true
-        super.viewDidLoad()
         checkState()
         for i in appDelegate.parents {
             if cars.contains(i.name!) == false {
@@ -70,16 +71,26 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tableView.reloadData()
-        if appDelegate.curentPdfRef.contains(where: {$0.title == name2}) == false {
+        let name3 = String(name2.dropLast())
+        if name3 != "" {
+            if appDelegate.referencesChild.contains(where: {$0.name == name3}) == false {
+                print("1")
+                state = false
+                progressView.isHidden = true
+            } else {
+                print("2")
+                state = true
+                progressView.isHidden = false
+            }
+        } else {
             state = false
-            checkState()
-            progressView.isHidden = true
         }
+       checkState()
+        
     }
     
     override func viewWillLayoutSubviews() {
-        self.tableView.reloadData()
+//        self.tableView.reloadData()
         checkState()
     }
     
@@ -128,9 +139,7 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     @IBAction func backTo(_ sender: Any) {
-        if name != "" {
             performSegue(withIdentifier: "showFSFav", sender: name)
-        }
     }
     @IBAction func backBut(_ sender: Any) {
         navigationController?.popViewController(animated: false)
@@ -151,31 +160,51 @@ extension FavouritesVCiPad {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell7", for: indexPath) as! FavorTVCell
         let current = appDelegate.favourites[indexPath.row]
-        cell.prodLbl.text = current
-        if appDelegate.favourites.contains(where: {$0 == cell.prodLbl.text}) {
-            cell.starBut.setImage(UIImage(named: "star_active"), for: .normal)
+        self.id = Int(current) ?? 0
+        cell.id = Int(current) ?? 0
+        var element: String!
+        var number: String!
+        let arr1 = appDelegate.curentPdf.filter({$0.id == Int(current)})
+        if arr1.first?.model_name != "" && arr1.first?.model_name != "_" {
+            element = arr1.first?.model_name
         } else {
-            cell.starBut.setImage(UIImage(named: "star"), for: .normal)
+            element = arr1.first?.model_number
         }
+        number = arr1.first?.model_number
         
-        if cell.prodLbl.text == name2 {
-            cell.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1)
-        } else {
-            cell.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 0)
+        if arr1.isEmpty {
+            let arr2 = appDelegate.curentPdfRef.filter({$0.id == Int(current)})
+            element = arr2.first?.title
+            number = ""
         }
-        
+        cell.prodLbl.text = element + " \(number ?? "")"
+        if cell.id == id {
+            cell.backgroundView?.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1)
+        }
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1)
+        cell.selectedBackgroundView = backgroundView
+        Functions.shared.checkStar(name: String(id), button: cell.starBut)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var text = " "
+        
         let cell = tableView.cellForRow(at: indexPath) as! FavorTVCell
+        let a = appDelegate.curentPdf.filter({$0.id == cell.id})
+        if a.isEmpty == false {
+            id = a.first?.id ?? 0
+        } else {
+            let b = appDelegate.curentPdfRef.filter({$0.id == cell.id})
+            id = b.first?.id ?? 0
+        }
+        var text = " "
         if cell.prodLbl.text != nil {
             text = cell.prodLbl.text!
         }
         name2 = text
-        if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text})  {
-            performSegue(withIdentifier: "showFavourVital", sender: text)
+        if appDelegate.curentPdf.contains(where: {$0.id == cell.id})  {
+            performSegue(withIdentifier: "showFavourVital", sender: cell)
         } else {
             name = text
             let pdfName = PDFDownloader.shared.addPercent(fromString: text)
@@ -186,18 +215,17 @@ extension FavouritesVCiPad {
             checkState()
 //            tableView.reloadData()
         }
-        tableView.reloadData()
+//        tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showFavourVital" {
-            let name = sender as! String
+            let name = sender as! FavorTVCell
             let vs = segue.destination as! VitalStatVCiPad
-            vs.name = name
-            
-            let arr = appDelegate.childs.filter({$0.name == name})
-            
-            vs.parentID = arr.first?.parent
+            vs.id = name.id
+            let a = appDelegate.curentPdf.filter({$0.id == name.id})
+            vs.manufacturer = a.first?.manufacturer ?? ""
+            vs.parentID = a.first?.prodTypeId ?? 0
         }
         if segue.identifier == "showFSFav" {
             let name = sender as! String

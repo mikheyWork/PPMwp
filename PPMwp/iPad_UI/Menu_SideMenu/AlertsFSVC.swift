@@ -9,15 +9,25 @@
 import UIKit
 
 class AlertsFSVC: UIViewController {
-
-    var name = ""
     
     @IBOutlet weak var webView: UIWebView!
+    @IBOutlet weak var imgView: UIImageView!
+    
+    var name = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if name != "" {
+            name = PDFDownloader.shared.addPercent(fromString: name)
             read(nameFile: name)
+            self.view.backgroundColor = UIColor.white
+            imgView.isHidden = true
+            webView.isHidden = false
+        } else {
+            webView.isHidden = true
+            imgView.isHidden = false
+            self.view.backgroundColor = UIColor(red: 234/255, green: 34/255, blue: 37/255, alpha: 1)
         }
     }
     
@@ -29,16 +39,6 @@ class AlertsFSVC: UIViewController {
             self.webView.loadRequest(request)
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     @IBAction func backBut(_ sender: Any) {
         navigationController?.popViewController(animated: false)
