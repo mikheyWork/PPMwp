@@ -20,6 +20,7 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         searchBarChange(searchBar: search)
         rangeChar()
+        index()
         indexFunc()
         search.setImage(UIImage(named: "ic_search_18px"), for: UISearchBar.Icon.search, state: UIControl.State.normal)
     }
@@ -56,7 +57,6 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
-        index()
         return carSectionTitles.map{ title -> UIView in
             return StringItem(text: title)
         }
@@ -126,6 +126,7 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             carSectionTitles = [String](carsDictionary.keys)
             carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
         self.tableView.reloadData()
+        self.tableViewIndex.reloadData()
     }
     
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {

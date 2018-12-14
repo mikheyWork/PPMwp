@@ -20,7 +20,6 @@ class ReferencesVC2: UIViewController, UITableViewDataSource, UITableViewDelegat
         super.viewDidLoad()
         rangeChar()
         indexFunc()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -30,7 +29,6 @@ class ReferencesVC2: UIViewController, UITableViewDataSource, UITableViewDelegat
     
     override func viewWillLayoutSubviews() {
         self.tableView.reloadData()
-//        filterArray = appDelegate.allCateg.filter({$0.parent == parentID})
     }
     
     func indexFunc() {
@@ -157,7 +155,6 @@ extension ReferencesVC2 {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 2
-        
         let carKey = carSectionTitles[section]
         if let carValues = carsDictionary[carKey] {
             return carValues.count
@@ -215,6 +212,7 @@ extension ReferencesVC2 {
             carSectionTitles.removeAll()
             index()
             tableView.reloadData()
+            tableViewIndex.reloadData()
         }
     }
     

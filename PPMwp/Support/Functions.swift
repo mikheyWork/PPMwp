@@ -141,18 +141,18 @@ class Functions: NSObject {
                 }
                 
                 UserDefaults.standard.set(self.appDelegate.favourites, forKey: "favorArr")
-                }
             }
+        }
         DispatchQueue.main.async {
             Functions.shared.checkStar(name: String(id), button: button)
         }
-        }
+    }
     
     func filterSearch( cars: inout Array<SearchItem>, searchText: String) {
         for i in appDelegate.referencesParent {
             let a = appDelegate.referencesParent.filter({$0.id == i.id})
             if cars.contains(where: {$0.id == a.first!.id}) == false {
-                let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!, number: "", manufacturer: "")
+                let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!, number: "", manufacturer: "", fullName: "")
                 cars.append(b)
             }
         }
@@ -160,10 +160,10 @@ class Functions: NSObject {
         for i in appDelegate.curentPdf {
             if cars.contains(where: {$0.id == i.id}) == false {
                 if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
-                    let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "")
+                    let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: (i.model_name ?? "") + (i.model_number ?? ""))
                     cars.append(b)
                 } else {
-                    let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "")
+                    let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: (i.model_number ?? "") + (i.model_number ?? ""))
                     cars.append(b)
                 }
             }
@@ -176,7 +176,7 @@ class Functions: NSObject {
             let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == arr2.first?.id})
             if arr3.count > 0 {
                 if cars.contains(where: {$0.id == i.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
                     cars.append(b)
                 }
             }
@@ -191,13 +191,13 @@ class Functions: NSObject {
             if arr2.count > 0 {
                 let a = appDelegate.models.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
                     cars.append(b)
                 }
             }
         }
         cars = cars.filter({ (elemt: SearchItem) -> Bool in
-            elemt.name.lowercased().contains(searchText.lowercased())
+            elemt.fullName?.lowercased().contains(searchText.lowercased()) ?? false
         })
     }
     

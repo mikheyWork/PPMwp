@@ -29,28 +29,23 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     var id = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-        appDelegate.favourites.removeAll()
-        let a  = self.appDelegate.currentUser.favor.split(separator: ",")
-        if a.isEmpty == false {
-            self.appDelegate.favourites.removeAll()
-            for i in a {
-                
-                if self.appDelegate.favourites.contains(String(i)) == false {
-                    if appDelegate.curentPdf.contains(where: {$0.id == Int(String(i))}) || appDelegate.curentPdfRef.contains(where: {$0.id == Int(String(i))}) || appDelegate.childs.contains(where: {$0.id == Int64(String(i))}) || appDelegate.referencesChild.contains(where: {$0.id == Int64(String(i))})  {
-                        self.appDelegate.favourites.append(String(i))
-                        print("favor id is \(i)")
-                    }
-                }
-            }
-        }
+       
         NotificationCenter.default.addObserver(self, selector: #selector(updateData ), name: NSNotification.Name("Star"), object: nil)
         progressView.isHidden = true
         checkState()
-        for i in appDelegate.parents {
-            if cars.contains(i.name!) == false {
-                cars.append(i.name!)
+        rangeChar()
+    }
+    
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+        for i in appDelegate.favourites {
+            if cars.contains(i) == false {
+                cars.append(i)
             }
-            
         }
         
         for car in cars {
@@ -62,16 +57,12 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
                 carsDictionary[carKey] = [car]
             }
         }
-        
-        // 2
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-        rangeChar()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        
+        
         let name3 = String(name2.dropLast())
+        print("name3 \(name3)")
         if name3 != "" {
             if appDelegate.referencesChild.contains(where: {$0.name == name3}) == false {
                 print("1")
@@ -80,17 +71,16 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
             } else {
                 print("2")
                 state = true
-                progressView.isHidden = false
+                progressView.isHidden = true
             }
         } else {
             state = false
         }
        checkState()
-        
+        tableView.reloadData()
     }
     
     override func viewWillLayoutSubviews() {
-//        self.tableView.reloadData()
         checkState()
     }
     
@@ -213,9 +203,7 @@ extension FavouritesVCiPad {
             read(nameFile: pdfName)
             state = true
             checkState()
-//            tableView.reloadData()
         }
-//        tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

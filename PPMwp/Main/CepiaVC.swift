@@ -61,8 +61,8 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         index()
         
     }
-    
     override func viewWillAppear(_ animated: Bool) {
+        showTable()
         if Reachability.isConnectedToNetwork() == true {
             //requset actual data
             DispatchQueue.global(qos: .userInteractive).async {
@@ -195,7 +195,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         if tableView.isHidden == true {
             view.addGestureRecognizer(tapGesture)
         } else {
-            if (view.gestureRecognizers?.count)! > 0 {
+            if view.gestureRecognizers?.count ?? 0 > 0 {
                 for i in (view?.gestureRecognizers)! {
                     view.removeGestureRecognizer(i)
                 }
@@ -215,7 +215,7 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == arr2.first?.id})
             if arr3.count > 0 {
                 if cars.contains(where: {$0.id == i.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
                     cars.append(b)
                 }
             }
@@ -617,12 +617,14 @@ class SearchItem {
     var discription: String?
     var number: String?
     var manufacturer: String?
+    var fullName: String?
     
-    init(id: Int, name: String, discription: String, number: String, manufacturer: String) {
+    init(id: Int, name: String, discription: String, number: String, manufacturer: String, fullName: String) {
         self.id = id
         self.name = name
         self.discription = discription
         self.number = number
         self.manufacturer = manufacturer
+        self.fullName = fullName
     }
 }

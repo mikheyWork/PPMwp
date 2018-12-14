@@ -66,7 +66,7 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         searchBarChange(searchBar: searchBarLbl)
         showTable()
         indexFunc()
-        
+        index()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -224,14 +224,13 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == arr2.first?.id})
             if arr3.count > 0 {
                 if cars.contains(where: {$0.id == i.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
                     cars.append(b)
                 }
             }
         }
         
         for car in cars {
-            print("mod \(car.name) \(car.number)")
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
@@ -269,7 +268,6 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     
     
     func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
-        index()
         return carSectionTitles.map{ title -> UIView in
             print()
             return StringItem(text: title)
@@ -299,24 +297,28 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     
     //search bar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         searchBar.text = searchText
+        
         if searchText != "" {
             if appDelegate.subscribtion == true {
-            isSearching = true
+                isSearching = true
             }
-        }  else {
+        } else {
             isSearching = false
         }
-        
+        cars.removeAll()
         showTable()
         tableView.reloadData()
         carsDictionary.removeAll()
         carSectionTitles.removeAll()
         
-        Functions.shared.filterSearch(cars: &cars, searchText: searchText)
-        
+        if searchText != "" {
+            Functions.shared.filterSearch(cars: &cars, searchText: searchText)
+        } else {
+            Functions.shared.filterSearch(cars: &cars, searchText: searchText)
+        }
         for car in cars {
-            print("car \(car.name)")
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
@@ -336,6 +338,9 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
         self.tableView.reloadData()
         self.tableViewIndex.reloadData()
+        for i in carsDictionary {
+            print(i.key, i.value)
+        }
     }
     
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
@@ -499,11 +504,19 @@ extension CepiaVCiPad {
         let carKey = carSectionTitles[indexPath.section]
         var prod: SearchItem!
         if let carValues = carsDictionary[carKey] {
-            prod = carValues[indexPath.row]
-            cell.nameLbl.text = prod.name
-            let text = cell.nameLbl.text
-            cell.text2 = text!
-            cell.id = prod.id
+            for i in carValues {
+                print("carV \(i.name)")
+            }
+            
+            var text = ""
+            if indexPath.row <= cars.count {
+                prod = carValues[indexPath.row]
+                cell.nameLbl.text = prod.name
+                text = cell.nameLbl.text ?? ""
+                cell.text2 = text
+                cell.id = prod.id
+            }
+          
             if appDelegate.curentPdf.contains(where: {$0.model_name == text}) || appDelegate.curentPdf.contains(where: {$0.model_number == text}) {
                 
                 let cellName = appDelegate.curentPdf.filter({$0.id == prod.id})
