@@ -294,7 +294,7 @@
                                 </constraints>
                                 <state key="normal" image="Search"/>
                                 <connections>
-                                    <segue destination="Mw8-ZR-kIx" kind="show" animates="NO" id="nBz-ae-3uO"/>
+                                    <segue destination="Mw8-ZR-kIx" kind="show" identifier="showMenuSearch" animates="NO" id="nBz-ae-3uO"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -2482,66 +2482,102 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                                     <segue destination="fA1-Yt-z8b" kind="show" id="vY0-5U-moD"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pH5-4D-wwr">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pH5-4D-wwr">
                                 <rect key="frame" x="7" y="118" width="360" height="494"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Group" translatesAutoresizingMaskIntoConstraints="NO" id="DDk-hm-s42">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Group" translatesAutoresizingMaskIntoConstraints="NO" id="DDk-hm-s42">
                                         <rect key="frame" x="20" y="18" width="320" height="454"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="Hfs-uk-jn3">
-                                        <rect key="frame" x="33" y="42" width="294" height="100"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        <viewLayoutGuide key="safeArea" id="T54-5k-t81"/>
-                                        <attributedString key="attributedText">
-                                            <fragment content="You are subscribed to a $9.99 annual subscription, to keep your app updated with the latest PPM Genius data.">
-                                                <attributes>
-                                                    <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <font key="NSFont" size="18" name="Lato-Regular"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineHeightMultiple="1.2" tighteningFactorForTruncation="0.0"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="20" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="DPf-Do-xex">
-                                        <rect key="frame" x="33" y="149" width="294" height="170"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        <viewLayoutGuide key="safeArea" id="ous-po-Ahy"/>
-                                        <attributedString key="attributedText">
-                                            <fragment>
-                                                <string key="content">Your PPM Genius subscription will automatically renew every 12 months and you will be charged through your iTunes account. You can cancel the auto-renewal subscription at any time in your iTunes account settings. Refunds will not be provided for any unused time during the 12 months subscription.</string>
-                                                <attributes>
-                                                    <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <font key="NSFont" size="14" name="Lato-Regular"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineHeightMultiple="1.3" tighteningFactorForTruncation="0.0"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="20" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="6d8-zi-ibt">
-                                        <rect key="frame" x="33" y="327" width="294" height="134"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                        <viewLayoutGuide key="safeArea" id="Txb-3F-sge"/>
-                                        <attributedString key="attributedText">
-                                            <fragment>
-                                                <string key="content">If you choose to cancel your subscription, PPM Genius will continue to function, but you will cease receiving product and application updates once your 12 months subscription has expired.</string>
-                                                <attributes>
-                                                    <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <font key="NSFont" size="14" name="Helvetica"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineHeightMultiple="1.5" tighteningFactorForTruncation="0.0"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MjK-FN-eeS">
+                                        <rect key="frame" x="29" y="28" width="303" height="436"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="Hfs-uk-jn3">
+                                                <rect key="frame" x="5" y="20" width="294" height="104"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Hfs-uk-jn3" secondAttribute="height" multiplier="147:52" id="C8w-BM-uy6"/>
+                                                </constraints>
+                                                <viewLayoutGuide key="safeArea" id="T54-5k-t81"/>
+                                                <attributedString key="attributedText">
+                                                    <fragment content="You are subscribed to a $9.99 annual subscription, to keep your app updated with the latest PPM Genius data.">
+                                                        <attributes>
+                                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <font key="NSFont" size="18" name="Lato-Regular"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineHeightMultiple="1.2" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="20" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="DPf-Do-xex">
+                                                <rect key="frame" x="4" y="132" width="294" height="154"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="DPf-Do-xex" secondAttribute="height" multiplier="21:11" id="hrh-Pb-NhV"/>
+                                                </constraints>
+                                                <viewLayoutGuide key="safeArea" id="ous-po-Ahy"/>
+                                                <attributedString key="attributedText">
+                                                    <fragment>
+                                                        <string key="content">Your PPM Genius subscription will automatically renew every 12 months and you will be charged through your iTunes account. You can cancel the auto-renewal subscription at any time in your iTunes account settings. Refunds will not be provided for any unused time during the 12 months subscription.</string>
+                                                        <attributes>
+                                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <font key="NSFont" size="14" name="Lato-Regular"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineHeightMultiple="1.3" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="20" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="6d8-zi-ibt">
+                                                <rect key="frame" x="4" y="294" width="294" height="122"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="6d8-zi-ibt" secondAttribute="height" multiplier="147:61" id="eYs-Sn-LuH"/>
+                                                </constraints>
+                                                <viewLayoutGuide key="safeArea" id="Txb-3F-sge"/>
+                                                <attributedString key="attributedText">
+                                                    <fragment>
+                                                        <string key="content">If you choose to cancel your subscription, PPM Genius will continue to function, but you will cease receiving product and application updates once your 12 months subscription has expired.</string>
+                                                        <attributes>
+                                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <font key="NSFont" size="14" name="Helvetica"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineHeightMultiple="1.5" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.55580225559999996" green="0.91764705879999997" blue="0.4788948563" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="6d8-zi-ibt" firstAttribute="top" secondItem="DPf-Do-xex" secondAttribute="bottom" constant="8" id="DfE-04-BA0"/>
+                                            <constraint firstItem="DPf-Do-xex" firstAttribute="leading" secondItem="MjK-FN-eeS" secondAttribute="leading" constant="4" id="UQl-PW-dzL"/>
+                                            <constraint firstItem="DPf-Do-xex" firstAttribute="top" secondItem="Hfs-uk-jn3" secondAttribute="bottom" constant="8" id="X4N-8C-I5v"/>
+                                            <constraint firstItem="Hfs-uk-jn3" firstAttribute="top" secondItem="MjK-FN-eeS" secondAttribute="top" constant="20" id="bbe-Ic-fg7"/>
+                                            <constraint firstAttribute="trailing" secondItem="DPf-Do-xex" secondAttribute="trailing" constant="5" id="cX0-QF-qWc"/>
+                                            <constraint firstAttribute="trailing" secondItem="6d8-zi-ibt" secondAttribute="trailing" constant="5" id="cnt-Nr-4zj"/>
+                                            <constraint firstAttribute="trailing" secondItem="Hfs-uk-jn3" secondAttribute="trailing" constant="4" id="drF-8e-HIy"/>
+                                            <constraint firstItem="Hfs-uk-jn3" firstAttribute="leading" secondItem="MjK-FN-eeS" secondAttribute="leading" constant="5" id="nGD-UY-iMf"/>
+                                            <constraint firstItem="6d8-zi-ibt" firstAttribute="leading" secondItem="MjK-FN-eeS" secondAttribute="leading" constant="4" id="wRf-mj-oye"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
+                                <color key="backgroundColor" red="0.91764705879999997" green="0.1333333333" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="MjK-FN-eeS" firstAttribute="top" secondItem="pH5-4D-wwr" secondAttribute="top" constant="28" id="JI6-JZ-mio"/>
+                                    <constraint firstItem="DDk-hm-s42" firstAttribute="top" secondItem="pH5-4D-wwr" secondAttribute="top" constant="18" id="POk-w0-dTy"/>
+                                    <constraint firstItem="MjK-FN-eeS" firstAttribute="leading" secondItem="pH5-4D-wwr" secondAttribute="leading" constant="29" id="XAb-G2-OBa"/>
+                                    <constraint firstAttribute="trailing" secondItem="MjK-FN-eeS" secondAttribute="trailing" constant="28" id="aJW-aF-7Cf"/>
+                                    <constraint firstAttribute="trailing" secondItem="DDk-hm-s42" secondAttribute="trailing" constant="20" id="g6F-Z8-kWG"/>
+                                    <constraint firstItem="DDk-hm-s42" firstAttribute="leading" secondItem="pH5-4D-wwr" secondAttribute="leading" constant="20" id="mMw-ug-l71"/>
+                                    <constraint firstAttribute="bottom" secondItem="DDk-hm-s42" secondAttribute="bottom" constant="22" id="qmv-K5-xCn"/>
+                                    <constraint firstAttribute="bottom" secondItem="MjK-FN-eeS" secondAttribute="bottom" constant="30" id="xql-pq-ccg"/>
+                                </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="SUBSCRIPTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RyE-Fr-6U5">
-                                <rect key="frame" x="63" y="65" width="250" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SUBSCRIPTION" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RyE-Fr-6U5">
+                                <rect key="frame" x="63" y="65" width="250" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="AoY-hd-Q4r"/>
+                                    <constraint firstAttribute="height" constant="24" id="t2J-li-YuJ"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="20"/>
                                 <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -2551,8 +2587,15 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                         <constraints>
                             <constraint firstItem="ulS-1h-Gwd" firstAttribute="trailing" secondItem="nNz-UM-S2g" secondAttribute="trailing" constant="13" id="1Er-cy-XIs"/>
                             <constraint firstItem="ulS-1h-Gwd" firstAttribute="bottom" secondItem="5Gm-8I-V99" secondAttribute="bottom" constant="14" id="DxT-jb-ZNs"/>
+                            <constraint firstItem="ulS-1h-Gwd" firstAttribute="trailing" secondItem="RyE-Fr-6U5" secondAttribute="trailing" constant="62" id="ICm-v4-m8W"/>
+                            <constraint firstItem="ulS-1h-Gwd" firstAttribute="bottom" secondItem="pH5-4D-wwr" secondAttribute="bottom" constant="166" id="OKD-6C-QKY"/>
+                            <constraint firstItem="RyE-Fr-6U5" firstAttribute="top" secondItem="ulS-1h-Gwd" secondAttribute="top" constant="21" id="OfD-Hr-3ef"/>
                             <constraint firstItem="5Gm-8I-V99" firstAttribute="leading" secondItem="ulS-1h-Gwd" secondAttribute="leading" constant="13" id="SmM-q0-USf"/>
+                            <constraint firstItem="pH5-4D-wwr" firstAttribute="leading" secondItem="ulS-1h-Gwd" secondAttribute="leading" constant="7" id="hfH-KQ-dx1"/>
+                            <constraint firstItem="pH5-4D-wwr" firstAttribute="top" secondItem="RyE-Fr-6U5" secondAttribute="bottom" constant="29" id="nXA-eo-0k5"/>
+                            <constraint firstItem="ulS-1h-Gwd" firstAttribute="trailing" secondItem="pH5-4D-wwr" secondAttribute="trailing" constant="8" id="qsW-1H-Plb"/>
                             <constraint firstItem="ulS-1h-Gwd" firstAttribute="bottom" secondItem="nNz-UM-S2g" secondAttribute="bottom" constant="14" id="sLs-7n-rej"/>
+                            <constraint firstItem="RyE-Fr-6U5" firstAttribute="leading" secondItem="ulS-1h-Gwd" secondAttribute="leading" constant="63" id="stx-Lj-XKY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ulS-1h-Gwd"/>
                     </view>
@@ -3119,8 +3162,8 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
         <image name="star" width="22" height="21"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aBX-YF-f82"/>
-        <segue reference="CCs-3W-W0W"/>
+        <segue reference="nBz-ae-3uO"/>
+        <segue reference="vY0-5U-moD"/>
         <segue reference="SDY-ab-mWa"/>
         <segue reference="M9s-x2-Hn4"/>
         <segue reference="do6-9I-KNb"/>

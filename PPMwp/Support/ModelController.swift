@@ -67,5 +67,7 @@ class ModelController: UIViewController {
                 vs.showAlert = true
             }
         }
+        
+        print("model \(model)")
     }
 }

@@ -326,9 +326,8 @@ extension ReferencesVC2iPad {
             cars.removeAll()
             carsDictionary.removeAll()
             carSectionTitles.removeAll()
-            index()
-            indexFunc()
             tableView.reloadData()
+            self.tableViewIndex.reloadData()
         }
         Functions.shared.checkStar(name: String(id), button: starBut)
         checkState()

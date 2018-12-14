@@ -20,6 +20,9 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
         super.viewDidLoad()
         rangeChar()
         searchBarChange(searchBar: searchBar1)
+        index()
+        indexFunc()
+        tableViewIndex.reloadData()
         searchBar1.delegate = self
         searchBar1.setImage(UIImage(named: "ic_search_18px"), for: UISearchBar.Icon.search, state: UIControl.State.normal)
     }
@@ -83,7 +86,9 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
     }
     
     func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
-        index()
+        for i in carSectionTitles {
+            print("car \(i)")
+        }
         return carSectionTitles.map{ title -> UIView in
             return StringItem(text: title)
         }
@@ -130,6 +135,8 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
         self.tableView.reloadData()
+        self.tableViewIndex.reloadData()
+        print("table change")
     }
     
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
@@ -139,7 +146,6 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
     }
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        //        searchResultsTableView.isHidden = false
         return true
         
     }
@@ -151,7 +157,6 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        //        searchResultsTableView.isHidden = true
         self.searchBar1.endEditing(true)
         searchBar.resignFirstResponder()
         
@@ -223,23 +228,15 @@ extension ReferencesVCiPad {
         return headerView
     }
     
-    
-    
-    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return carSectionTitles[section]
     }
     
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        // 1
         return carSectionTitles.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        // 2
-        
         let carKey = carSectionTitles[section]
         if let carValues = carsDictionary[carKey] {
             return carValues.count
@@ -267,7 +264,6 @@ extension ReferencesVCiPad {
             // need content
             cell.resultLbl.text = description
         }
-        
         return cell
     }
     

@@ -77,6 +77,18 @@ extension SideMenuVC {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if appDelegate.model == "iPhone" {
+            if segue.identifier == "showMenuSearch" {
+                let vs = segue.destination as! CepiaVC
+                vs.isSearching = true
+            }
+        } else {
+            if segue.identifier == "showMenuSearch" {
+                let vs = segue.destination as! CepiaVCiPad
+                vs.isSearching = true
+            }
+        }
+        
         if segue.identifier == "LogOut" {
             let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")
             self.appDelegate.currentUser = user
