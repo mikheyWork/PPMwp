@@ -24,13 +24,13 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        appDelegate.subscribtion = true
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.showMenu), name: NSNotification.Name("ShowMenu"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.showBlock), name: NSNotification.Name("ShowBlock"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.hideBlock), name: NSNotification.Name("HideBlock"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.restore1), name: NSNotification.Name("Restore"), object: nil)
         }
         hidenMenu.isHidden = false
         activity.isHidden = true
@@ -124,11 +124,15 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         }
     }
     
+    
+    
     override func viewWillLayoutSubviews() {
         addTapGestureToHideKeyboard1()
     }
     
-    
+    @objc func restore1() {
+        showAlertError2(withText: "Restore Error", title: "text error")
+    }
     
     @objc func loadDataWp() {
         guard loadDataWpBool == false else {
@@ -216,6 +220,40 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             if arr3.count > 0 {
                 if cars.contains(where: {$0.id == i.id}) == false {
                     let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
+                    cars.append(b)
+                }
+            }
+        }
+        
+        for i in appDelegate.referencesParent {
+            if cars.contains(where: {$0.id == i.id}) == false {
+                let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
+                cars.append(b)
+            }
+        }
+        
+        for i in appDelegate.models {
+            let arr1 = appDelegate.childs.filter({$0.id == i.id})
+            var arr2 = [PdfDocumentInfo]()
+            if arr1.isEmpty == false{
+                arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == arr1.first?.id})
+            }
+            if arr2.count > 0 {
+                let a = appDelegate.models.filter({$0.id == i.id})
+                if cars.contains(where: {$0.id == a.first!.id}) == false {
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
+                    cars.append(b)
+                }
+            }
+        }
+        
+        for i in appDelegate.curentPdf {
+            if cars.contains(where: {$0.id == i.id}) == false {
+                if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
+                    let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: (i.model_name ?? "") + (i.model_number ?? ""))
+                    cars.append(b)
+                } else {
+                    let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: (i.model_number ?? "") + (i.model_number ?? ""))
                     cars.append(b)
                 }
             }

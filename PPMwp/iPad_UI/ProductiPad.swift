@@ -262,8 +262,8 @@ extension ProductiPad {
         if segue.identifier == "showVitalStatistics" {
             let name = sender as! ProductsTVCell
             let vs = segue.destination as! VitalStatVCiPad
-            vs.id = name.id
-            let a = appDelegate.curentPdf.filter({$0.id == name.id})
+            vs.id = Int(name.id)
+            let a = appDelegate.curentPdf.filter({$0.id == Int(name.id)})
             vs.manufacturer = a.first?.manufacturer ?? ""
             vs.parentID = a.first?.prodTypeId ?? 0
             print("111 \(a.first?.model_name) \(a.first?.model_number)")

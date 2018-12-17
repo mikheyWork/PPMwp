@@ -42,7 +42,7 @@ class ProductTypesiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func index() {
-        
+        print("parent id \(parentID)")
         if parentID != nil {
             let resault = appDelegate.childs.filter{$0.parent == parentID}
             for i in resault {
@@ -50,26 +50,29 @@ class ProductTypesiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
                     cars2.append(i.name!)
                 }
             }
+            cars = cars2
         } else {
             for i in appDelegate.childs {
                 if cars2.contains(i.name!) == false {
                     cars2.append(i.name!)
                 }
             }
-        }
-        
-        for car in cars2 {
-            let aText = car
-            let text = aText
-            let cellName = appDelegate.childs.filter({$0.name == text})
-            let selectedNameID = cellName.first?.id
-            let resault = appDelegate.curentPdf.filter{$0.prodTypeId == selectedNameID}
-            if resault.count > 0 {
-                cars.append(aText)
+            
+            for car in cars2 {
+                let cellName = appDelegate.childs.filter({$0.name == car})
+                
+                for i in cellName {
+                    let pdf = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                    if pdf.count > 0 {
+                        if cars.contains(where: {$0 == i.name}) == false {
+                            cars.append(i.name ?? "")
+                        }
+                    }
+                }
             }
         }
         
-        // 1
+        
         for car in cars {
             let carKey = String(car.prefix(1))
             if var carValues = carsDictionary[carKey] {
@@ -79,11 +82,8 @@ class ProductTypesiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
                 carsDictionary[carKey] = [car]
             }
         }
-        
-        // 2
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-        
     }
     
     func indexFunc() {
@@ -213,19 +213,23 @@ extension ProductTypesiPad {
             
             cell.nameLbl.text = carValues[indexPath.row]
             var cellName = [CategoryEnt]()
-            if manufacturer != "" {
+            var id: Int64 = 0
+            if manufacturer != nil && manufacturer != "" {
                 cellName = appDelegate.parents.filter({$0.name == manufacturer})
             } else {
                 let arr1 = appDelegate.childs.filter({$0.name == cell.nameLbl.text})
+                id = arr1.first?.id ?? 0
                 for i in arr1 {
                     cellName.append(i)
                 }
             }
+            
             var resArr = [PdfDocumentInfo]()
-            if  manufacturer != "" {
-                let selectedNameID = cellName.first?.id
-                let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                resArr = appDelegate.curentPdf.filter({$0.prodTypeId == resault.first?.id})
+            if manufacturer != nil && manufacturer != "" {
+                let resault = appDelegate.childs.filter{$0.parent == parentID}
+                let prod = resault.filter({$0.name == cell.nameLbl.text})
+                id = prod.first?.id ?? 0
+                resArr = appDelegate.curentPdf.filter({$0.prodTypeId == prod.first?.id})
             } else {
                 for i in cellName {
                     let selectedNameID = i.id
@@ -237,6 +241,7 @@ extension ProductTypesiPad {
                     }
                 }
             }
+            cell.id = id
             cell.resaultLbl.text = "\(resArr.count) Results"
         }
         return cell
@@ -257,10 +262,10 @@ extension ProductTypesiPad {
         let selectedName = appDelegate.childs.filter({$0.name == text})
         let selectedNameID = selectedName.first?.id
         if from == "Manuf" {
-            performSegue(withIdentifier: "showModel", sender: selectedNameID)
+            performSegue(withIdentifier: "showModel", sender: selectedCell)
         }
         if from == "Models" {
-            performSegue(withIdentifier: "showModel", sender: selectedNameID)
+            performSegue(withIdentifier: "showModel", sender: selectedCell)
         }
         if from == "ProdTypes" {
             performSegue(withIdentifier: "ShowProd2", sender: selectedNameID)
@@ -271,23 +276,20 @@ extension ProductTypesiPad {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showModel" {
-           let parentId = sender as! Int64
             let types = segue.destination as! ModelsVCiPad
+            
+            let parentId = sender as! ProductTypesTVCell
             types.from = from
-            types.parentID = parentId
+            types.parentID = parentId.id
             types.manufacturer = manufacturer
+            print("parentId \(parentId.id)")
         }
         if segue.identifier == "ShowProd2" {
-            let parentId = sender as! Int64
             let types = segue.destination as! ProductiPad
-            let filterArr = appDelegate.childs.filter({$0.id == parentId})
-            let name2 = filterArr.first?.name
-            if name2 != nil {
-                types.name = name2!
-            }
-            types.parentID = parentId
+            let parentId = sender as! Int64
             types.manufacturer = manufacturer
-            
+            types.parentID = parentId
+            print("parentId2 \(parentId)")
         }
     }
 }
