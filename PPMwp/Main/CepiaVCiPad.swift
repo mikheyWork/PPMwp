@@ -1,18 +1,16 @@
 import UIKit
 import GTProgressBar
-import MYTableViewIndex
 import Alamofire
 import SwiftyJSON
 
 
 
-class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, TableViewIndexDelegate, TableViewIndexDataSource {
+class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate{
     
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var searchBarLbl: UISearchBar!
     @IBOutlet weak var showTableView: UIView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var tableViewIndex: TableViewIndex!
     @IBOutlet weak var hideMenu: UIView!
     @IBOutlet weak var activity: UIActivityIndicatorView!
     
@@ -30,13 +28,13 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBarLbl.delegate = self
-        appDelegate.subscribtion = true
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.showMenu), name: NSNotification.Name("ShowMenu"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.showBlock), name: NSNotification.Name("ShowBlock"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.hideBlock), name: NSNotification.Name("HideBlock"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.restore1), name: NSNotification.Name("Restore"), object: nil)
         }
         
         hideMenu.isHidden = false
@@ -65,7 +63,6 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         rangeChar()
         searchBarChange(searchBar: searchBarLbl)
         showTable()
-        indexFunc()
         index()
     }
     
@@ -131,13 +128,8 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        
-    }
-    override func viewWillLayoutSubviews() {
-        indexFunc()
+    @objc func restore1() {
+        showAlertError2(withText: "Restore Error", title: "text error")
     }
     
     @objc func showBlock() {
@@ -230,6 +222,40 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             }
         }
         
+        for i in appDelegate.referencesParent {
+            if cars.contains(where: {$0.id == i.id}) == false {
+                let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
+                cars.append(b)
+            }
+        }
+        
+        for i in appDelegate.models {
+            let arr1 = appDelegate.childs.filter({$0.id == i.id})
+            var arr2 = [PdfDocumentInfo]()
+            if arr1.isEmpty == false{
+                arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == arr1.first?.id})
+            }
+            if arr2.count > 0 {
+                let a = appDelegate.models.filter({$0.id == i.id})
+                if cars.contains(where: {$0.id == a.first!.id}) == false {
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
+                    cars.append(b)
+                }
+            }
+        }
+        
+        for i in appDelegate.curentPdf {
+            if cars.contains(where: {$0.id == i.id}) == false {
+                if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
+                    let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: (i.model_name ?? "") + (i.model_number ?? ""))
+                    cars.append(b)
+                } else {
+                    let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: (i.model_number ?? "") + (i.model_number ?? ""))
+                    cars.append(b)
+                }
+            }
+        }
+        
         for car in cars {
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {
@@ -244,52 +270,12 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
         UserDefaults.standard.set(appDelegate.subscribtion, forKey: "subscribe2")
     }
     
-    func indexFunc() {
-        //index
-//        tableViewIndex.backgroundColor = UIColor.red
-        tableViewIndex.tintColor = UIColor.white
-        var display: CGFloat
-        display = view.bounds.height
-        if display < 800 {
-            tableViewIndex.font = UIFont(name: "Lato", size: 12)!
-            tableViewIndex.itemSpacing = 5
-        } else if display < 900{
-            tableViewIndex.font = UIFont(name: "Lato", size: 13)!
-            tableViewIndex.itemSpacing = 6
-        } else if display < 1120{
-            tableViewIndex.font = UIFont(name: "Lato", size: 15)!
-            tableViewIndex.itemSpacing = 12
-        } else {
-            tableViewIndex.font = UIFont(name: "Lato", size: 15)!
-            tableViewIndex.itemSpacing = 24
-        }
-        
-    }
-    
-    
-    func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
-        return carSectionTitles.map{ title -> UIView in
-            print()
-            return StringItem(text: title)
-        }
-    }
-    
-    func tableViewIndex(_ tableViewIndex: TableViewIndex, didSelect item: UIView, at index: Int) -> Bool {
-        
-        if index < carSectionTitles.count {
-            let indexPath = NSIndexPath(row: 0, section: index)
-            tableView.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
-        }
-        return true // return true to produce haptic feedback on capable devices
-    }
     
     func showTable() {
         if isSearching == true {
             showTableView.isHidden = false
             tableView.isHidden = false
-            tableViewIndex.isHidden = false
         } else {
-            tableViewIndex.isHidden = true
             showTableView.isHidden = true
             tableView.isHidden = true
         }
@@ -328,16 +314,9 @@ class CepiaVCiPad: UIViewController, UISearchBarDelegate, UITableViewDataSource,
             }
         }
         
-        if cars.count < 9 {
-            tableViewIndex.isHidden = true
-        } else {
-            tableViewIndex.isHidden = false
-        }
-        
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
         self.tableView.reloadData()
-        self.tableViewIndex.reloadData()
         for i in carsDictionary {
             print(i.key, i.value)
         }
@@ -562,7 +541,7 @@ extension CepiaVCiPad {
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return [" "]
+        return []
     }
     
     

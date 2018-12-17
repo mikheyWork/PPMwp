@@ -12,7 +12,7 @@ class ProductsTVCell: UITableViewCell {
 
     @IBOutlet weak var prodLbl: UILabel!
     
-        var id = 0
+    var id: Int = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()

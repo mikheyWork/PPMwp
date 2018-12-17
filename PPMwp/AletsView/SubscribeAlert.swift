@@ -1,5 +1,6 @@
 import UIKit
 import GTProgressBar
+import SwiftyStoreKit
 
 class SubscribeAlert: UIViewController {
     
@@ -9,13 +10,15 @@ class SubscribeAlert: UIViewController {
     
     @IBOutlet weak var cancelBut: UIButton!
     
+    @IBOutlet weak var restoreProd: UIButton!
+    
     var progressBar = GTProgressBar()
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        restoreProd.layer.cornerRadius = 5
         alertView.layer.cornerRadius = 15
         subscribeBut.layer.cornerRadius = 5
         cancelBut.layer.cornerRadius = 5
@@ -36,6 +39,23 @@ class SubscribeAlert: UIViewController {
         vc?.view.backgroundColor = UIColor.gray.withAlphaComponent(0.2)
         self.addChild(vc!)
         self.view.addSubview((vc?.view)!)
+    }
+    
+    
+    @IBAction func resoreTap(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name("Restore"), object: nil)
+        SwiftyStoreKit.restorePurchases(atomically: true) { results in
+            
+            if results.restoreFailedPurchases.count > 0 {
+                print("Restore Failed: \(results.restoreFailedPurchases)")
+            }
+            else if results.restoredPurchases.count > 0 {
+                print("Restore Success: \(results.restoredPurchases)")
+            }
+            else {
+                print("Nothing to Restore")
+            }
+        }
     }
     
     @IBAction func subscribeButTaped(_ sender: Any) {

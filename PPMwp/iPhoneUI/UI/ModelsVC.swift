@@ -79,23 +79,16 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
     
     func index() {
         if parentID != nil {
-            if manufacturer != nil && manufacturer != "" {
-                let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
-                parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
-            }
             var resault = [CategoryEnt]()
             if manufacturer != "" && manufacturer != nil {
                 
                 let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
                 
                 for i in pop {
-                    print("pop \(i.model_name) \(i.model_number)")
                     if cars.contains(where: {$0.id == i.id}) == false {
                         cars.append(i)
-                        print("\(i.model_name) \(i.model_number)")
                     }
                 }
-                
             } else {
                 let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
                 resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
@@ -106,9 +99,6 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
                             cars.append(j)
                         }
                     }
-                }
-                for car in cars {
-                    print("carr \(car.model_name)")
                 }
             }
         } else {

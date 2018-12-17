@@ -251,7 +251,8 @@ extension Product {
         if segue.identifier == "showVitalStatistics" {
             let name = sender as! ProductsTVCell
             let vs = segue.destination as! VitalStatVC
-            vs.id = name.id
+            vs.id = Int(name.id)
+            print("id id \(name.id)")
             
         }
     }

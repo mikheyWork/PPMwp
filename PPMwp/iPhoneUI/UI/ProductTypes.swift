@@ -82,7 +82,7 @@ class ProductTypes: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func index() {
-        
+        print("parent id \(parentID)")
         if parentID != nil {
             let resault = appDelegate.childs.filter{$0.parent == parentID}
             for i in resault {
@@ -99,12 +99,15 @@ class ProductTypes: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
             
             for car in cars2 {
-                print("prod type \(car)")
                 let cellName = appDelegate.childs.filter({$0.name == car})
-                let selectedNameID = cellName.first?.id
-                let resault = appDelegate.curentPdf.filter{$0.prodTypeId == selectedNameID}
-                if resault.count > 0 {
-                    cars.append(car)
+                
+                for i in cellName {
+                    let pdf = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
+                    if pdf.count > 0 {
+                        if cars.contains(where: {$0 == i.name}) == false {
+                            cars.append(i.name ?? "")
+                        }
+                    }
                 }
             }
         }
@@ -199,19 +202,23 @@ extension ProductTypes {
             
             cell.nameLbl.text = carValues[indexPath.row]
             var cellName = [CategoryEnt]()
+            var id: Int64 = 0
             if manufacturer != nil && manufacturer != "" {
                 cellName = appDelegate.parents.filter({$0.name == manufacturer})
             } else {
                 let arr1 = appDelegate.childs.filter({$0.name == cell.nameLbl.text})
+                id = arr1.first?.id ?? 0
                 for i in arr1 {
                     cellName.append(i)
                 }
             }
+            
             var resArr = [PdfDocumentInfo]()
             if manufacturer != nil && manufacturer != "" {
-                let selectedNameID = cellName.first?.id
-                let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-                resArr = appDelegate.curentPdf.filter({$0.prodTypeId == resault.first?.id})
+                let resault = appDelegate.childs.filter{$0.parent == parentID}
+                let prod = resault.filter({$0.name == cell.nameLbl.text})
+                id = prod.first?.id ?? 0
+                resArr = appDelegate.curentPdf.filter({$0.prodTypeId == prod.first?.id})
             } else {
                 for i in cellName {
                     let selectedNameID = i.id
@@ -223,10 +230,9 @@ extension ProductTypes {
                     }
                 }
             }
+            cell.id = id
             cell.resaultLbl.text = "\(resArr.count) Results"
         }
-        
-        
         
         cell.accessoryType = .disclosureIndicator
         return cell
@@ -246,10 +252,10 @@ extension ProductTypes {
         let selectedNameID = selectedName.first?.id
         
         if from == "Manuf" {
-            performSegue(withIdentifier: "showModel", sender: selectedNameID)
+            performSegue(withIdentifier: "showModel", sender: selectedCell)
         }
         if from == "Models" {
-            performSegue(withIdentifier: "showModel", sender: selectedNameID)
+            performSegue(withIdentifier: "showModel", sender: selectedCell)
         }
         if from == "ProdTypes" {
             performSegue(withIdentifier: "ShowProd2", sender: selectedNameID)
@@ -263,10 +269,11 @@ extension ProductTypes {
         if segue.identifier == "showModel" {
             let types = segue.destination as! ModelsVC
             
-            let parentId = sender as! Int64
+            let parentId = sender as! ProductTypesTVCell
             types.from = from
-            types.parentID = parentId
+            types.parentID = parentId.id
             types.manufacturer = manufacturer
+            print("parentId \(parentId.id)")
         }
         if segue.identifier == "ShowProd2" {
             let types = segue.destination as! Product

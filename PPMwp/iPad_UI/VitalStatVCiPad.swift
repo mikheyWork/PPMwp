@@ -163,10 +163,10 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     func index() {
         print("par \(parentID)")
         if parentID != nil {
-            if manufacturer != "" {
-                let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
-                parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
-            }
+//            if manufacturer != "" {
+//                let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
+//                parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
+//            }
             var resault = [CategoryEnt]()
             if manufacturer != "" && manufacturer != nil {
                 let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
