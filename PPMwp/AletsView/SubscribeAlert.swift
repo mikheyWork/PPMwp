@@ -43,17 +43,19 @@ class SubscribeAlert: UIViewController {
     
     
     @IBAction func resoreTap(_ sender: Any) {
-        NotificationCenter.default.post(name: NSNotification.Name("Restore"), object: nil)
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             
             if results.restoreFailedPurchases.count > 0 {
                 print("Restore Failed: \(results.restoreFailedPurchases)")
+                NotificationCenter.default.post(name: NSNotification.Name("Restore1"), object: nil)
             }
             else if results.restoredPurchases.count > 0 {
                 print("Restore Success: \(results.restoredPurchases)")
+                NotificationCenter.default.post(name: NSNotification.Name("Restore2"), object: nil)
             }
             else {
                 print("Nothing to Restore")
+                NotificationCenter.default.post(name: NSNotification.Name("Restore3"), object: nil)
             }
         }
     }

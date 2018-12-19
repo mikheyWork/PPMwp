@@ -20,14 +20,11 @@ class ReferencesVC2: UIViewController, UITableViewDataSource, UITableViewDelegat
         super.viewDidLoad()
         rangeChar()
         indexFunc()
+        index()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tableView.reloadData()
-    }
-    
-    override func viewWillLayoutSubviews() {
         self.tableView.reloadData()
     }
     
@@ -54,7 +51,6 @@ class ReferencesVC2: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
-        index()
         return carSectionTitles.map{ title -> UIView in
             return StringItem(text: title)
         }
@@ -107,7 +103,18 @@ class ReferencesVC2: UIViewController, UITableViewDataSource, UITableViewDelegat
     }
     
     @IBAction func backBut(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+        let parrent = appDelegate.referencesChild.filter({$0.id == parentID})
+        if parrent.isEmpty {
+            navigationController?.popViewController(animated: true)
+        } else {
+            parentID = parrent.first?.parent
+            cars.removeAll()
+            carsDictionary.removeAll()
+            carSectionTitles.removeAll()
+            index()
+            tableView.reloadData()
+            tableViewIndex.reloadData()
+        }
     }
     
     @IBAction func menuBut(_ sender: Any) {

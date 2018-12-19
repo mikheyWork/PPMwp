@@ -21,6 +21,7 @@ class MailSender: NSObject, SKPSMTPMessageDelegate {
         message.delegate = self
         message.send()
     }
+        
     
     func messageSent(_ message: SKPSMTPMessage!) {
         print("Successfully sent email!")

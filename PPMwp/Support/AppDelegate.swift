@@ -267,6 +267,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if name.contains("&#038;") {
                     name = PDFDownloader.shared.addAmper(fromString: name)
                 }
+                let first = name.prefix(1).uppercased()
+                name = String(name.dropFirst())
+                name = first + name
                  self.networkRef.append(name)
                 let a = self.references.filter{$0.name == name}
                 if a.isEmpty == false {
@@ -312,7 +315,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("not full page")
             }
             for resault in resaults {
-                let name = resault["name"].stringValue
+                var name = resault["name"].stringValue
+                let first = name.prefix(1).uppercased()
+                name = String(name.dropFirst())
+                name = first + name
                 self.networkProd.append(name)
                 let a = self.allCateg.filter{$0.name == name}
                 if a.isEmpty == false {

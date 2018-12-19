@@ -23,12 +23,19 @@ class ForgotPassVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("1")
         NotificationCenter.default.addObserver(self, selector: #selector(soop), name: NSNotification.Name("soop"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(soop2), name: NSNotification.Name("soop2"), object: nil)
         rangeChar()
         addTapGestureToHideKeyboard()
         activity.isHidden = true
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("2")
+    }
+
     
     @objc func soop2() {
         showAlertError(title: "Request Failed", withText: "Invalid Email Address")
@@ -69,7 +76,7 @@ class ForgotPassVC: UIViewController {
             self.activity.isHidden = false
             self.activity.startAnimating()
         }
-
+        
         Alamofire.request(url!,
                           method: .get,
                           parameters: nil,
@@ -100,17 +107,17 @@ class ForgotPassVC: UIViewController {
                         let text =  "Hello, \n \nYou have requested a password reset, follow the link below to reset it. \n \nChange Password: https://ppm.customertests.com/forgot-password/ \n \nThanks, \n \nCEPIA Team"
                         MailSender.shared.sendEmail(subject: "Reset password", body: text, mail: self.emailLbl.text!)
                     } else {
-//                        self.mailTrue = false
+                        //                        self.mailTrue = false
                     }
                 }
                 if resaults.count < 100 {
                     print(self.mailTrue)
                     if self.mailTrue ==  false {
-                                                DispatchQueue.main.async {
-                        self.showAlertError(title: "Request Failed", withText: "Username was not found.")
-                        self.activity.isHidden = true
-                        self.activity.stopAnimating()
-                                                }
+                        DispatchQueue.main.async {
+                            self.showAlertError(title: "Request Failed", withText: "Username was not found.")
+                            self.activity.isHidden = true
+                            self.activity.stopAnimating()
+                        }
                     } else {
                     }
                 }
@@ -121,17 +128,17 @@ class ForgotPassVC: UIViewController {
         
         guard emailLbl.text != "" else { return }
         
-            if Reachability.isConnectedToNetwork() {
-                DispatchQueue.global(qos: .userInteractive).async {
+        if Reachability.isConnectedToNetwork() {
+            DispatchQueue.global(qos: .background).async {
                 self.forgotReq(page: 1)
-                }
-            } else {
-                showAlertError(title: "Request Failed", withText: "No internet connection")
-                self.activity.isHidden = true
-                self.activity.stopAnimating()
             }
-    }
-        @IBAction func backBut(_ sender: Any) {
-            navigationController?.popViewController(animated: true)
+        } else {
+            showAlertError(title: "Request Failed", withText: "No internet connection")
+            self.activity.isHidden = true
+            self.activity.stopAnimating()
         }
+    }
+    @IBAction func backBut(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
 }

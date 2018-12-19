@@ -24,13 +24,17 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        appDelegate.subscribtion = true
         DispatchQueue.main.async {
             NotificationCenter.default.addObserver(self, selector: #selector(self.showCongr), name: NSNotification.Name("Check"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.loadDataWp), name: NSNotification.Name("CheckSub"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.showMenu), name: NSNotification.Name("ShowMenu"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.showBlock), name: NSNotification.Name("ShowBlock"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.hideBlock), name: NSNotification.Name("HideBlock"), object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(self.restore1), name: NSNotification.Name("Restore"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.restore1), name: NSNotification.Name("Restore1"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.restore2), name: NSNotification.Name("Restore2"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.restore3), name: NSNotification.Name("Restore3"), object: nil)
+
         }
         hidenMenu.isHidden = false
         activity.isHidden = true
@@ -131,7 +135,13 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
     }
     
     @objc func restore1() {
-        showAlertError2(withText: "Restore Error", title: "text error")
+        showAlertError2(withText: "Restore Purchase Error", title: "Restore Purchase Failed")
+    }
+    @objc func restore2() {
+        showAlertError2(withText: "Enjoy you subscription!", title: "Purchase Restored")
+    }
+    @objc func restore3() {
+        showAlertError2(withText: "You have no purchases to restore.", title: "Restore Purchase Failed")
     }
     
     @objc func loadDataWp() {
@@ -303,11 +313,8 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
         carSectionTitles.removeAll()
         addTapGestureToHideKeyboard1()
         
-        if searchText != "" {
-            Functions.shared.filterSearch(cars: &cars, searchText: searchText)
-        } else {
-            Functions.shared.filterSearch(cars: &cars, searchText: searchText)
-        }
+        Functions.shared.filterSearch(cars: &cars, searchText: searchText)
+        
         for car in cars {
             let carKey = String(car.name.prefix(1))
             if var carValues = carsDictionary[carKey] {

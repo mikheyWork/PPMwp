@@ -357,7 +357,7 @@
                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="New content updates are available. Subscribe to receive the latest updates." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="42y-x7-btb">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscribe to access the app and stay updated with the latest PPM Genius data." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="42y-x7-btb">
                                         <rect key="frame" x="25" y="96" width="308" height="46"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="42y-x7-btb" secondAttribute="height" multiplier="269:40" id="DMX-Ut-tLo"/>
@@ -2046,6 +2046,7 @@
                         <outlet property="tableView" destination="IoB-8q-smj" id="FOV-OE-Twq"/>
                         <outlet property="tableViewIndex" destination="QkI-CU-JFu" id="Obn-df-HDQ"/>
                         <segue destination="Qhz-2d-ab9" kind="show" identifier="showRef2" id="PnQ-Op-KSj"/>
+                        <segue destination="aK7-q8-zgn" kind="show" identifier="showPDFfromSearch" id="NjV-Ns-8QN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hH1-2j-drn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2258,18 +2259,143 @@
                                     <segue destination="fA1-Yt-z8b" kind="show" id="GsL-aB-2Xq"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="justified" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tvW-Qs-NAW">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tvW-Qs-NAW">
                                 <rect key="frame" x="28" y="160" width="358" height="621"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <string key="text">PPM Genius - Pacemaker &amp; ICD companion is for the use of device specialists and medical professionals. It is not intended for use by the general public, patients or consumers. This application does not imply the user is competent in the field of implantable cardiac devices and related products. Implantable cardiac devices and related products should only be managed by competent medical professionals specifically trained in the field of implantable cardiac devices and related products.
-The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification.
-New devices and improvements of existing products will become available following publication and may not, therefore, be represented among those listed herein until such information is received from the original manufacturer.
-Products contained within this application may not be available in your specific region and/or may not have received regional approval for use. Please check with your local manufacturer for clarification.
-In the interest of readability and type reduction, the registered trademark symbol has been omitted from trademarked names in this application. Any names listed without a proprietary designation are not to be regarded as representation by the author, editor, or publisher that the names are not proprietary or are not subject to proprietary rights.
-PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice...</string>
-                                <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">PPM Genius - Pacemaker &amp; ICD companion is for the use of device specialists and medical professionals. It is not intended for use by the general public, patients or consumers. This application does not imply the user is competent in the field of implantable cardiac devices and related products. Implantable cardiac devices and related products should only be managed by competent medical professionals specifically trained in the field of implantable cardiac devices and related products. </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <mutableString key="content">The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification. </mutableString>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">New devices and improvements of existing products will become available following publication and may not, therefore, be represented among those listed herein until such information is received from the original manufacturer. </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Products contained within this application may not be available in your specific region and/or may not have received regional approval for use. Please check with your local manufacturer for clarification. </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">In the interest of readability and type reduction, the registered trademark symbol has been omitted from trademarked names in this application. Any names listed without a proprietary designation are not to be regarded as representation by the author, editor, or publisher that the names are not proprietary or are not subject to proprietary rights. </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <mutableString key="content">PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice....</mutableString>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
@@ -2513,6 +2639,7 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Group" translatesAutoresizingMaskIntoConstraints="NO" id="DDk-hm-s42">
                                         <rect key="frame" x="20" y="18" width="359" height="538"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="EOG-oo-o8r">
                                         <rect key="frame" x="39" y="36" width="326" height="134"/>
@@ -2548,7 +2675,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.91764705879999997" green="0.1333333333" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="DDk-hm-s42" firstAttribute="top" secondItem="pH5-4D-wwr" secondAttribute="top" constant="18" id="POk-w0-dTy"/>
                                     <constraint firstAttribute="trailing" secondItem="DDk-hm-s42" secondAttribute="trailing" constant="20" id="g6F-Z8-kWG"/>
@@ -2653,7 +2780,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                         <rect key="frame" x="0.0" y="0.0" width="338.66666666666669" height="177.33333333333334"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="IM8-uD-RCy">
-                                                <rect key="frame" x="0.0" y="30.666666666666686" width="179.33333333333334" height="116"/>
+                                                <rect key="frame" x="0.0" y="30.33333333333335" width="179.33333333333334" height="116.66666666666669"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C5D-kQ-yBA">
                                                         <rect key="frame" x="43.666666666666664" y="0.0" width="91.666666666666686" height="91.666666666666671"/>
@@ -2666,7 +2793,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Manufacturers" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Sb-kI-MlU">
-                                                        <rect key="frame" x="44.333333333333336" y="99.666666666666657" width="90.333333333333314" height="16.333333333333329"/>
+                                                        <rect key="frame" x="44.333333333333336" y="99.666666666666686" width="90.333333333333314" height="17"/>
                                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -2674,7 +2801,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="9vN-5l-ft0">
-                                                <rect key="frame" x="159.33333333333331" y="30.666666666666686" width="179.33333333333331" height="116"/>
+                                                <rect key="frame" x="159.33333333333331" y="30.33333333333335" width="179.33333333333331" height="116.66666666666669"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A7H-5F-Jto">
                                                         <rect key="frame" x="44.000000000000007" y="0.0" width="91.666666666666686" height="91.666666666666671"/>
@@ -2688,7 +2815,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product Types" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mst-wD-nxv">
-                                                        <rect key="frame" x="44.666666666666657" y="99.666666666666657" width="90" height="16.333333333333329"/>
+                                                        <rect key="frame" x="45.999999999999993" y="99.666666666666686" width="87.333333333333314" height="17"/>
                                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -2704,7 +2831,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                         <rect key="frame" x="0.0" y="177.33333333333337" width="338.66666666666669" height="177"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="3HO-eh-5wd">
-                                                <rect key="frame" x="0.0" y="30.666666666666693" width="179.33333333333334" height="115.66666666666669"/>
+                                                <rect key="frame" x="0.0" y="30.333333333333307" width="179.33333333333334" height="116.33333333333331"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OBq-Oh-nKM">
                                                         <rect key="frame" x="43.666666666666664" y="0.0" width="91.666666666666686" height="91.333333333333329"/>
@@ -2717,7 +2844,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Models" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDx-Dy-ct1">
-                                                        <rect key="frame" x="66.333333333333343" y="99.333333333333314" width="46.333333333333343" height="16.333333333333329"/>
+                                                        <rect key="frame" x="67" y="99.333333333333314" width="45.333333333333343" height="17"/>
                                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -2725,7 +2852,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Kx0-iz-ZdR">
-                                                <rect key="frame" x="159.33333333333331" y="30.666666666666693" width="179.33333333333331" height="115.66666666666669"/>
+                                                <rect key="frame" x="159.33333333333331" y="30.333333333333307" width="179.33333333333331" height="116.33333333333331"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c0e-10-xMi">
                                                         <rect key="frame" x="44.000000000000007" y="0.0" width="91.666666666666686" height="91.333333333333329"/>
@@ -2739,7 +2866,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Alerts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KTb-SP-sUA">
-                                                        <rect key="frame" x="71.666666666666686" y="99.333333333333314" width="36" height="16.333333333333329"/>
+                                                        <rect key="frame" x="71.666666666666686" y="99.333333333333314" width="36.333333333333343" height="17"/>
                                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -2752,7 +2879,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                         <rect key="frame" x="0.0" y="354.33333333333337" width="338.66666666666669" height="177"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="6dN-Mv-SKl">
-                                                <rect key="frame" x="0.0" y="30.666666666666629" width="179.33333333333334" height="116"/>
+                                                <rect key="frame" x="0.0" y="30.333333333333378" width="179.33333333333334" height="116.66666666666669"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ahe-02-iQb">
                                                         <rect key="frame" x="43.666666666666664" y="0.0" width="91.666666666666686" height="91.666666666666671"/>
@@ -2765,7 +2892,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Favourites" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qZn-wz-KD2">
-                                                        <rect key="frame" x="57.000000000000007" y="99.666666666666742" width="65.333333333333343" height="16.333333333333329"/>
+                                                        <rect key="frame" x="57.666666666666671" y="99.666666666666629" width="63.666666666666671" height="17"/>
                                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -2773,7 +2900,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="086-oY-Ge4">
-                                                <rect key="frame" x="159.33333333333331" y="30.666666666666629" width="179.33333333333331" height="116"/>
+                                                <rect key="frame" x="159.33333333333331" y="30.333333333333378" width="179.33333333333331" height="116.66666666666669"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RuO-TO-wYY">
                                                         <rect key="frame" x="44.000000000000007" y="0.0" width="91.666666666666686" height="91.666666666666671"/>
@@ -2786,7 +2913,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="References" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vta-pq-QXe">
-                                                        <rect key="frame" x="54.33333333333335" y="99.666666666666742" width="70.666666666666686" height="16.333333333333329"/>
+                                                        <rect key="frame" x="55.666666666666657" y="99.666666666666629" width="68" height="17"/>
                                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -2997,20 +3124,145 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                                     <action selector="cancelButTapped:" destination="JW8-mP-nbg" eventType="touchUpInside" id="Jlh-Ph-FUJ"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="justified" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CmL-Je-Er5">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CmL-Je-Er5">
                                 <rect key="frame" x="25" y="144.99999999999997" width="364" height="403.33333333333326"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="CmL-Je-Er5" secondAttribute="height" multiplier="65:72" id="KZW-Rp-v5Y"/>
                                 </constraints>
-                                <string key="text">PPM Genius - Pacemaker &amp; ICD companion is for the use of device specialists and medical professionals. It is not intended for use by the general public, patients or consumers. This application does not imply the user is competent in the field of implantable cardiac devices and related products. Implantable cardiac devices and related products should only be managed by competent medical professionals specifically trained in the field of implantable cardiac devices and related products.
-The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification.
-New devices and improvements of existing products will become available following publication and may not, therefore, be represented among those listed herein until such information is received from the original manufacturer.
-Products contained within this application may not be available in your specific region and/or may not have received regional approval for use. Please check with your local manufacturer for clarification.
-In the interest of readability and type reduction, the registered trademark symbol has been omitted from trademarked names in this application. Any names listed without a proprietary designation are not to be regarded as representation by the author, editor, or publisher that the names are not proprietary or are not subject to proprietary rights.
-PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice...</string>
-                                <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">PPM Genius - Pacemaker &amp; ICD companion is for the use of device specialists and medical professionals. It is not intended for use by the general public, patients or consumers. This application does not imply the user is competent in the field of implantable cardiac devices and related products. Implantable cardiac devices and related products should only be managed by competent medical professionals specifically trained in the field of implantable cardiac devices and related products. </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <mutableString key="content">The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification. </mutableString>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">New devices and improvements of existing products will become available following publication and may not, therefore, be represented among those listed herein until such information is received from the original manufacturer. </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Products contained within this application may not be available in your specific region and/or may not have received regional approval for use. Please check with your local manufacturer for clarification. </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">In the interest of readability and type reduction, the registered trademark symbol has been omitted from trademarked names in this application. Any names listed without a proprietary designation are not to be regarded as representation by the author, editor, or publisher that the names are not proprietary or are not subject to proprietary rights. </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <mutableString key="content">PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice....</mutableString>
+                                        <attributes>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
@@ -3151,10 +3403,10 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
         <segue reference="SDY-ab-mWa"/>
         <segue reference="M9s-x2-Hn4"/>
         <segue reference="do6-9I-KNb"/>
-        <segue reference="aiB-hl-doe"/>
-        <segue reference="nwL-6g-w7n"/>
+        <segue reference="sE0-hJ-xTF"/>
+        <segue reference="ciZ-at-CdR"/>
         <segue reference="eWs-QG-U0T"/>
-        <segue reference="HcQ-ap-vln"/>
+        <segue reference="ze8-jM-v3U"/>
         <segue reference="A98-F5-V1U"/>
     </inferredMetricsTieBreakers>
 </document>

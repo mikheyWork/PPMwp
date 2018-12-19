@@ -152,7 +152,7 @@ class Functions: NSObject {
         for i in appDelegate.referencesParent {
             let a = appDelegate.referencesParent.filter({$0.id == i.id})
             if cars.contains(where: {$0.id == a.first!.id}) == false {
-                let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!, number: "", manufacturer: "", fullName: "")
+                let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!, number: "", manufacturer: "", fullName: i.name!)
                 cars.append(b)
             }
         }
@@ -176,7 +176,7 @@ class Functions: NSObject {
             let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == arr2.first?.id})
             if arr3.count > 0 {
                 if cars.contains(where: {$0.id == i.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: i.name!)
                     cars.append(b)
                 }
             }
@@ -191,7 +191,7 @@ class Functions: NSObject {
             if arr2.count > 0 {
                 let a = appDelegate.models.filter({$0.id == i.id})
                 if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: "")
+                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: i.name!)
                     cars.append(b)
                 }
             }
