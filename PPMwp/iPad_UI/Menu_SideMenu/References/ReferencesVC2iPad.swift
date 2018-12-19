@@ -161,7 +161,19 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     
     
     @IBAction func backBut(_ sender: Any) {
-        navigationController?.popViewController(animated: false)
+        let parrent = appDelegate.referencesChild.filter({$0.id == parentID})
+        if parrent.isEmpty {
+            navigationController?.popViewController(animated: false)
+        } else {
+            //test for 2-3 parent
+            parentID = parrent.first?.parent
+            cars.removeAll()
+            carsDictionary.removeAll()
+            carSectionTitles.removeAll()
+            index()
+            tableView.reloadData()
+            tableViewIndex.reloadData()
+        }
     }
     
     @IBAction func menuBut(_ sender: Any) {

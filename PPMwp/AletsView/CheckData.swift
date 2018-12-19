@@ -115,7 +115,11 @@ class CheckDataController: UIViewController {
             for resault in resaults {
                 self.count10 += 1
                 progressCount2 += self.point2
-                let name = resault["title"]["rendered"].stringValue
+                var name = resault["title"]["rendered"].stringValue
+                let first = name.prefix(1).uppercased()
+                name = String(name.dropFirst())
+                name = first + name
+                print("name upp case \(name)")
                 let id = resault["id"].intValue
                 let startLink = resault["acf"]["references"].stringValue
                 let name2 = PDFDownloader.shared.addPercent(fromString: name)
@@ -258,7 +262,10 @@ class CheckDataController: UIViewController {
             for resault in resaults {
                 self.count10 += 1
                 progressCount2 += self.point2
-                let name = resault["acf"]["model_name"].stringValue
+                var name = resault["acf"]["model_name"].stringValue
+                let first = name.prefix(1).uppercased()
+                name = String(name.dropFirst())
+                name = first + name
                 let id2 = resault["id"].intValue
                 let number = resault["acf"]["model_number"].stringValue
                 let parent = resault["categories"].arrayValue

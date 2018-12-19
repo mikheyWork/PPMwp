@@ -1,5 +1,6 @@
 import UIKit
 import MYTableViewIndex
+import GTProgressBar
 
 class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, TableViewIndexDelegate, TableViewIndexDataSource {
     
@@ -9,27 +10,44 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
     @IBOutlet weak var searchBar1: UISearchBar!
     @IBOutlet weak var tableViewIndex: TableViewIndex!
     
+    
+    @IBOutlet weak var progressView: UIView!
+    
+    @IBOutlet weak var progressBar: GTProgressBar!
+    
+    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet weak var imgView: UIImageView!
     //test
     var carsDictionary = [String: [String]]()
     var carSectionTitles = [String]()
     var cars = [String]()
-    
+    var state = false
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    var pdfName2 = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for i in appDelegate.curentPdfRef {
+            print("pdf \(i.title)")
+        }
+        progressView.isHidden = true
         rangeChar()
         searchBarChange(searchBar: searchBar1)
         index()
         indexFunc()
         tableViewIndex.reloadData()
         searchBar1.delegate = self
+        checkState()
         searchBar1.setImage(UIImage(named: "ic_search_18px"), for: UISearchBar.Icon.search, state: UIControl.State.normal)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
     }
     
     override func viewWillLayoutSubviews() {
@@ -103,24 +121,48 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
         return true // return true to produce haptic feedback on capable devices
     }
     
+    func read(nameFile: String) {
+        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let fileURL = dir.appendingPathComponent("\(nameFile).pdf")
+            //reading
+            let request = URLRequest(url: fileURL)
+            self.webView.loadRequest(request)
+        }
+    }
+    
     //search bar
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchBar1.text = searchText
+        searchBar.text = searchText
         
         carsDictionary.removeAll()
         carSectionTitles.removeAll()
         tableView.reloadData()
         if searchText != "" {
-            cars = cars.filter({ (elemt: String) -> Bool in
-                elemt.lowercased().contains(searchText.lowercased())
-            })
-        } else {
             for i in appDelegate.referencesParent {
                 if cars.contains(i.name!) == false {
                     cars.append(i.name!)
                 }
             }
+            
+            for i in appDelegate.referencesChild {
+                if cars.contains(i.name!) == false {
+                    cars.append(i.name!)
+                }
+            }
+            
+            cars = cars.filter({ (elemt: String) -> Bool in
+                elemt.lowercased().contains(searchText.lowercased())
+            })
+        } else {
+            cars.removeAll()
+            
+            for i in appDelegate.referencesParent {
+                if cars.contains(i.name!) == false {
+                    cars.append(i.name!)
+                }
+            }
+            
         }
         for car in cars {
             let carKey = String(car.prefix(1))
@@ -136,7 +178,6 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
         self.tableView.reloadData()
         self.tableViewIndex.reloadData()
-        print("table change")
     }
     
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
@@ -180,11 +221,45 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
         textFieldInsideUISearchBarLabel?.font = UIFont(name: "Lato", size: 14)
     }
     
+    func checkState() {
+        if state == true {
+            self.view.backgroundColor = UIColor.white
+            imgView.image = nil
+            webView.isHidden = false
+//            starBut.isHidden = false
+        } else {
+            self.view.backgroundColor = UIColor(red: 234/255, green: 34/255, blue: 37/255, alpha: 1)
+            imgView.image = UIImage(named: "CEPIA Splash 5")
+            webView.isHidden = true
+//            starBut.isHidden = true
+        }
+    }
+    
     //nameLbl char range
     fileprivate func rangeChar() {
         let attributedString = nameLbl.attributedText as! NSMutableAttributedString
         attributedString.addAttribute(kCTKernAttributeName as NSAttributedString.Key, value: 3.0, range: NSMakeRange(0, attributedString.length))
         nameLbl.attributedText = attributedString
+    }
+    
+    func progressShow() {
+        var progress: Float = 0.0
+        self.progressBar.progress = 0
+        // Do the time critical stuff asynchronously
+        DispatchQueue.global(qos: .background).async {
+            repeat {
+                progress += 0.075
+                Thread.sleep(forTimeInterval: 0.25)
+                DispatchQueue.main.async(flags: .barrier) {
+                    
+                    self.progressBar.animateTo(progress: CGFloat(progress))
+                }
+                // time progress
+            } while progress < 1.0
+            DispatchQueue.main.async {
+                self.progressView.isHidden = true
+            }
+        }
     }
     
     @IBAction func backBut(_ sender: Any) {
@@ -258,10 +333,16 @@ extension ReferencesVCiPad {
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
             cell.nameLbl.text = carValues[indexPath.row]
+            var elem = ""
             let text = cell.nameLbl.text
             let cellName = appDelegate.referencesParent.filter({$0.name == text})
-            let description = cellName.first?.description2
-            // need content
+            elem = cellName.first?.description2 ?? ""
+            if cellName.isEmpty {
+                let arr1 = appDelegate.referencesChild.filter({$0.name == text})
+                elem = arr1.first?.description2 ?? ""
+            }
+            
+            let description = elem
             cell.resultLbl.text = description
         }
         return cell
@@ -274,15 +355,39 @@ extension ReferencesVCiPad {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.reloadData()
+        
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! RefTVCell
         let text = selectedCell.nameLbl.text
-        let selectedName = appDelegate.referencesParent.filter({$0.name == text})
-        let selectedNameID = selectedName.first?.id
-        
-        performSegue(withIdentifier: "showRef2", sender: selectedNameID)
+        if appDelegate.referencesParent.contains(where: {$0.name == text}) {
+            let selectedName = appDelegate.referencesParent.filter({$0.name == text})
+            let selectedNameID = selectedName.first?.id
+            
+            performSegue(withIdentifier: "showRef2", sender: selectedNameID)
+        } else {
+            
+            let id = appDelegate.referencesChild.filter({$0.name == text})
+            let arr1 = appDelegate.referencesChild.filter({$0.parent == id.first?.id})
+            
+            for i in appDelegate.referencesChild {
+                print("i \(String(describing: i.name)) \(i.id) \(i.parent)")
+            }
+            
+            if arr1.isEmpty {
+                //read
+                state = true
+                checkState()
+                progressView.isHidden = false
+                progressShow()
+                let pdfName = PDFDownloader.shared.addPercent(fromString: text ?? "")
+                pdfName2 = pdfName
+                read(nameFile: pdfName)
+            } else {
+                performSegue(withIdentifier: "showRef2", sender: id.first?.id)
+            }
+        }
     }
+    
     
     
     //MARK: -Segue
@@ -292,7 +397,19 @@ extension ReferencesVCiPad {
             let parentId = sender as! Int64
             let types = segue.destination as! ReferencesVC2iPad
             types.parentID = parentId
+            state = false
+            checkState()
+        } else if segue.identifier == "showReferFS" {
+            let vs = segue.destination as! ReferencesFSVC
+            vs.name = pdfName2
+            state = true
+            checkState()
+        } else if segue.identifier == "showMenuRefSeg" {
+            state = true
+            checkState()
+        } else {
+            state = false
+            checkState()
         }
-        
     }
 }

@@ -239,8 +239,8 @@ extension VitalStatVC {
             keysAZ.append("Sensor Type")
         }
         if prodArr.first?.number_of_hv_coils != "" && prodArr.first?.number_of_hv_coils != "_" {
-            fieldsDict["Number of HW coils"] = prodArr.first?.number_of_hv_coils
-            keysAZ.append("Number of HW coils")
+            fieldsDict["Number of HV Coils"] = prodArr.first?.number_of_hv_coils
+            keysAZ.append("Number of HV Coils")
         }
         if prodArr.first?.polarity != "" && prodArr.first?.polarity != "_" {
             fieldsDict["Polarity"] = prodArr.first?.polarity
@@ -267,8 +267,8 @@ extension VitalStatVC {
             keysAZ.append("Lead Polarity")
         }
         if prodArr.first?.fixation != "" && prodArr.first?.fixation != "_" {
-            fieldsDict["Fixation(#Terns to Deploy)"] = prodArr.first?.fixation
-            keysAZ.append("Fixation(#Terns to Deploy)")
+            fieldsDict["Fixation (# Turns to Deploy)"] = prodArr.first?.fixation
+            keysAZ.append("Fixation (# Turns to Deploy)")
         }
         if prodArr.first?.insulation_material != "" && prodArr.first?.insulation_material != "_" {
             fieldsDict["Insulation Material"] = prodArr.first?.insulation_material
@@ -279,12 +279,12 @@ extension VitalStatVC {
             keysAZ.append("Max Lead Diameter(Fr)/ Min Introducer Siz(Fr)")
         }
         if prodArr.first?.connectores_pace_sense != "" && prodArr.first?.connectores_pace_sense != "_" {
-            fieldsDict["Connectores Pace/Sense"] = prodArr.first?.connectores_pace_sense
-            keysAZ.append("Connectores Pace/Sense")
+            fieldsDict["Connectors Pace/Sense"] = prodArr.first?.connectores_pace_sense
+            keysAZ.append("Connectors Pace/Sense")
         }
         if prodArr.first?.connectores_hight_voltage != "" && prodArr.first?.connectores_hight_voltage != "_" {
-            fieldsDict["Connectores Hight Voltage"] = prodArr.first?.connectores_hight_voltage
-            keysAZ.append("Connectores Hight Voltage")
+            fieldsDict["Connectors Hight Voltage"] = prodArr.first?.connectores_hight_voltage
+            keysAZ.append("Connectors Hight Voltage")
         }
         if prodArr.first?.placement != "" && prodArr.first?.placement != "_" {
             fieldsDict["Placement"] = prodArr.first?.placement

@@ -292,8 +292,7 @@ extension AlertsVC {
             cell.id = prod.id
             let alert = prod.date
             let date = alert?.dropLast(9)
-            let time = alert?.dropFirst(11)
-            cell.dateLbl.text = "\(date!)   \(time!)"
+            cell.dateLbl.text = "\(date!)"
             
         } else {
             prod = cars[indexPath.row]

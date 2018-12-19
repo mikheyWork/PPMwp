@@ -317,11 +317,8 @@ extension AlertsVCiPad {
             cell.nameLbl.text = prod.name + " \(prod.number ?? "")"
             let alert = cars[indexPath.row].date
             let date = alert?.dropLast(9)
-            let time = alert?.dropFirst(11)
-            cell.dateLbl.text = "\(date!)   \(time!)"
+            cell.dateLbl.text = "\(date!)"
         }
-        
-        
         return cell
     }
     

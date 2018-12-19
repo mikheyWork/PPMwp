@@ -103,15 +103,30 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         carSectionTitles.removeAll()
         tableView.reloadData()
         if searchText != "" {
-            cars = cars.filter({ (elemt: String) -> Bool in
-                elemt.lowercased().contains(searchText.lowercased())
-            })
-        } else {
             for i in appDelegate.referencesParent {
                 if cars.contains(i.name!) == false {
                     cars.append(i.name!)
                 }
             }
+            
+            for i in appDelegate.referencesChild {
+                if cars.contains(i.name!) == false {
+                    cars.append(i.name!)
+                }
+            }
+            
+            cars = cars.filter({ (elemt: String) -> Bool in
+                elemt.lowercased().contains(searchText.lowercased())
+            })
+        } else {
+            cars.removeAll()
+            
+            for i in appDelegate.referencesParent {
+                if cars.contains(i.name!) == false {
+                    cars.append(i.name!)
+                }
+            }
+            
         }
             for car in cars {
                 let carKey = String(car.prefix(1))
@@ -264,10 +279,16 @@ extension ReferencesVC {
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
             cell.nameLbl.text = carValues[indexPath.row]
+            var elem = ""
             let text = cell.nameLbl.text
             let cellName = appDelegate.referencesParent.filter({$0.name == text})
-            let description = cellName.first?.description2
-            // need content
+            elem = cellName.first?.description2 ?? ""
+            if cellName.isEmpty {
+                let arr1 = appDelegate.referencesChild.filter({$0.name == text})
+                elem = arr1.first?.description2 ?? ""
+            }
+            
+            let description = elem
             cell.resultLbl.text = description
         }
         
@@ -287,10 +308,28 @@ extension ReferencesVC {
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! RefTVCell
         let text = selectedCell.nameLbl.text
-        let selectedName = appDelegate.referencesParent.filter({$0.name == text})
-        let selectedNameID = selectedName.first?.id
-        
-        performSegue(withIdentifier: "showRef2", sender: selectedNameID)
+        if appDelegate.referencesParent.contains(where: {$0.name == text}) {
+            let selectedName = appDelegate.referencesParent.filter({$0.name == text})
+            let selectedNameID = selectedName.first?.id
+            
+            performSegue(withIdentifier: "showRef2", sender: selectedNameID)
+        } else {
+            
+            let id = appDelegate.referencesChild.filter({$0.name == text})
+            let arr1 = appDelegate.referencesChild.filter({$0.parent == id.first?.id})
+            
+            for i in appDelegate.referencesChild {
+                print("i \(String(describing: i.name)) \(i.id) \(i.parent)")
+            }
+            
+            if arr1.isEmpty {
+                performSegue(withIdentifier: "showPDFfromSearch", sender: id.first?.id)
+            } else {
+               performSegue(withIdentifier: "showRef2", sender: id.first?.id)
+            }
+            
+            
+        }
     }
     
     //MARK: -Segue
@@ -302,5 +341,11 @@ extension ReferencesVC {
             types.parentID = parentId
         }
         
+        if segue.identifier == "showPDFfromSearch" {
+            let id = sender as! Int64
+            let vsPdf = segue.destination as! PDFviewerVC
+            vsPdf.id = Int(id)
+            print("iddd \(id)")
+        }
     }
 }

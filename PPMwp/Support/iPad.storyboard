@@ -425,7 +425,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" distribution="equalCentering" spacing="42" translatesAutoresizingMaskIntoConstraints="NO" id="54I-az-R3w">
-                                <rect key="frame" x="304" y="298" width="417" height="130"/>
+                                <rect key="frame" x="304" y="298" width="417" height="130.5"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="54" translatesAutoresizingMaskIntoConstraints="NO" id="s2D-MG-Ijz">
@@ -490,7 +490,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" axis="vertical" distribution="equalCentering" spacing="42" translatesAutoresizingMaskIntoConstraints="NO" id="olf-e9-d6u">
-                                <rect key="frame" x="304" y="471" width="417" height="132"/>
+                                <rect key="frame" x="304" y="471" width="417" height="131.5"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="54" translatesAutoresizingMaskIntoConstraints="NO" id="u9s-Er-5zi">
@@ -1057,154 +1057,16 @@
                                 </constraints>
                                 <attributedString key="attributedText">
                                     <fragment>
-                                        <string key="content">PPM Genius - Pacemaker &amp; ICD companion is for the use of device specialists and medical professionals. It is not intended for use by the general public, patients or consumers. This application does not imply the user is competent in the field of implantable cardiac devices and related products. Implantable cardiac devices and related products should only be managed by competent medical professionals specifically trained in the field of implantable cardiac devices and related products. </string>
+                                        <mutableString key="content">PPM Genius - Pacemaker &amp; ICD companion is for the use of device specialists and medical professionals. It is not intended for use by the general public, patients or consumers. This application does not imply the user is competent in the field of implantable cardiac devices and related products. Implantable cardiac devices and related products should only be managed by competent medical professionals specifically trained in the field of implantable cardiac devices and related products. 
+The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification. 
+New devices and improvements of existing products will become available following publication and may not, therefore, be represented among those listed herein until such information is received from the original manufacturer. 
+Products contained within this application may not be available in your specific region and/or may not have received regional approval for use. Please check with your local manufacturer for clarification. 
+In the interest of readability and type reduction, the registered trademark symbol has been omitted from trademarked names in this application. Any names listed without a proprietary designation are not to be regarded as representation by the author, editor, or publisher that the names are not proprietary or are not subject to proprietary rights. 
+PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice... 
+</mutableString>
                                         <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="Times-Roman"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification. </string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="Times-Roman"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">New devices and improvements of existing products will become available following publication and may not, therefore, be represented among those listed herein until such information is received from the original manufacturer. </string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="Times-Roman"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">Products contained within this application may not be available in your specific region and/or may not have received regional approval for use. Please check with your local manufacturer for clarification. </string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="Times-Roman"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">In the interest of readability and type reduction, the registered trademark symbol has been omitted from trademarked names in this application. Any names listed without a proprietary designation are not to be regarded as representation by the author, editor, or publisher that the names are not proprietary or are not subject to proprietary rights. </string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="Times-Roman"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice... </string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="13.333" name="Lato-Regular"/>
-                                            <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                            <color key="NSStrokeColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="12" name="Times-Roman"/>
+                                            <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Lato-Regular"/>
                                             <real key="NSKern" value="0.0"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="12" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
                                                 <tabStops/>
@@ -3200,7 +3062,7 @@ Cg
                                 <state key="normal" image="ic_menu_24px"/>
                                 <connections>
                                     <action selector="menuBut:" destination="mFV-zH-HLe" eventType="touchUpInside" id="8GD-s3-Q8w"/>
-                                    <segue destination="Y5y-FW-tWU" kind="show" id="Xkc-21-hUI"/>
+                                    <segue destination="Y5y-FW-tWU" kind="show" identifier="showMenuRefSeg" id="Xkc-21-hUI"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RRR-bh-UyE">
@@ -3351,6 +3213,10 @@ Cg
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CEPIA Splash 1" translatesAutoresizingMaskIntoConstraints="NO" id="a44-MB-Ojb">
                                 <rect key="frame" x="330" y="61" width="694" height="637"/>
                             </imageView>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aOZ-gL-sxo">
+                                <rect key="frame" x="363" y="90" width="628" height="589"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xPz-fG-Wfa">
                                 <rect key="frame" x="330" y="349" width="25" height="70"/>
                                 <constraints>
@@ -3359,24 +3225,95 @@ Cg
                                 <state key="normal" image="hide"/>
                                 <connections>
                                     <action selector="sideMenuBut:" destination="lL6-h9-ICQ" eventType="touchUpInside" id="eCn-6o-jVF"/>
-                                    <segue destination="sMe-R7-QgU" kind="show" animates="NO" id="c37-WP-FKh"/>
+                                    <segue destination="sMe-R7-QgU" kind="show" identifier="showReferFS" animates="NO" id="c37-WP-FKh"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aOy-8C-Qdu">
+                                <rect key="frame" x="355" y="79" width="645" height="601"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="84Z-vR-jxh">
+                                        <rect key="frame" x="164.5" y="238.5" width="316" height="124"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading PDF..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pRU-J4-Zvp">
+                                                <rect key="frame" x="25" y="20" width="266" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="266" id="bKZ-W9-CMv"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="20"/>
+                                                <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JHw-wu-QYN" customClass="GTProgressBar" customModule="GTProgressBar">
+                                                <rect key="frame" x="20" y="90" width="276" height="14"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="276" id="7i8-NY-bS2"/>
+                                                    <constraint firstAttribute="height" constant="14" id="Z2k-K1-swW"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="barBorderWidth">
+                                                        <real key="value" value="0.0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="barFillInset">
+                                                        <real key="value" value="0.0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="7"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="displayLabel" value="NO"/>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="barBackgroundColor">
+                                                        <color key="value" red="0.64313725489999995" green="0.68627450980000004" blue="0.74117647060000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="barFillColor">
+                                                        <color key="value" red="0.1019607843" green="0.14901960780000001" blue="0.20784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="progress">
+                                                        <real key="value" value="0.01"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="JHw-wu-QYN" firstAttribute="leading" secondItem="84Z-vR-jxh" secondAttribute="leading" constant="20" id="3hI-Na-gip"/>
+                                            <constraint firstAttribute="width" secondItem="84Z-vR-jxh" secondAttribute="height" multiplier="79:31" id="8Lj-Ig-lIE"/>
+                                            <constraint firstItem="pRU-J4-Zvp" firstAttribute="centerX" secondItem="JHw-wu-QYN" secondAttribute="centerX" id="Db7-qK-9cV"/>
+                                            <constraint firstAttribute="trailing" secondItem="JHw-wu-QYN" secondAttribute="trailing" constant="20" id="Qk0-F9-49s"/>
+                                            <constraint firstItem="JHw-wu-QYN" firstAttribute="top" secondItem="pRU-J4-Zvp" secondAttribute="bottom" constant="46" id="UPG-yv-GuO"/>
+                                            <constraint firstItem="pRU-J4-Zvp" firstAttribute="centerX" secondItem="84Z-vR-jxh" secondAttribute="centerX" id="ebD-Zn-4yZ"/>
+                                            <constraint firstItem="pRU-J4-Zvp" firstAttribute="top" secondItem="84Z-vR-jxh" secondAttribute="top" constant="20" id="rKo-M5-p7o"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="84Z-vR-jxh" firstAttribute="centerX" secondItem="aOy-8C-Qdu" secondAttribute="centerX" id="BMv-Jk-BLG"/>
+                                    <constraint firstItem="84Z-vR-jxh" firstAttribute="centerY" secondItem="aOy-8C-Qdu" secondAttribute="centerY" id="F34-f9-vfQ"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.91764705879999997" green="0.1333333333" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="fEb-U9-uGn" firstAttribute="trailing" secondItem="5Tw-WR-f1H" secondAttribute="trailing" constant="33" id="2rp-WP-J3r"/>
+                            <constraint firstItem="fEb-U9-uGn" firstAttribute="trailing" secondItem="aOy-8C-Qdu" secondAttribute="trailing" constant="24" id="4K5-Qc-Sk9"/>
+                            <constraint firstItem="5Tw-WR-f1H" firstAttribute="top" secondItem="aOZ-gL-sxo" secondAttribute="bottom" constant="27" id="4ft-la-7qn"/>
                             <constraint firstItem="fEb-U9-uGn" firstAttribute="trailing" secondItem="a44-MB-Ojb" secondAttribute="trailing" id="91y-Lw-3rN"/>
+                            <constraint firstItem="aOy-8C-Qdu" firstAttribute="top" secondItem="fEb-U9-uGn" secondAttribute="top" constant="59" id="FEo-bQ-aOU"/>
                             <constraint firstItem="5Tw-WR-f1H" firstAttribute="top" secondItem="a44-MB-Ojb" secondAttribute="bottom" constant="8" id="Iir-q7-nSP"/>
+                            <constraint firstItem="aOy-8C-Qdu" firstAttribute="leading" secondItem="xPz-fG-Wfa" secondAttribute="trailing" id="J2z-LE-904"/>
                             <constraint firstItem="CWF-xd-xdD" firstAttribute="bottom" secondItem="fEb-U9-uGn" secondAttribute="bottom" id="N1J-sn-2OT"/>
+                            <constraint firstItem="aOZ-gL-sxo" firstAttribute="leading" secondItem="xPz-fG-Wfa" secondAttribute="trailing" constant="8" id="N6n-Dr-aif"/>
                             <constraint firstItem="a44-MB-Ojb" firstAttribute="top" secondItem="fEb-U9-uGn" secondAttribute="top" constant="41" id="RWw-8d-mVp"/>
                             <constraint firstItem="RRR-bh-UyE" firstAttribute="bottom" secondItem="5Tw-WR-f1H" secondAttribute="bottom" id="V9r-Xy-ibu"/>
+                            <constraint firstItem="5Tw-WR-f1H" firstAttribute="top" secondItem="aOy-8C-Qdu" secondAttribute="bottom" constant="26" id="XRH-6i-a3N"/>
                             <constraint firstItem="a44-MB-Ojb" firstAttribute="leading" secondItem="CWF-xd-xdD" secondAttribute="trailing" id="YNk-s5-Kse"/>
                             <constraint firstItem="RRR-bh-UyE" firstAttribute="top" secondItem="5Tw-WR-f1H" secondAttribute="top" id="aOe-bU-S0y"/>
                             <constraint firstItem="fEb-U9-uGn" firstAttribute="bottom" secondItem="RRR-bh-UyE" secondAttribute="bottom" constant="14" id="ef0-0R-r5z"/>
                             <constraint firstItem="RRR-bh-UyE" firstAttribute="leading" secondItem="CWF-xd-xdD" secondAttribute="trailing" constant="3" id="ggP-Fn-NXX"/>
                             <constraint firstItem="xPz-fG-Wfa" firstAttribute="leading" secondItem="CWF-xd-xdD" secondAttribute="trailing" id="gu2-ch-VCG"/>
                             <constraint firstItem="xPz-fG-Wfa" firstAttribute="top" secondItem="fEb-U9-uGn" secondAttribute="top" constant="329" id="iOz-4e-Aus"/>
+                            <constraint firstItem="fEb-U9-uGn" firstAttribute="trailing" secondItem="aOZ-gL-sxo" secondAttribute="trailing" constant="33" id="nCF-Wo-Wjc"/>
+                            <constraint firstItem="aOZ-gL-sxo" firstAttribute="top" secondItem="fEb-U9-uGn" secondAttribute="top" constant="70" id="qdy-lP-Gla"/>
                             <constraint firstItem="RRR-bh-UyE" firstAttribute="top" secondItem="xPz-fG-Wfa" secondAttribute="bottom" constant="287" id="rBb-LC-beJ"/>
                             <constraint firstItem="CWF-xd-xdD" firstAttribute="leading" secondItem="MzH-ae-9yz" secondAttribute="leading" id="rsI-4Y-sMI"/>
                             <constraint firstItem="CWF-xd-xdD" firstAttribute="top" secondItem="MzH-ae-9yz" secondAttribute="top" id="sbI-zN-1PO"/>
@@ -3385,10 +3322,14 @@ Cg
                     </view>
                     <navigationItem key="navigationItem" id="Cr2-Lh-DiG"/>
                     <connections>
+                        <outlet property="imgView" destination="a44-MB-Ojb" id="omW-vb-qjH"/>
                         <outlet property="nameLbl" destination="dht-sG-SVg" id="tzr-Mo-gGa"/>
+                        <outlet property="progressBar" destination="JHw-wu-QYN" id="N7Q-wd-SHW"/>
+                        <outlet property="progressView" destination="aOy-8C-Qdu" id="vni-IS-8Wt"/>
                         <outlet property="searchBar1" destination="DRN-xy-gOa" id="lea-NL-jx4"/>
                         <outlet property="tableView" destination="c7o-iF-nIl" id="xPe-iB-7UD"/>
                         <outlet property="tableViewIndex" destination="Erg-Tn-OWX" id="NfM-lW-HaK"/>
+                        <outlet property="webView" destination="aOZ-gL-sxo" id="EgV-6P-PBP"/>
                         <segue destination="SS6-pg-QKq" kind="show" identifier="showRef2" animates="NO" id="4vS-1d-m4m"/>
                     </connections>
                 </viewController>
@@ -4587,25 +4528,27 @@ Cg
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jes-5I-8Wa">
                                 <rect key="frame" x="352" y="234" width="320" height="320"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="$9.99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pBO-3q-sWN">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$9.99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pBO-3q-sWN">
                                         <rect key="frame" x="15" y="25" width="290" height="24"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="2ER-vd-jHv"/>
                                             <constraint firstAttribute="width" constant="290" id="9Fm-aR-PeX"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="20"/>
                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Annual Subscription" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="Lv7-kl-qZk">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Annual Subscription" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="16" translatesAutoresizingMaskIntoConstraints="NO" id="Lv7-kl-qZk">
                                         <rect key="frame" x="15" y="55" width="290" height="22"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="AZW-Zf-q15"/>
                                             <constraint firstAttribute="width" constant="290" id="hVg-jp-ylr"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="18"/>
                                         <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="New content updates are available. Subscribe to receive the latest updates." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="rSL-Ah-nec">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscribe to access the app and stay updated with the latest PPM Genius data." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="rSL-Ah-nec">
                                         <rect key="frame" x="15" y="96" width="290" height="34"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="290" id="JH7-aL-g3D"/>
@@ -4971,10 +4914,6 @@ Cg
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="CEPIA Splash 1" translatesAutoresizingMaskIntoConstraints="NO" id="XuV-0x-mH4">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dYh-sk-OO9">
                                 <rect key="frame" x="0.0" y="349" width="25" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -5008,22 +4947,38 @@ Cg
                                     <segue destination="Y5y-FW-tWU" kind="show" id="b0Y-nI-fy9"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="CEPIA Splash 1" translatesAutoresizingMaskIntoConstraints="NO" id="XuV-0x-mH4">
+                                <rect key="frame" x="100" y="0.0" width="824" height="768"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5y9-pF-gPL">
+                                <rect key="frame" x="33" y="20" width="958" height="678"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
                         </subviews>
                         <color key="backgroundColor" red="0.91764705879999997" green="0.1333333333" blue="0.12549019610000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="WCr-yz-Clj" firstAttribute="top" secondItem="5y9-pF-gPL" secondAttribute="bottom" constant="8" id="5Rz-pZ-f6G"/>
+                            <constraint firstItem="FlU-oM-hfb" firstAttribute="trailing" secondItem="5y9-pF-gPL" secondAttribute="trailing" constant="33" id="FPR-CH-QG8"/>
                             <constraint firstItem="WCr-yz-Clj" firstAttribute="leading" secondItem="FlU-oM-hfb" secondAttribute="leading" constant="33" id="GzM-fz-66u"/>
                             <constraint firstItem="FlU-oM-hfb" firstAttribute="trailing" secondItem="KTt-vu-7ry" secondAttribute="trailing" constant="33" id="KiZ-NF-NS4"/>
                             <constraint firstItem="FlU-oM-hfb" firstAttribute="bottom" secondItem="WCr-yz-Clj" secondAttribute="bottom" constant="14" id="VXw-fD-EH6"/>
                             <constraint firstItem="KTt-vu-7ry" firstAttribute="width" secondItem="KTt-vu-7ry" secondAttribute="height" multiplier="1:1" id="ifN-rm-2tw"/>
+                            <constraint firstItem="5y9-pF-gPL" firstAttribute="top" secondItem="sNo-NX-9j9" secondAttribute="top" constant="20" id="nXe-aC-gzU"/>
                             <constraint firstItem="WCr-yz-Clj" firstAttribute="width" secondItem="WCr-yz-Clj" secondAttribute="height" multiplier="1:1" id="rdC-ZY-u5A"/>
+                            <constraint firstItem="5y9-pF-gPL" firstAttribute="leading" secondItem="FlU-oM-hfb" secondAttribute="leading" constant="33" id="upw-jD-gHB"/>
                             <constraint firstItem="FlU-oM-hfb" firstAttribute="bottom" secondItem="KTt-vu-7ry" secondAttribute="bottom" constant="14" id="vdX-5p-hFv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="FlU-oM-hfb"/>
                     </view>
+                    <connections>
+                        <outlet property="imgView" destination="XuV-0x-mH4" id="SCO-mG-em4"/>
+                        <outlet property="webView" destination="5y9-pF-gPL" id="MCg-nA-tih"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3iL-8E-rlh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4206" y="-2891"/>
+            <point key="canvasLocation" x="4205.859375" y="-2891.40625"/>
         </scene>
         <!--ReferencesFSVC2-->
         <scene sceneID="Bcm-vX-ot7">
@@ -5352,13 +5307,13 @@ Cg
     <inferredMetricsTieBreakers>
         <segue reference="O9R-i6-ygV"/>
         <segue reference="4Yh-20-M10"/>
-        <segue reference="EIO-ct-TSQ"/>
+        <segue reference="4vS-1d-m4m"/>
         <segue reference="ES2-b4-06W"/>
         <segue reference="dPM-OT-Mds"/>
-        <segue reference="6hJ-8f-ajb"/>
+        <segue reference="eoE-gf-qDg"/>
         <segue reference="w8D-MZ-VGc"/>
         <segue reference="lbp-LP-ESf"/>
-        <segue reference="WE7-3G-mQz"/>
+        <segue reference="WVu-jE-ttY"/>
         <segue reference="hlb-47-qYW"/>
     </inferredMetricsTieBreakers>
 </document>
