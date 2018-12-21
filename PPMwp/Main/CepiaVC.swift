@@ -34,7 +34,6 @@ class CepiaVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UIS
             NotificationCenter.default.addObserver(self, selector: #selector(self.restore1), name: NSNotification.Name("Restore1"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.restore2), name: NSNotification.Name("Restore2"), object: nil)
             NotificationCenter.default.addObserver(self, selector: #selector(self.restore3), name: NSNotification.Name("Restore3"), object: nil)
-
         }
         hidenMenu.isHidden = false
         activity.isHidden = true

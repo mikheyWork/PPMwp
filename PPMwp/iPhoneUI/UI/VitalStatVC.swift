@@ -33,6 +33,10 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             prodArr = appDelegate.curentPdf.filter({$0.model_number == name})
         }
         addDataToDict()
+        
+        self.tableView2.rowHeight = UITableView.automaticDimension
+        
+        self.tableView2.estimatedRowHeight = 73.0
     }
     
     var nameVC = "VitalStatVC"
@@ -83,7 +87,7 @@ extension VitalStatVC {
             count = 2
         }
         if tableView == tableView2 {
-            count = keysAZ.count + 2
+            count = keysAZ.count + 3
         }
         return count
     }
@@ -95,7 +99,6 @@ extension VitalStatVC {
             
             let backgroundView = UIView()
             backgroundView.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1.0)
-//            cell.selectedBackgroundView = backgroundView
             
             if indexPath.row == 0 {
                 let arr = appDelegate.curentPdf.filter({$0.id == id})
@@ -164,6 +167,7 @@ extension VitalStatVC {
                 cell2.nameLbl.text = key
                 cell2.contentLbl.text = fieldsDict[key]
             }
+            
            cell = cell2
         }
         return cell
@@ -208,6 +212,9 @@ extension VitalStatVC {
             pDFLoadVC.nameVC = nameVC
             pDFLoadVC.id = id
             pDFLoadVC.doc = cell.doc
+            print("1 \(nameVC)")
+            print("2 \(id)")
+            print("3 \(cell.doc)")
         }
     }
     

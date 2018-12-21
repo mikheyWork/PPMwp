@@ -27,6 +27,7 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
         super.viewDidLoad()
         rangeChar()
         indexFunc()
+//        index()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,56 +79,23 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
     }
     
     func index() {
-        if parentID != nil {
-            var resault = [CategoryEnt]()
-            if manufacturer != "" && manufacturer != nil {
-                
-                let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
-                
-                for i in pop {
-                    if cars.contains(where: {$0.id == i.id}) == false {
-                        cars.append(i)
-                    }
-                }
-            } else {
-                let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
-                resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
-                for i in resault {
-                    let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
-                    for j in resArr {
-                        if cars.contains(where: {$0.id == j.id}) == false {
-                            cars.append(j)
-                        }
-                    }
-                }
-            }
-        } else {
-            for i in appDelegate.curentPdf {
+        for i in appDelegate.curentPdf {
+            if i.model_name != "" && i.model_name != "_" {
+                if cars.contains(where: {$0.model_name == i.model_name}) == false {
                     cars.append(i)
+                }
             }
         }
         
         //
         for car in cars {
-            var carKey = ""
-            if car.model_name != "" && car.model_name != "_" {
-                carKey = String(car.model_name?.prefix(1) ?? "")
-                if var carValues = carsDictionary[carKey] {
-                    carValues.append(car)
-                    carsDictionary[carKey] = carValues
-                } else {
-                    carsDictionary[carKey] = [car]
-                }
+            let carKey = String((car.model_name?.prefix(1))!)
+            if var carValues = carsDictionary[carKey] {
+                carValues.append(car)
+                carsDictionary[carKey] = carValues
             } else {
-                carKey = String(car.model_number?.prefix(1) ?? "q")
-                if var carValues = carsDictionary[carKey] {
-                    carValues.append(car)
-                    carsDictionary[carKey] = carValues
-                } else {
-                    carsDictionary[carKey] = [car]
-                }
+                carsDictionary[carKey] = [car]
             }
-           
         }
         
         carSectionTitles = [String](carsDictionary.keys)
@@ -221,25 +189,9 @@ extension ModelsVC {
             if product.model_name != "" && product.model_name != "_" {
                 cell.nameLbl.text = product.model_name
                 cell.text2 = product.model_name ?? ""
-            } else {
-                cell.nameLbl.text = product.model_number
-                cell.text2 = product.model_number ?? ""
             }
             
-            let text = cell.nameLbl.text
-            var cellName = appDelegate.curentPdf.filter({$0.model_name == text})
-            if cellName.isEmpty == true {
-                cellName = appDelegate.curentPdf.filter({$0.model_number == text})
-            }
-                let a = product.model_number
-                cell.resaultLbl.text = product.manufacturer
-                if a != nil {
-                    if cell.text2 == a {
-                        cell.nameLbl.text = product.model_number
-                    } else {
-                        cell.nameLbl.text = "\(String(describing: product.model_name!)) \(a!)"
-                    }
-                }
+            cell.resaultLbl.text = product.manufacturer
         }
         cell.accessoryType = .disclosureIndicator
         return cell
@@ -252,40 +204,17 @@ extension ModelsVC {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCell = tableView.cellForRow(at: indexPath) as! ModelsTVCell
-        if from == "Manuf" {
-            performSegue(withIdentifier: "ShowVital2", sender: selectedCell)
-        }
-        if from == "Models" {
             performSegue(withIdentifier: "showProduct", sender: selectedCell)
-        }
     }
     
     //MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //        let parentId = sender as! Int64
-
-        if segue.identifier == "ShowVital2" {
-            let parentId = sender as! ModelsTVCell
-            let vitalStat = segue.destination as! VitalStatVC
-            vitalStat.id = parentId.id
-        }
-        
         if segue.identifier == "showProduct" {
-            let parentId = sender as! ModelsTVCell
-            let text = parentId.text2
-            print("sel \(text)")
-            var selectedName = appDelegate.curentPdf.filter({$0.model_name == text})
-            if selectedName.isEmpty {
-                selectedName = appDelegate.curentPdf.filter({$0.model_number == text})
-            }
-            let arr1 = appDelegate.childs.filter({$0.id == selectedName.first?.prodTypeId})
-            let arr2 = appDelegate.parents.filter({$0.id == arr1.first?.parent})
+            let prodTypeName = sender as! ModelsTVCell
             let prod = segue.destination as! Product
-            prod.name = text
-            prod.prodName = text
-            prod.parentID = selectedName.first?.prodTypeId
-            prod.manufacturer = arr2.first?.name
+            prod.name = prodTypeName.nameLbl.text ?? ""
+            prod.from = from
         }
     }
 }

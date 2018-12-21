@@ -26,6 +26,7 @@ class ForgotPassVC: UIViewController {
         print("1")
         NotificationCenter.default.addObserver(self, selector: #selector(soop), name: NSNotification.Name("soop"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(soop2), name: NSNotification.Name("soop2"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.stopAnimation), name: NSNotification.Name("stopAnimation"), object: nil)
         rangeChar()
         addTapGestureToHideKeyboard()
         activity.isHidden = true
@@ -35,7 +36,11 @@ class ForgotPassVC: UIViewController {
         super.viewWillAppear(animated)
         print("2")
     }
-
+    
+    @objc func stopAnimation() {
+        activity.stopAnimating()
+        activity.isHidden = true
+    }
     
     @objc func soop2() {
         showAlertError(title: "Request Failed", withText: "Invalid Email Address")

@@ -246,40 +246,35 @@ extension ProductTypes {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! ProductTypesTVCell
-        
-        let text = selectedCell.nameLbl.text
-        let selectedName = appDelegate.childs.filter({$0.name == text})
-        let selectedNameID = selectedName.first?.id
-        
         if from == "Manuf" {
-            performSegue(withIdentifier: "showModel", sender: selectedCell)
+            performSegue(withIdentifier: "ShowProd2", sender: selectedCell)
         }
         if from == "Models" {
             performSegue(withIdentifier: "showModel", sender: selectedCell)
         }
         if from == "ProdTypes" {
-            performSegue(withIdentifier: "ShowProd2", sender: selectedNameID)
+            performSegue(withIdentifier: "ShowProd2", sender: selectedCell)
         }
     }
     
     //MARK: -Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if segue.identifier == "showModel" {
             let types = segue.destination as! ModelsVC
-            
             let parentId = sender as! ProductTypesTVCell
             types.from = from
             types.parentID = parentId.id
             types.manufacturer = manufacturer
-            print("parentId \(parentId.id)")
+            types.from = from
         }
         if segue.identifier == "ShowProd2" {
             let types = segue.destination as! Product
-            let parentId = sender as! Int64
+            let parentId = sender as! ProductTypesTVCell
             types.manufacturer = manufacturer
-            types.parentID = parentId
+            types.parentID = parentId.id
+            print("parentId2 \(parentId)")
+            types.from = from
         }
     }
 }

@@ -62,6 +62,10 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         changeName()
         
+        self.tableView3.rowHeight = UITableView.automaticDimension
+        self.tableView3.estimatedRowHeight = 73.0
+        self.tableView4.rowHeight = UITableView.automaticDimension
+        self.tableView4.estimatedRowHeight = 73.0
         
     }
     
@@ -192,7 +196,7 @@ extension VitalFullScrennVC {
         }
         
         if tableView == self.tableView4 {
-                return keysAZ2.count + 2
+                return keysAZ2.count + 4
         }
         
         if tableView == self.tableView6 {

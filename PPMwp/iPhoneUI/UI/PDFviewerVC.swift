@@ -57,6 +57,7 @@ class PDFviewerVC: UIViewController {
         progressShow()
         Functions.shared.checkStar(name: String(id), button: starBut)
         checkSub()
+        print("name2 \(name2)")
         read(nameFile: name2)
     }
     

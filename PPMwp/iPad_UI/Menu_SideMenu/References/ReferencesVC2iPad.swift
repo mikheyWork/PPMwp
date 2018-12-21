@@ -165,7 +165,7 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
         if parrent.isEmpty {
             navigationController?.popViewController(animated: false)
         } else {
-            //test for 2-3 parent
+            //test for 2-3 parentр
             parentID = parrent.first?.parent
             cars.removeAll()
             carsDictionary.removeAll()
