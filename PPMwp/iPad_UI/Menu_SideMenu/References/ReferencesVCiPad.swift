@@ -27,10 +27,8 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        for i in appDelegate.curentPdfRef {
-            print("pdf \(i.title)")
-        }
+//        self.tableView.rowHeight = UITableView.automaticDimension
+//        self.tableView.estimatedRowHeight = 73.0
         progressView.isHidden = true
         rangeChar()
         searchBarChange(searchBar: searchBar1)
@@ -40,6 +38,7 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
         searchBar1.delegate = self
         checkState()
         searchBar1.setImage(UIImage(named: "ic_search_18px"), for: UISearchBar.Icon.search, state: UIControl.State.normal)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,17 +46,12 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
         self.tableView.reloadData()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-    }
-    
     override func viewWillLayoutSubviews() {
         self.tableView.reloadData()
-        
         indexFunc()
     }
     
     func index() {
-        
         for i in appDelegate.referencesParent {
             if cars.contains(i.name!) == false {
                 cars.append(i.name!)
@@ -104,9 +98,6 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
     }
     
     func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
-        for i in carSectionTitles {
-            print("car \(i)")
-        }
         return carSectionTitles.map{ title -> UIView in
             return StringItem(text: title)
         }
@@ -134,7 +125,6 @@ class ReferencesVCiPad: UIViewController, UITableViewDataSource, UITableViewDele
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBar.text = searchText
-        
         carsDictionary.removeAll()
         carSectionTitles.removeAll()
         tableView.reloadData()
@@ -369,10 +359,6 @@ extension ReferencesVCiPad {
             let id = appDelegate.referencesChild.filter({$0.name == text})
             let arr1 = appDelegate.referencesChild.filter({$0.parent == id.first?.id})
             
-            for i in appDelegate.referencesChild {
-                print("i \(String(describing: i.name)) \(i.id) \(i.parent)")
-            }
-            
             if arr1.isEmpty {
                 //read
                 state = true
@@ -402,8 +388,15 @@ extension ReferencesVCiPad {
         } else if segue.identifier == "showReferFS" {
             let vs = segue.destination as! ReferencesFSVC
             vs.name = pdfName2
-            state = true
-            checkState()
+            print("name \(pdfName2)")
+            if pdfName2 != "" {
+                state = true
+                checkState()
+            } else {
+                state = false
+                checkState()
+            }
+           
         } else if segue.identifier == "showMenuRefSeg" {
             state = true
             checkState()

@@ -54,8 +54,6 @@ class DiscAlert: UIViewController {
         self.view.removeFromSuperview()
     }
     
-    
-    
     @IBAction func cancelButTapped(_ sender: Any) {
         for controller in self.navigationController!.viewControllers as Array {
             if controller.isKind(of: LoginVC.self) {

@@ -9,17 +9,16 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var tableViewIndex: TableViewIndex!
     
-    var from: String!
+    var from = ""
     var parentID: Int64?
     var filterArray: [CategoryEnt] = []
     var carsDictionary = [String: [PdfDocumentInfo]]()
     var carSectionTitles = [String]()
     var cars = [PdfDocumentInfo]()
-    
-    //    var childs: [Categ] = []
     var fltrChilds: [CategoryEnt] = []
     var resault: [CategoryEnt] = []
     var name4 = ""
+    var prodTypes = ""
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var manufacturer: String!
     
@@ -27,13 +26,10 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
         super.viewDidLoad()
         rangeChar()
         indexFunc()
-//        index()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        filterArray = appDelegate.allCateg.filter({$0.parent == parentID})
         self.tableView.reloadData()
     }
     
@@ -80,9 +76,13 @@ class ModelsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
     
     func index() {
         for i in appDelegate.curentPdf {
-            if i.model_name != "" && i.model_name != "_" {
-                if cars.contains(where: {$0.model_name == i.model_name}) == false {
-                    cars.append(i)
+            if i.prodType == prodTypes {
+                if i.model_name != "" && i.model_name != "_" {
+                    if cars.contains(where: {$0.model_name == i.model_name}) == false {
+                        if cars.contains(where: {$0.id == i.id}) == false {
+                            cars.append(i)
+                        }
+                    }
                 }
             }
         }
@@ -185,12 +185,10 @@ extension ModelsVC {
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
             let product = carValues[indexPath.row]
-            cell.id = product.id ?? 0
             if product.model_name != "" && product.model_name != "_" {
                 cell.nameLbl.text = product.model_name
-                cell.text2 = product.model_name ?? ""
+                cell.text2 = product.prodType ?? ""
             }
-            
             cell.resaultLbl.text = product.manufacturer
         }
         cell.accessoryType = .disclosureIndicator
@@ -211,9 +209,10 @@ extension ModelsVC {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showProduct" {
-            let prodTypeName = sender as! ModelsTVCell
+            let cell = sender as! ModelsTVCell
             let prod = segue.destination as! Product
-            prod.name = prodTypeName.nameLbl.text ?? ""
+            prod.prodTypes = cell.text2
+            prod.models = cell.nameLbl.text ?? ""
             prod.from = from
         }
     }

@@ -734,6 +734,7 @@
                         <segue destination="DoA-C3-JSz" kind="show" identifier="showFavourites" animates="NO" id="4Yh-20-M10"/>
                         <segue destination="WTC-v6-deK" kind="show" identifier="showAlerts" animates="NO" id="Rqy-aI-R8Z"/>
                         <segue destination="4ZR-rV-JqQ" kind="show" identifier="showModels" animates="NO" id="w8D-MZ-VGc"/>
+                        <segue destination="w3H-5z-mog" kind="show" identifier="showProdFromSearch" animates="NO" id="kkZ-fk-dKF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f7a-LP-GWY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2040,7 +2041,7 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                                             <outlet property="delegate" destination="HI4-Ij-AFW" id="04C-XZ-Hzv"/>
                                         </connections>
                                     </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MODELS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Doi-vn-A7G">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRODUCTS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Doi-vn-A7G">
                                         <rect key="frame" x="63" y="68" width="204" height="23.5"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="23.5" id="2V0-Ow-gjF"/>
@@ -3366,20 +3367,14 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                                             <rect key="frame" x="0.0" y="0.0" width="330" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Element" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNh-HN-CfE">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Element" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SNh-HN-CfE">
                                                     <rect key="frame" x="30" y="8" width="256" height="23"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="23" id="qlO-Xp-afj"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9 Results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6ha-uN-azv">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9 Results" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6ha-uN-azv">
                                                     <rect key="frame" x="30" y="31" width="256" height="17"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="17" id="OEX-Sg-S6W"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <color key="textColor" red="0.62352941179999999" green="0.64313725489999995" blue="0.6705882353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -4302,11 +4297,8 @@ PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, pro
                                 <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="40" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WcJ-Dh-UGL">
-                                <rect key="frame" x="128" y="168" width="768" height="423"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="423" id="UE5-wE-4qf"/>
-                                </constraints>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WcJ-Dh-UGL">
+                                <rect key="frame" x="128" y="168" width="768" height="396"/>
                                 <attributedString key="attributedText">
                                     <fragment>
                                         <string key="content">PPM Genius - Pacemaker &amp; ICD companion is for the use of device specialists and medical professionals. It is not intended for use by the general public, patients or consumers. This application does not imply the user is competent in the field of implantable cardiac devices and related products. Implantable cardiac devices and related products should only be managed by competent medical professionals specifically trained in the field of implantable cardiac devices and related products. </string>
@@ -4455,7 +4447,7 @@ Cg
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y6c-1y-Dlv">
-                                <rect key="frame" x="287" y="657" width="450" height="40"/>
+                                <rect key="frame" x="287" y="630" width="450" height="40"/>
                                 <color key="backgroundColor" red="0.95294117649999999" green="0.20784313730000001" blue="0.20784313730000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="450" id="drW-q0-xc7"/>
@@ -5281,15 +5273,15 @@ Cg
         <image name="star" width="22" height="21"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="cwT-Np-7fa"/>
+        <segue reference="CUG-uL-KXZ"/>
         <segue reference="4Yh-20-M10"/>
-        <segue reference="gUe-P2-8gA"/>
+        <segue reference="EIO-ct-TSQ"/>
         <segue reference="ES2-b4-06W"/>
-        <segue reference="XTI-7p-QwN"/>
-        <segue reference="eoE-gf-qDg"/>
+        <segue reference="kkZ-fk-dKF"/>
+        <segue reference="6hJ-8f-ajb"/>
         <segue reference="w8D-MZ-VGc"/>
-        <segue reference="YHs-yP-kdN"/>
-        <segue reference="N0k-RQ-kvg"/>
+        <segue reference="ZVy-Pl-eSS"/>
+        <segue reference="WE7-3G-mQz"/>
         <segue reference="hlb-47-qYW"/>
     </inferredMetricsTieBreakers>
 </document>

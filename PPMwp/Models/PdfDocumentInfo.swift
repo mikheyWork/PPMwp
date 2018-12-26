@@ -8,7 +8,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
     var model_name: String?
     var manufacturer: String?
     var modified: String?
-    var prodTypeId: Int64?
+    var prodType: String?
     var nbg_code: String?
     var polarity: String?
     var sensor_type: String?
@@ -47,7 +47,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
          model_name: String?,
          manufacturer: String?,
          modified: String?,
-         prodTypeId: Int64?,
+         prodType: String?,
          nbg_code: String?,
          polarity: String?,
          sensor_type: String?,
@@ -83,7 +83,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
         self.model_name = model_name
         self.manufacturer = manufacturer
         self.modified = modified
-        self.prodTypeId = prodTypeId
+        self.prodType = prodType
         self.nbg_code = nbg_code
         self.polarity = polarity
         self.sensor_type = sensor_type
@@ -126,7 +126,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
         let model_name = aDecoder.decodeObject(forKey: "model_name") as! String
         let manufacturer = aDecoder.decodeObject(forKey: "manufacturer") as! String
         let modified = aDecoder.decodeObject(forKey: "modified") as! String
-        let prodTypeId = aDecoder.decodeObject(forKey: "prodTypeId") as! Int64
+        let prodType = aDecoder.decodeObject(forKey: "prodType") as! String
         let nbg_code = aDecoder.decodeObject(forKey: "nbg_code") as! String
         let polarity = aDecoder.decodeObject(forKey: "polarity") as! String
         let sensor_type = aDecoder.decodeObject(forKey: "sensor_type") as! String
@@ -162,7 +162,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
                   model_name: model_name,
                   manufacturer: manufacturer,
                   modified: modified,
-                  prodTypeId: prodTypeId,
+                  prodType: prodType,
                   nbg_code: nbg_code,
                   polarity: polarity,
                   sensor_type: sensor_type,
@@ -201,7 +201,7 @@ class PdfDocumentInfo: NSObject, NSCoding {
         aCoder.encode(model_name, forKey: "model_name")
         aCoder.encode(manufacturer, forKey: "manufacturer")
         aCoder.encode(modified, forKey: "modified")
-        aCoder.encode(prodTypeId, forKey: "prodTypeId")
+        aCoder.encode(prodType, forKey: "prodType")
         aCoder.encode(nbg_code, forKey: "nbg_code")
         aCoder.encode(polarity, forKey: "polarity")
         aCoder.encode(sensor_type, forKey: "sensor_type")

@@ -157,55 +157,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         tableView4.reloadData()
     }
     
-    func index() {
-        
-        if manufacturer != "" {
-            print("111")
-            for i in appDelegate.curentPdf {
-                if i.prodTypeId == parentID {
-                    cars.append(i)
-                }
-            }
-        } else {
-            print("222")
-            if parentID != nil {
-                let arr1 = appDelegate.childs.filter({$0.id == parentID})
-                let arr2 = appDelegate.childs.filter({$0.name == arr1.first?.name})
-                for i in arr2 {
-                    for j in appDelegate.curentPdf {
-                        if j.prodTypeId == i.id {
-                            cars.append(j)
-                        }
-                    }
-                }
-            } else {
-                print("333")
-                for i in appDelegate.curentPdf {
-                    if i.model_name != "" && i.model_name != "_" {
-                        if i.model_name == name {
-                            cars.append(i)
-                        }
-                    }
-                }
-            }
-        }
-        
-        
-        //
-        for car in cars {
-            var carKey = ""
-            carKey = String(car.model_number?.prefix(1) ?? "")
-            if var carValues = carsDictionary[carKey] {
-                carValues.append(car)
-                carsDictionary[carKey] = carValues
-            } else {
-                carsDictionary[carKey] = [car]
-            }
-        }
-        carSectionTitles = [String](carsDictionary.keys)
-        carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-    }
-    
     func indexFunc() {
         //index
         var display: CGFloat
@@ -229,7 +180,7 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         
     }
     
-    func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {        index()
+    func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
         return carSectionTitles.map{ title -> UIView in
             return StringItem(text: title)
         }
@@ -278,7 +229,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     func read(nameFile: String) {
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fileURL = dir.appendingPathComponent("\(nameFile).pdf")
-            print("\(nameFile).pdf")
             //reading
             let request = URLRequest(url: fileURL)
             self.webView.loadRequest(request)

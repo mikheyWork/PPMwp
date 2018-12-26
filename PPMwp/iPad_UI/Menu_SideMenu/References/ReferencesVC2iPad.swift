@@ -79,7 +79,6 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func index() {
-        print("parent \(parentID)")
         if parentID != nil {
             let resault = appDelegate.referencesChild.filter{$0.parent == parentID}
             for i in resault {
@@ -95,7 +94,6 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
             }
         }
         for car in cars {
-            print("name \(car)")
             let carKey = String(car.prefix(1))
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
@@ -107,10 +105,6 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
         
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-        
-        for i in carSectionTitles {
-            print("sss \(i)")
-        }
     }
     
     func indexFunc() {
@@ -138,7 +132,6 @@ class ReferencesVC2iPad: UIViewController, UITableViewDataSource, UITableViewDel
     func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
         index()
         return carSectionTitles.map{ title -> UIView in
-            print(StringItem(text: title))
             return StringItem(text: title)
         }
     }
@@ -316,9 +309,6 @@ extension ReferencesVC2iPad {
         }
         
         let arr1 = appDelegate.referencesChild.filter({$0.name == text})
-        for i in arr1 {
-            print("arr1 \(arr1.first?.name)")
-        }
         id = arr1.first?.id ?? 0
         let arr2 = appDelegate.referencesChild.filter({$0.parent == arr1.first?.id})
         if arr2.isEmpty == true {

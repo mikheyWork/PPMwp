@@ -55,7 +55,6 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
        
         
         //find element
-        a = appDelegate.childs.filter({$0.name == name })
         b = [ReferEnt]()
         if a.isEmpty == true {
             b = appDelegate.referencesChild.filter({$0.name == name })
@@ -91,20 +90,20 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func index() {
         
-        if parentID != nil {
-            let resault = appDelegate.childs.filter{$0.id == parentID}
-            for i in resault {
-                if cars.contains(i.name!) == false {
-                    cars.append(i.name!)
-                }
-            }
-        } else {
-            for i in appDelegate.childs {
-                if cars.contains(i.name!) == false {
-                    cars.append(i.name!)
-                }
-            }
-        }
+//        if parentID != nil {
+//            let resault = appDelegate.childs.filter{$0.id == parentID}
+//            for i in resault {
+//                if cars.contains(i.name!) == false {
+//                    cars.append(i.name!)
+//                }
+//            }
+//        } else {
+//            for i in appDelegate.childs {
+//                if cars.contains(i.name!) == false {
+//                    cars.append(i.name!)
+//                }
+//            }
+//        }
         
         // 1
         for car in cars {

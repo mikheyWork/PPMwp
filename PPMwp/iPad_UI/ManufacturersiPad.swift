@@ -15,16 +15,14 @@ class ManufacturersiPad: UIViewController, UITableViewDelegate, UITableViewDataS
     
     //MARK: -variables
     
-    var parents: [CategoryEnt] = []
-    var childs: [CategoryEnt] = []
-    var sideMenuShow = false
+//    var sideMenuShow = false
     var from = "pusto"
     var isTop5Taped = true
     var isAzTabep = false
     var showIndex = false
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [PdfDocumentInfo]]()
     var carSectionTitles = [String]()
-    var cars = [CategoryEnt]()
+    var cars = [PdfDocumentInfo]()
     var arr1 = ["Biotronik", "Boston Scientific", "Medtronic", "Sorin Group", "St. Jude Medical"]
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -33,15 +31,15 @@ class ManufacturersiPad: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        if appDelegate.parents.isEmpty == false {
+//        if appDelegate.parents.isEmpty == false {
             rangeChar()
             top5But.layer.cornerRadius = 15
             azBut.layer.cornerRadius = 15
             buttonChang(senderButton: top5But, senderSwitch: isTop5Taped)
             buttonChang(senderButton: azBut, senderSwitch: isAzTabep)
-        } else {
-            showAlert()
-        }
+//        } else {
+//            showAlert()
+//        }
         showIndexView()
     }
     
@@ -59,36 +57,26 @@ class ManufacturersiPad: UIViewController, UITableViewDelegate, UITableViewDataS
     //MARK: -MEthods
     
     func index() {
-        cars.removeAll()
-        for i in appDelegate.parents {
-            
-            let arr3 = appDelegate.childs.filter({$0.parent == i.id})
-            var count = 0
-            for j in arr3 {
-                let arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == j.id})
-                count += arr2.count
-            }
-            if count != 0 {
-                if cars.contains(where: {$0.id == i.id}) == false {
-                    cars.append(i)
-                }
+        
+        for i in appDelegate.curentPdf {
+            if cars.contains(where: {$0.manufacturer == i.manufacturer}) == false {
+                cars.append(i)
             }
         }
         
-        // 1
         for car in cars {
-            let carKey = String(car.name?.prefix(1) ?? "a")
+            let carKey = String((car.manufacturer?.prefix(1))!)
             if var carValues = carsDictionary[carKey] {
-                carValues.append(car.name ?? "")
+                carValues.append(car)
                 carsDictionary[carKey] = carValues
             } else {
-                carsDictionary[carKey] = [car.name] as? [String]
+                carsDictionary[carKey] = [car]
             }
         }
         
-        // 2
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
+        
     }
     
     func indexFunc() {
@@ -219,9 +207,6 @@ class ManufacturersiPad: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     @IBAction func sideMenuBut(_ sender: Any) {
-        if sideMenuShow == true {
-            
-        }
     }
     
 }
@@ -305,34 +290,23 @@ extension ManufacturersiPad {
         cell.separatorInset.left = CGFloat(30)
         cell.separatorInset.right = CGFloat(30)
         
-        
         if self.isAzTabep {
-            cell.separatorInset.left = CGFloat(30)
-            cell.separatorInset.right = CGFloat(50)
+            cell.separatorInset.left = CGFloat(25)
+            cell.separatorInset.right = CGFloat(40)
             // Configure the cell...
             let carKey = carSectionTitles[indexPath.section]
             if let carValues = carsDictionary[carKey] {
-                cell.createrLabel.text = carValues[indexPath.row]
+                cell.createrLabel.text = carValues[indexPath.row].manufacturer
             }
-            
         } else {
-            cell.separatorInset.left = CGFloat(30)
-            cell.separatorInset.right = CGFloat(30)
+            cell.separatorInset.left = CGFloat(25)
+            cell.separatorInset.right = CGFloat(25)
             cell.createrLabel.text = arr1[indexPath.row]
         }
         
-        let text = cell.createrLabel.text
-        let cellName = appDelegate.parents.filter({$0.name == text})
-        let selectedNameID = cellName.first?.id
-        let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-        var resaultArr = [PdfDocumentInfo]()
-        for i in resault {
-            let arr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
-            for j in arr {
-                resaultArr.append(j)
-            }
-        }
-        cell.resaultLabel.text = "\(resaultArr.count) Results"
+        let ressArray = appDelegate.curentPdf.filter({$0.manufacturer == cell.createrLabel.text})
+        
+        cell.resaultLabel.text = "\(ressArray.count) Results"
         return cell
     }
     
@@ -350,8 +324,8 @@ extension ManufacturersiPad {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //parentID
-        
-        performSegue(withIdentifier: "showType", sender: indexPath)
+        let selectedCell = tableView.cellForRow(at: indexPath) as! ManufacturersTVCell
+        performSegue(withIdentifier: "showType", sender: selectedCell)
     }
     
     
@@ -359,18 +333,11 @@ extension ManufacturersiPad {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showType" {
-            let index = sender as! IndexPath
-            
-            let selectedCell = tableView.cellForRow(at: index) as! ManufacturersTVCell
-            let text = selectedCell.createrLabel.text
-            let selectedName = appDelegate.parents.filter({$0.name == text})
-            let selectedNameID = selectedName.first?.id
-            
+            let cell = sender as! ManufacturersTVCell
+            let text = cell.createrLabel.text
             let types = segue.destination as! ProductTypesiPad
             types.from = from
-            types.parentID = selectedNameID
-            types.manufacturer = text!
+            types.manufacturer = text ?? ""
         }
-        
     }
 }

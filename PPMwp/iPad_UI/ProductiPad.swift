@@ -24,9 +24,11 @@ class ProductiPad: UIViewController, UITableViewDataSource, UITableViewDelegate,
     var carSectionTitles = [String]()
     var cars = [PdfDocumentInfo]()
     var manufacturer = ""
-    var prodName: String!
+    var models = ""
+    var prodTypes: String!
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var from = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,34 +48,37 @@ class ProductiPad: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     func index() {
         
-    if manufacturer != "" {
-            for i in appDelegate.curentPdf {
-                if i.prodTypeId == parentID {
-                    cars.append(i)
-                }
-            }
-        } else {
-            if parentID != nil {
-                let arr1 = appDelegate.childs.filter({$0.id == parentID})
-                let arr2 = appDelegate.childs.filter({$0.name == arr1.first?.name})
-                for i in arr2 {
-                    for j in appDelegate.curentPdf {
-                        if j.prodTypeId == i.id {
-                            cars.append(j)
-                        }
+        for i in appDelegate.curentPdf {
+            if manufacturer != "" && manufacturer != nil {
+                if prodTypes != "" && prodTypes != nil {
+                    if i.manufacturer == manufacturer && i.prodType == prodTypes {
+                        cars.append(i)
                     }
                 }
             } else {
-                for i in appDelegate.curentPdf {
-                    if i.model_name != "" && i.model_name != "_" {
-                        if i.model_name == name {
+                if models == nil || models == "" {
+                    if prodTypes != "" && prodTypes != nil {
+                        if i.prodType == prodTypes {
+                            cars.append(i)
+                        }
+                    }
+                } else {
+                    
+                    if prodTypes != "" && prodTypes != nil {
+                        if i.prodType == prodTypes && i.model_name == models {
+                            cars.append(i)
+                        }
+                    } else {
+                        print("done\(models)/")
+                        print("i. \(i.model_name!)")
+                        if i.model_name == models {
+                            
                             cars.append(i)
                         }
                     }
                 }
             }
         }
-        
         
         //
         for car in cars {
@@ -125,8 +130,6 @@ class ProductiPad: UIViewController, UITableViewDataSource, UITableViewDelegate,
             let indexPath = NSIndexPath(row: 0, section: index)
             tableView.scrollToRow(at: indexPath as IndexPath, at: .top, animated: false)
         }
-        
-        
         
         return true // return true to produce haptic feedback on capable devices
     }
@@ -236,18 +239,13 @@ extension ProductiPad {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showVitalStatistics" {
-            let name = sender as! ProductsTVCell
             let vs = segue.destination as! VitalStatVCiPad
-            vs.id = Int(name.id)
-            let a = appDelegate.curentPdf.filter({$0.id == Int(name.id)})
-            print("from \(from)")
-            if from != "Models" {
-                vs.parentID = a.first?.prodTypeId ?? 0
-            } else {
-                vs.parentID = nil
-            }
-            vs.name = a.first?.model_name ?? ""
-            vs.manufacturer = manufacturer
+            let cell = sender as! ProductsTVCell
+            vs.cars = cars
+            vs.carSectionTitles = carSectionTitles
+            vs.carsDictionary = carsDictionary
+            vs.name = cell.prodLbl.text ?? ""
+            vs.id = cell.id
         }
     }
 }

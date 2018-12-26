@@ -308,8 +308,7 @@ extension AlertsVCiPad {
             cell.id = prod.id
             let alert = prod.date
             let date = alert?.dropLast(9)
-            let time = alert?.dropFirst(11)
-            cell.dateLbl.text = "\(date!)   \(time!)"
+            cell.dateLbl.text = "\(date!)"
             
         } else {
             prod = cars[indexPath.row]
@@ -358,7 +357,6 @@ extension AlertsVCiPad {
             repeat {
                 progress += 0.075
                 Thread.sleep(forTimeInterval: 0.25)
-                //                    print (progress)
                 DispatchQueue.main.async(flags: .barrier) {
                     
                     self.progressBar.animateTo(progress: CGFloat(progress))
@@ -379,10 +377,33 @@ extension AlertsVCiPad {
             let name = sender as! AlertsTVCell
             let vs = segue.destination as! VitalStatVCiPad
             vs.id = name.id
-            let a = appDelegate.curentPdf.filter({$0.id == name.id})
-            vs.parentID = a.first?.prodTypeId
-            vs.manufacturer = a.first?.manufacturer ?? ""
-            print("id \(name.id)")
+            
+            let cars2 = appDelegate.curentPdf.filter({$0.id == name.id})
+            
+            var carsDictionary2 = [String: [PdfDocumentInfo]]()
+            var carSectionTitles2 = [String]()
+            
+            for i in cars2 {
+                var name = ""
+                if i.model_name != "" && i.model_name != "_" {
+                    name = i.model_name ?? ""
+                } else {
+                    name = i.model_number ?? ""
+                }
+                let carKey2 = String(name.prefix(1))
+                if var carValues2 = carsDictionary2[carKey2] {
+                    carValues2.append(i)
+                    carsDictionary2[carKey2] = carValues2
+                } else {
+                    carsDictionary2[carKey2] = [i]
+                }
+            }
+            carSectionTitles2 = [String](carsDictionary2.keys)
+            carSectionTitles2 = carSectionTitles2.sorted(by: { $0 < $1 })
+            
+            vs.cars = cars2
+            vs.carsDictionary = carsDictionary2
+            vs.carSectionTitles = carSectionTitles2
         }
         
     }

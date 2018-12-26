@@ -1140,14 +1140,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="364" height="73"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfI-jc-Bhd">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Type" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfI-jc-Bhd">
                                                     <rect key="frame" x="0.0" y="16" width="364" height="18.666666666666671"/>
                                                     <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="16"/>
                                                     <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Content" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qp5-3Z-SgN">
-                                                    <rect key="frame" x="0.0" y="39.666666666666664" width="364" height="17.333333333333336"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" ambiguous="YES" text="Content" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qp5-3Z-SgN">
+                                                    <rect key="frame" x="0.0" y="39.666666666666657" width="364" height="17.333333333333336"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <color key="textColor" red="0.52549019610000003" green="0.56078431370000004" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -3075,6 +3075,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                         <segue destination="FPM-vb-uNU" kind="show" identifier="showRef" id="M9s-x2-Hn4"/>
                         <segue destination="fA1-Yt-z8b" kind="show" identifier="showSideMenu2" id="jvs-qd-sBY"/>
                         <segue destination="4XH-yS-6RB" kind="show" identifier="showModels" id="ze8-jM-v3U"/>
+                        <segue destination="b3p-rW-GRh" kind="show" identifier="showProdFromSearch" id="d8P-Ss-okN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3kk-qV-xIE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3396,14 +3397,14 @@ Cg
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="nBz-ae-3uO"/>
-        <segue reference="1HR-Y1-12Y"/>
+        <segue reference="jvs-qd-sBY"/>
         <segue reference="SDY-ab-mWa"/>
         <segue reference="M9s-x2-Hn4"/>
         <segue reference="do6-9I-KNb"/>
         <segue reference="aiB-hl-doe"/>
-        <segue reference="nRH-BX-nhQ"/>
+        <segue reference="nwL-6g-w7n"/>
         <segue reference="eWs-QG-U0T"/>
-        <segue reference="HcQ-ap-vln"/>
-        <segue reference="A98-F5-V1U"/>
+        <segue reference="ze8-jM-v3U"/>
+        <segue reference="zJu-XY-OBG"/>
     </inferredMetricsTieBreakers>
 </document>

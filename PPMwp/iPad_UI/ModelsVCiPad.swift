@@ -21,6 +21,7 @@ class ModelsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
     var carSectionTitles = [String]()
     var cars = [PdfDocumentInfo]()
     var manufacturer = ""
+    var prodTypes = ""
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
@@ -40,23 +41,26 @@ class ModelsVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func index() {
         for i in appDelegate.curentPdf {
-            if i.model_name != "" && i.model_name != "_" {
-                if cars.contains(where: {$0.model_name == i.model_name}) == false {
-                    cars.append(i)
+            if i.prodType == prodTypes {
+                if i.model_name != "" && i.model_name != "_" {
+                    if cars.contains(where: {$0.model_name == i.model_name}) == false {
+                        if cars.contains(where: {$0.id == i.id}) == false {
+                            cars.append(i)
+                        }
+                    }
                 }
             }
         }
         
         //
         for car in cars {
-            var carKey = ""
-                carKey = String(car.model_name?.prefix(1) ?? "")
-                if var carValues = carsDictionary[carKey] {
-                    carValues.append(car)
-                    carsDictionary[carKey] = carValues
-                } else {
-                    carsDictionary[carKey] = [car]
-                }
+            let carKey = String((car.model_name?.prefix(1))!)
+            if var carValues = carsDictionary[carKey] {
+                carValues.append(car)
+                carsDictionary[carKey] = carValues
+            } else {
+                carsDictionary[carKey] = [car]
+            }
         }
         
         carSectionTitles = [String](carsDictionary.keys)
@@ -189,7 +193,7 @@ extension ModelsVCiPad {
             cell.id = product.id ?? 0
             if product.model_name != "" && product.model_name != "_" {
                 cell.nameLbl.text = product.model_name
-                cell.text2 = product.model_name ?? ""
+                cell.text2 = product.prodType ?? ""
             }
             cell.resaultLbl.text = product.manufacturer
         }
@@ -226,19 +230,11 @@ extension ModelsVCiPad {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "showProduct" {
-            let parentId = sender as! ModelsTVCell
+            let cell = sender as! ModelsTVCell
             let prod = segue.destination as! ProductiPad
-            prod.name = parentId.text2
+            prod.prodTypes = cell.text2
+            prod.models = cell.nameLbl.text ?? ""
             prod.from = from
-        }
-        
-        if segue.identifier == "ShowVital2" {
-            let parentId = sender as! ModelsTVCell
-            let vitalStat = segue.destination as! VitalStatVCiPad
-            vitalStat.id = parentId.id
-            let a = appDelegate.curentPdf.filter({$0.id == parentId.id})
-            vitalStat.manufacturer = a.first?.manufacturer ?? ""
-            vitalStat.parentID = a.first?.prodTypeId ?? 0
         }
     }
 }

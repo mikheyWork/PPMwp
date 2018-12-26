@@ -34,6 +34,20 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
         progressView.isHidden = true
         checkState()
         rangeChar()
+        
+        appDelegate.favourites.removeAll()
+        let a  = self.appDelegate.currentUser.favor.split(separator: ",")
+        if a.isEmpty == false {
+            self.appDelegate.favourites.removeAll()
+            for i in a {
+                
+                if self.appDelegate.favourites.contains(String(i)) == false {
+                    if appDelegate.curentPdf.contains(where: {$0.id == Int(String(i))}) || appDelegate.curentPdfRef.contains(where: {$0.id == Int(String(i))}) ||  appDelegate.referencesChild.contains(where: {$0.id == Int64(String(i))})  {
+                        self.appDelegate.favourites.append(String(i))
+                    }
+                }
+            }
+        }
     }
     
     
@@ -62,14 +76,11 @@ class FavouritesVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         
         let name3 = String(name2.dropLast())
-        print("name3 \(name3)")
         if name3 != "" {
             if appDelegate.referencesChild.contains(where: {$0.name == name3}) == false {
-                print("1")
                 state = false
                 progressView.isHidden = true
             } else {
-                print("2")
                 state = true
                 progressView.isHidden = true
             }
@@ -211,9 +222,36 @@ extension FavouritesVCiPad {
             let name = sender as! FavorTVCell
             let vs = segue.destination as! VitalStatVCiPad
             vs.id = name.id
-            let a = appDelegate.curentPdf.filter({$0.id == name.id})
-            vs.manufacturer = a.first?.manufacturer ?? ""
-            vs.parentID = a.first?.prodTypeId ?? 0
+            
+            let cars2 = appDelegate.curentPdf.filter({$0.id == name.id})
+            
+            var carsDictionary2 = [String: [PdfDocumentInfo]]()
+            var carSectionTitles2 = [String]()
+            
+            for i in cars2 {
+                var name = ""
+                if i.model_name != "" && i.model_name != "_" {
+                    name = i.model_name ?? ""
+                } else {
+                    name = i.model_number ?? ""
+                }
+                let carKey2 = String(name.prefix(1))
+                if var carValues2 = carsDictionary2[carKey2] {
+                    carValues2.append(i)
+                    carsDictionary2[carKey2] = carValues2
+                } else {
+                    carsDictionary2[carKey2] = [i]
+                }
+            }
+            carSectionTitles2 = [String](carsDictionary2.keys)
+            carSectionTitles2 = carSectionTitles2.sorted(by: { $0 < $1 })
+            
+            vs.cars = cars2
+            vs.carsDictionary = carsDictionary2
+            vs.carSectionTitles = carSectionTitles2
+            
+            
+            
         }
         if segue.identifier == "showFSFav" {
             let name = sender as! String

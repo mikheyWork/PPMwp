@@ -15,29 +15,27 @@ class Manufacturers: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     //MARK: -variables
     var parentID: Int?
-    var parents: [CategoryEnt] = []
-    var childs: [CategoryEnt] = []
     var isTop5Taped = true
     var isAzTabep = false
     var from = "pusto"
     var showIndex = false
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [PdfDocumentInfo]]()
     var carSectionTitles = [String]()
-    var cars = [CategoryEnt]()
+    var cars = [PdfDocumentInfo]()
     var arr1 = ["Biotronik", "Boston Scientific", "Medtronic", "Sorin Group", "St. Jude Medical"]
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if appDelegate.parents.isEmpty == false {
+//        if appDelegate.parents.isEmpty == false {
             rangeChar()
             top5But.layer.cornerRadius = 14
             azBut.layer.cornerRadius = 14
             buttonChang(senderButton: top5But, senderSwitch: isTop5Taped)
             buttonChang(senderButton: azBut, senderSwitch: isAzTabep)
-        } else {
-            showAlert()
-        }
+//        } else {
+//            showAlert()
+//        }
         
         indexFunc()
         showIndexView()
@@ -59,29 +57,19 @@ class Manufacturers: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     func index() {
         
-        for i in appDelegate.parents {
-            
-            let arr1 = appDelegate.childs.filter({$0.parent == i.id})
-            var count = 0
-            for j in arr1 {
-                let arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == j.id})
-                count += arr2.count
+        for i in appDelegate.curentPdf {
+            if cars.contains(where: {$0.manufacturer == i.manufacturer}) == false {
+                cars.append(i)
             }
-            if count != 0 {
-                if cars.contains(i) == false {
-                    cars.append(i)
-                }
-            }
-            
         }
         
         for car in cars {
-            let carKey = String((car.name?.prefix(1))!)
+            let carKey = String((car.manufacturer?.prefix(1))!)
             if var carValues = carsDictionary[carKey] {
-                carValues.append(car.name!)
+                carValues.append(car)
                 carsDictionary[carKey] = carValues
             } else {
-                carsDictionary[carKey] = [car.name!]
+                carsDictionary[carKey] = [car]
             }
         }
         
@@ -311,28 +299,17 @@ extension Manufacturers {
             // Configure the cell...
             let carKey = carSectionTitles[indexPath.section]
             if let carValues = carsDictionary[carKey] {
-                cell.createrLabel.text = carValues[indexPath.row]
-                
+                cell.createrLabel.text = carValues[indexPath.row].manufacturer
             }
-            
         } else {
             cell.separatorInset.left = CGFloat(25)
             cell.separatorInset.right = CGFloat(25)
             cell.createrLabel.text = arr1[indexPath.row]
         }
         
-        let text = cell.createrLabel.text
-        let cellName = appDelegate.parents.filter({$0.name == text})
-        let selectedNameID = cellName.first?.id
-        let resault = appDelegate.childs.filter{$0.parent == selectedNameID}
-        var resaultArr = [PdfDocumentInfo]()
-        for i in resault {
-            let arr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
-            for j in arr {
-               resaultArr.append(j)
-            }
-        }
-        cell.resaultLabel.text = "\(resaultArr.count) Results"
+        let ressArray = appDelegate.curentPdf.filter({$0.manufacturer == cell.createrLabel.text})
+        
+        cell.resaultLabel.text = "\(ressArray.count) Results"
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -357,11 +334,8 @@ extension Manufacturers {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! ManufacturersTVCell
-       
-        
         performSegue(withIdentifier: "showType", sender: selectedCell)
     }
     
@@ -369,15 +343,10 @@ extension Manufacturers {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showType" {
-            
             let cell = sender as! ManufacturersTVCell
-            
             let text = cell.createrLabel.text
-            let selectedName = appDelegate.parents.filter({$0.name == text})
-            let selectedNameID = selectedName.first?.id
             let types = segue.destination as! ProductTypes
             types.from = from
-            types.parentID = selectedNameID
             types.manufacturer = text
         }
     }

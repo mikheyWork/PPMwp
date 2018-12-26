@@ -11,10 +11,10 @@ class ProductTypes: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     //MARK: -variales
     
-    var carsDictionary = [String: [String]]()
+    var carsDictionary = [String: [PdfDocumentInfo]]()
     var carSectionTitles = [String]()
-    var cars = [String]()
-    var cars2 = [String]()
+    var cars = [PdfDocumentInfo]()
+    var cars2 = [PdfDocumentInfo]()
     var showIndex = false
     var from: String!
     var parentID: Int64?
@@ -82,39 +82,30 @@ class ProductTypes: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     
     func index() {
-        print("parent id \(parentID)")
-        if parentID != nil {
-            let resault = appDelegate.childs.filter{$0.parent == parentID}
-            for i in resault {
-                if cars2.contains(i.name!) == false {
-                    cars2.append(i.name!)
-                }
-            }
-            cars = cars2
-        } else {
-            for i in appDelegate.childs {
-                if cars2.contains(i.name!) == false {
-                    cars2.append(i.name!)
-                }
-            }
-            
-            for car in cars2 {
-                let cellName = appDelegate.childs.filter({$0.name == car})
-                
-                for i in cellName {
-                    let pdf = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
-                    if pdf.count > 0 {
-                        if cars.contains(where: {$0 == i.name}) == false {
-                            cars.append(i.name ?? "")
-                        }
+        
+        for i in appDelegate.curentPdf {
+            if manufacturer != nil && manufacturer != "" {
+                if i.manufacturer == manufacturer {
+                    if cars.contains(where: {$0.prodType == i.prodType}) == false {
+                        cars.append(i)
                     }
+                }
+            } else {
+                if cars.contains(where: {$0.prodType == i.prodType}) == false {
+                    cars.append(i)
                 }
             }
         }
         
         
         for car in cars {
-            let carKey = String(car.prefix(1))
+            var name = ""
+            if car.model_name != "" && car.model_name != "_" {
+                name = car.model_name ?? ""
+            } else {
+                name = car.model_number ?? ""
+            }
+            let carKey = String(name.prefix(1))
             if var carValues = carsDictionary[carKey] {
                 carValues.append(car)
                 carsDictionary[carKey] = carValues
@@ -199,41 +190,14 @@ extension ProductTypes {
         // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
-            
-            cell.nameLbl.text = carValues[indexPath.row]
-            var cellName = [CategoryEnt]()
-            var id: Int64 = 0
-            if manufacturer != nil && manufacturer != "" {
-                cellName = appDelegate.parents.filter({$0.name == manufacturer})
-            } else {
-                let arr1 = appDelegate.childs.filter({$0.name == cell.nameLbl.text})
-                id = arr1.first?.id ?? 0
-                for i in arr1 {
-                    cellName.append(i)
-                }
+            let prod = carValues[indexPath.row]
+            cell.nameLbl.text = prod.prodType
+            var ressArray = appDelegate.curentPdf.filter({$0.prodType == cell.nameLbl.text})
+            if manufacturer != "" && manufacturer != nil {
+                ressArray = ressArray.filter({$0.manufacturer == manufacturer})
             }
-            
-            var resArr = [PdfDocumentInfo]()
-            if manufacturer != nil && manufacturer != "" {
-                let resault = appDelegate.childs.filter{$0.parent == parentID}
-                let prod = resault.filter({$0.name == cell.nameLbl.text})
-                id = prod.first?.id ?? 0
-                resArr = appDelegate.curentPdf.filter({$0.prodTypeId == prod.first?.id})
-            } else {
-                for i in cellName {
-                    let selectedNameID = i.id
-                    let pop = appDelegate.curentPdf.filter({$0.prodTypeId == selectedNameID})
-                    for i in pop {
-                        if resArr.contains(where: {$0.id == i.id}) == false {
-                            resArr.append(i)
-                        }
-                    }
-                }
-            }
-            cell.id = id
-            cell.resaultLbl.text = "\(resArr.count) Results"
+            cell.resaultLbl.text = "\(ressArray.count) Results"
         }
-        
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -246,6 +210,7 @@ extension ProductTypes {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //parentID
         let selectedCell = tableView.cellForRow(at: indexPath) as! ProductTypesTVCell
+        print("from \(from)")
         if from == "Manuf" {
             performSegue(withIdentifier: "ShowProd2", sender: selectedCell)
         }
@@ -262,18 +227,16 @@ extension ProductTypes {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showModel" {
             let types = segue.destination as! ModelsVC
-            let parentId = sender as! ProductTypesTVCell
-            types.from = from
-            types.parentID = parentId.id
+            let cell = sender as! ProductTypesTVCell
+            types.prodTypes = cell.nameLbl.text ?? ""
             types.manufacturer = manufacturer
             types.from = from
         }
         if segue.identifier == "ShowProd2" {
             let types = segue.destination as! Product
-            let parentId = sender as! ProductTypesTVCell
+            let cell = sender as! ProductTypesTVCell
+            types.prodTypes = cell.nameLbl.text
             types.manufacturer = manufacturer
-            types.parentID = parentId.id
-            print("parentId2 \(parentId)")
             types.from = from
         }
     }

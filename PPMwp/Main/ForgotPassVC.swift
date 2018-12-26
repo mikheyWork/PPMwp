@@ -15,15 +15,10 @@ class ForgotPassVC: UIViewController {
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var id: Int!
-    var mailTrue = false {
-        didSet {
-            print("change \(mailTrue)")
-        }
-    }
+    var mailTrue = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("1")
         NotificationCenter.default.addObserver(self, selector: #selector(soop), name: NSNotification.Name("soop"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(soop2), name: NSNotification.Name("soop2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.stopAnimation), name: NSNotification.Name("stopAnimation"), object: nil)
@@ -32,10 +27,6 @@ class ForgotPassVC: UIViewController {
         activity.isHidden = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print("2")
-    }
     
     @objc func stopAnimation() {
         activity.stopAnimating()
@@ -100,7 +91,6 @@ class ForgotPassVC: UIViewController {
                 for resault in resaults {
                     if self.emailLbl.text == resault["name"].stringValue {
                         self.id = resault["id"].intValue
-                        print("email \(resault["name"].stringValue)")
                         self.mailTrue = true
                         //delete current user
                         let user = User(name: "_", password: "_", favor: "_", id: 0, subs: "_", disclaimer: "_")
@@ -116,7 +106,6 @@ class ForgotPassVC: UIViewController {
                     }
                 }
                 if resaults.count < 100 {
-                    print(self.mailTrue)
                     if self.mailTrue ==  false {
                         DispatchQueue.main.async {
                             self.showAlertError(title: "Request Failed", withText: "Username was not found.")

@@ -149,10 +149,47 @@ class Functions: NSObject {
     }
     
     func filterSearch( cars: inout Array<SearchItem>, searchText: String) {
+        
+        var models = [String]()
+        var manuf = [String]()
+        var prodTypes = [String]()
+        
+        for i in appDelegate.curentPdf {
+            if manuf.contains(where: {$0 == i.manufacturer}) == false {
+                manuf.append(i.manufacturer ?? "")
+            }
+            if models.contains(where: {$0 == i.model_name}) == false {
+                models.append(i.model_name ?? "")
+            }
+            if prodTypes.contains(where: {$0 == i.prodType}) == false {
+                prodTypes.append(i.prodType ?? "")
+            }
+        }
+        
+        for i in manuf {
+            if cars.contains(where: {$0.name == i}) == false {
+                let b = SearchItem(id: 0, name: i, discription: "", number: "", manufacturer: "", fullName: i)
+                cars.append(b)
+            }
+        }
+        
+        for i in models {
+            if cars.contains(where: {$0.name == i}) == false {
+                let b = SearchItem(id: 0, name: i, discription: "", number: "", manufacturer: "", fullName: i)
+                cars.append(b)
+            }
+        }
+        
+        for i in prodTypes {
+            if cars.contains(where: {$0.name == i}) == false {
+                let b = SearchItem(id: 0, name: i, discription: "", number: "", manufacturer: "", fullName: i)
+                cars.append(b)
+            }
+        }
+        
         for i in appDelegate.referencesParent {
-            let a = appDelegate.referencesParent.filter({$0.id == i.id})
-            if cars.contains(where: {$0.id == a.first!.id}) == false {
-                let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2!, number: "", manufacturer: "", fullName: i.name!)
+            if cars.contains(where: {$0.id == i.id}) == false {
+                let b = SearchItem(id: Int(i.id), name: i.name!, discription: i.description2 ?? "", number: "", manufacturer: "", fullName: i.name!)
                 cars.append(b)
             }
         }
@@ -160,42 +197,15 @@ class Functions: NSObject {
         for i in appDelegate.curentPdf {
             if cars.contains(where: {$0.id == i.id}) == false {
                 if i.model_name != "" && i.model_name != "_" && i.model_name != nil {
-                    let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: (i.model_name ?? "") + (i.model_number ?? ""))
+                    let b = SearchItem(id: i.id!, name: i.model_name!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: "\((i.model_name ?? "")) \((i.model_number ?? ""))")
                     cars.append(b)
                 } else {
-                    let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName: (i.model_number ?? "") + (i.model_number ?? ""))
+                    let b = SearchItem(id: i.id!, name: i.model_number!, discription: i.manufacturer!, number: i.model_number ?? "", manufacturer: i.manufacturer ?? "", fullName:"\((i.model_name ?? "")) \((i.model_number ?? ""))")
                     cars.append(b)
                 }
             }
         }
         
-        for i in appDelegate.parents {
-            
-            let arr1 = appDelegate.parents.filter({$0.name == i.name})
-            let arr2 = appDelegate.childs.filter({$0.parent == arr1.first?.id})
-            let arr3 = appDelegate.curentPdf.filter({$0.prodTypeId == arr2.first?.id})
-            if arr3.count > 0 {
-                if cars.contains(where: {$0.id == i.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: i.name!)
-                    cars.append(b)
-                }
-            }
-        }
-        
-        for i in appDelegate.models {
-            let arr1 = appDelegate.childs.filter({$0.id == i.id})
-            var arr2 = [PdfDocumentInfo]()
-            if arr1.isEmpty == false{
-                arr2 = appDelegate.curentPdf.filter({$0.prodTypeId == arr1.first?.id})
-            }
-            if arr2.count > 0 {
-                let a = appDelegate.models.filter({$0.id == i.id})
-                if cars.contains(where: {$0.id == a.first!.id}) == false {
-                    let b = SearchItem(id: Int(i.id), name: i.name!, discription: "a", number: "", manufacturer: "", fullName: i.name!)
-                    cars.append(b)
-                }
-            }
-        }
         cars = cars.filter({ (elemt: SearchItem) -> Bool in
             elemt.fullName?.lowercased().contains(searchText.lowercased()) ?? false
         })

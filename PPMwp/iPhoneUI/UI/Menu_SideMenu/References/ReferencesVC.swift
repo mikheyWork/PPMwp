@@ -20,8 +20,8 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         searchBarChange(searchBar: search)
         rangeChar()
-        index()
         indexFunc()
+        index()
         search.setImage(UIImage(named: "ic_search_18px"), for: UISearchBar.Icon.search, state: UIControl.State.normal)
     }
     
@@ -77,6 +77,7 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 cars.append(i.name!)
             }
         }
+        
         // 1
         for car in cars {
             let carKey = String(car.prefix(1))
@@ -91,14 +92,14 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         // 2
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
+        
     }
     
     
     //search bar
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        search.text = searchText
-        
+        searchBar.text = searchText
         carsDictionary.removeAll()
         carSectionTitles.removeAll()
         tableView.reloadData()
@@ -126,20 +127,21 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                     cars.append(i.name!)
                 }
             }
-            
         }
-            for car in cars {
-                let carKey = String(car.prefix(1))
-                if var carValues = carsDictionary[carKey] {
-                    carValues.append(car)
-                    carsDictionary[carKey] = carValues
-                } else {
-                    carsDictionary[carKey] = [car]
-                }
+        for car in cars {
+            print("name \(car)")
+            let carKey = String(car.prefix(1))
+            if var carValues = carsDictionary[carKey] {
+                carValues.append(car)
+                carsDictionary[carKey] = carValues
+            } else {
+                carsDictionary[carKey] = [car]
             }
+        }
+       
         
-            carSectionTitles = [String](carsDictionary.keys)
-            carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
+        carSectionTitles = [String](carsDictionary.keys)
+        carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
         self.tableView.reloadData()
         self.tableViewIndex.reloadData()
     }
@@ -169,8 +171,8 @@ class ReferencesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
-
-
+    
+    
     
     //searchBar view
     func searchBarChange(searchBar: UISearchBar) {
@@ -278,6 +280,7 @@ extension ReferencesVC {
         // Configure the cell...
         let carKey = carSectionTitles[indexPath.section]
         if let carValues = carsDictionary[carKey] {
+            print("car \(carKey)")
             cell.nameLbl.text = carValues[indexPath.row]
             var elem = ""
             let text = cell.nameLbl.text
@@ -318,14 +321,10 @@ extension ReferencesVC {
             let id = appDelegate.referencesChild.filter({$0.name == text})
             let arr1 = appDelegate.referencesChild.filter({$0.parent == id.first?.id})
             
-            for i in appDelegate.referencesChild {
-                print("i \(String(describing: i.name)) \(i.id) \(i.parent)")
-            }
-            
             if arr1.isEmpty {
                 performSegue(withIdentifier: "showPDFfromSearch", sender: id.first?.id)
             } else {
-               performSegue(withIdentifier: "showRef2", sender: id.first?.id)
+                performSegue(withIdentifier: "showRef2", sender: id.first?.id)
             }
             
             
@@ -345,7 +344,6 @@ extension ReferencesVC {
             let id = sender as! Int64
             let vsPdf = segue.destination as! PDFviewerVC
             vsPdf.id = Int(id)
-            print("iddd \(id)")
         }
     }
 }

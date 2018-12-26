@@ -149,8 +149,6 @@ extension VitalStatVC {
                     cell1.seperatorColor.backgroundColor = UIColor.white
                 }
             }
-            print("hide1 \(hide1)")
-            print("hide2 \(hide2)")
             if hide1 == true && hide2 == true {
                 tableView.isHidden = true
             } else {
@@ -212,9 +210,6 @@ extension VitalStatVC {
             pDFLoadVC.nameVC = nameVC
             pDFLoadVC.id = id
             pDFLoadVC.doc = cell.doc
-            print("1 \(nameVC)")
-            print("2 \(id)")
-            print("3 \(cell.doc)")
         }
     }
     

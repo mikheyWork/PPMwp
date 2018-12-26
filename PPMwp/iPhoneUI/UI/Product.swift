@@ -88,37 +88,38 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
     }
     
     func index() {
-        if manufacturer != "" && manufacturer != nil {
-            print("111")
-            for i in appDelegate.curentPdf {
-                if i.prodTypeId == parentID {
-                    cars.append(i)
-                }
-            }
-        } else {
-            print("222")
-            if parentID != nil {
-                let arr1 = appDelegate.childs.filter({$0.id == parentID})
-                let arr2 = appDelegate.childs.filter({$0.name == arr1.first?.name})
-                for i in arr2 {
-                    for j in appDelegate.curentPdf {
-                        if j.prodTypeId == i.id {
-                            cars.append(j)
-                        }
+        
+        for i in appDelegate.curentPdf {
+            if manufacturer != "" && manufacturer != nil {
+                if prodTypes != "" && prodTypes != nil {
+                    if i.manufacturer == manufacturer && i.prodType == prodTypes {
+                        cars.append(i)
                     }
                 }
             } else {
-                print("333")
-                for i in appDelegate.curentPdf {
-                    if i.model_name != "" && i.model_name != "_" {
-                        if i.model_name == name {
+                if models == nil || models == "" {
+                    if prodTypes != "" && prodTypes != nil {
+                        if i.prodType == prodTypes {
+                            cars.append(i)
+                        }
+                    }
+                } else {
+                    
+                    if prodTypes != "" && prodTypes != nil {
+                        if i.prodType == prodTypes && i.model_name == models {
+                            cars.append(i)
+                        }
+                    } else {
+                        print("done\(models!)/")
+                        print("i. \(i.model_name!)")
+                        if i.model_name == models {
+                            
                             cars.append(i)
                         }
                     }
                 }
             }
         }
-        
         
         //
         for car in cars {
@@ -133,7 +134,6 @@ class Product: UIViewController, UITableViewDataSource, UITableViewDelegate, Tab
         }
         carSectionTitles = [String](carsDictionary.keys)
         carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-       print("car \(carSectionTitles)")
     }
     
     //    nameLbl char range
