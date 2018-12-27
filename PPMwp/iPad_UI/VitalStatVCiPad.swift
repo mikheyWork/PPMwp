@@ -72,8 +72,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         rangeChar(label: nameLbl2)
         Functions.shared.checkStar(name: String(id), button: starBut)
         indexFunc()
-//        checkStar()
-        print("idd \(id)")
         //find element
         a = appDelegate.curentPdf.filter({$0.id == id })
         b = [ReferEnt]()
@@ -82,11 +80,10 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         orient()
         
-//        if parentID
-        
-         print("1id \(id)")
-        print("2 \(parentID)")
-        print("3 \(manufacturer)")
+        self.tableView3.rowHeight = UITableView.automaticDimension
+        self.tableView3.estimatedRowHeight = 73.0
+        self.tableView4.rowHeight = UITableView.automaticDimension
+        self.tableView4.estimatedRowHeight = 73.0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -160,65 +157,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
         tableView4.reloadData()
     }
     
-    func index() {
-        print("par \(parentID)")
-        if parentID != nil {
-//            if manufacturer != "" {
-//                let allId = appDelegate.parents.filter({$0.name == manufacturer}).first?.id
-//                parentID = appDelegate.childs.filter({$0.parent == allId}).first?.id
-//            }
-            var resault = [CategoryEnt]()
-            if manufacturer != "" && manufacturer != nil {
-                let pop = appDelegate.curentPdf.filter({$0.prodTypeId == parentID})
-                
-                for i in pop {
-                    if cars.contains(where: {$0.id == i.id}) == false {
-                        cars.append(i)
-                    }
-                }
-            } else {
-                let selectedNameID = appDelegate.childs.filter({$0.id == parentID})
-                resault = appDelegate.childs.filter{$0.name == selectedNameID.first?.name}
-                for i in resault {
-                    let resArr = appDelegate.curentPdf.filter({$0.prodTypeId == i.id})
-                    for j in resArr {
-                        if cars.contains(where: {$0.id == j.id}) == false {
-                            cars.append(j)
-                        }
-                    }
-                }
-                for car in cars {
-                    print("carr \(car.model_name)")
-                }
-            }
-        } else {
-            for i in appDelegate.curentPdf {
-                cars.append(i)
-            }
-        }
-        
-        // 1
-        for car in cars {
-            var name2 = ""
-            if car.model_name != "" && car.model_name != "_" {
-                name2 = car.model_name ?? ""
-            } else {
-                name2 = car.model_number ?? ""
-            }
-            let carKey = String(name2.prefix(1))
-            if var carValues = carsDictionary[carKey] {
-                carValues.append(car)
-                carsDictionary[carKey] = carValues
-            } else {
-                carsDictionary[carKey] = [car]
-            }
-        }
-        // 2
-        carSectionTitles = [String](carsDictionary.keys)
-        carSectionTitles = carSectionTitles.sorted(by: { $0 < $1 })
-        
-    }
-    
     func indexFunc() {
         //index
         var display: CGFloat
@@ -243,7 +181,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func indexItems(for tableViewIndex: TableViewIndex) -> [UIView] {
-        index()
         return carSectionTitles.map{ title -> UIView in
             return StringItem(text: title)
         }
@@ -292,7 +229,6 @@ class VitalStatVCiPad: UIViewController, UITableViewDelegate, UITableViewDataSou
     func read(nameFile: String) {
         if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fileURL = dir.appendingPathComponent("\(nameFile).pdf")
-            print("\(nameFile).pdf")
             //reading
             let request = URLRequest(url: fileURL)
             self.webView.loadRequest(request)
@@ -366,7 +302,7 @@ extension VitalStatVCiPad {
         if tableView == self.tableView3 {
             var count = 0
             if orientation == false {
-                count = keysAZAll.count + 2
+                count = keysAZAll.count + 4
             } else {
                 count = keysAZ1.count
             }
@@ -375,9 +311,9 @@ extension VitalStatVCiPad {
         if tableView == self.tableView4 {
             var count = 0
             if orientation == false {
-                count = keysAZ2.count + 2
+                count = keysAZ2.count + 4
             } else {
-                count = keysAZ2.count + 2
+                count = keysAZ2.count + 4
             }
             return count
         }
@@ -436,29 +372,10 @@ extension VitalStatVCiPad {
             var prod: PdfDocumentInfo!
             if let carValues = carsDictionary[carKey] {
                 prod = carValues[indexPath.row]
-                var name3 = ""
-                if prod.model_name != "" && prod.model_name != "_" {
-                    name3 = prod.model_name ?? ""
-                } else {
-                    name3 = prod.model_number ?? ""
-                }
-                cell2.prodLbl.text = name3
-                cell2.text2 = name3
+                cell2.prodLbl.text = prod.model_number
                 cell2.id = prod.id ?? 0
-                let selectedNameID = prod.manufacturer
-                let a = prod.model_number
-                cell2.resultLbl.text = selectedNameID
-                if a != nil {
-                    if cell2.text2 == a {
-                        cell2.prodLbl.text = name3
-                    } else {
-                        cell2.prodLbl.text = "\(name3) \(a!)"
-                    }
-                    
-                }
-                
+                cell2.resultLbl.text = prod.manufacturer
             }
-            print("id \(id) \(prod.id)")
             if cell2.id == id {
                 cell2.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1)
             } else {
@@ -530,7 +447,7 @@ extension VitalStatVCiPad {
                         cell5.accessoryType = .disclosureIndicator
                         cell5.selectionStyle = .default
                         cell5.hideView.isHidden = true
-//                        cell5.separatorColor.isHidden = false
+                        //                        cell5.separatorColor.isHidden = false
                     } else {
                         cell5.nameLbl.text = " "
                         cell5.imgView.image = nil
@@ -642,7 +559,7 @@ extension VitalStatVCiPad {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == tableView2 {
-                        let cell = tableView.cellForRow(at: indexPath) as! ProdVitalTableViewCell
+            let cell = tableView.cellForRow(at: indexPath) as! ProdVitalTableViewCell
             name = cell.text2
             name2 = name
             id = cell.id
@@ -677,7 +594,7 @@ extension VitalStatVCiPad {
                         nameTr = "\(namePdf)Alert"
                         read(nameFile: "\(namePdf)Alert")
                         
-                    cell.selectionStyle = .default
+                        cell.selectionStyle = .default
                     } else {
                         cell.selectionStyle = .none
                     }

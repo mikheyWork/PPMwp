@@ -33,6 +33,10 @@ class VitalStatVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
             prodArr = appDelegate.curentPdf.filter({$0.model_number == name})
         }
         addDataToDict()
+        
+        self.tableView2.rowHeight = UITableView.automaticDimension
+        
+        self.tableView2.estimatedRowHeight = 73.0
     }
     
     var nameVC = "VitalStatVC"
@@ -83,7 +87,7 @@ extension VitalStatVC {
             count = 2
         }
         if tableView == tableView2 {
-            count = keysAZ.count + 2
+            count = keysAZ.count + 3
         }
         return count
     }
@@ -95,7 +99,6 @@ extension VitalStatVC {
             
             let backgroundView = UIView()
             backgroundView.backgroundColor = UIColor(red: 241/255, green: 243/255, blue: 246/255, alpha: 1.0)
-//            cell.selectedBackgroundView = backgroundView
             
             if indexPath.row == 0 {
                 let arr = appDelegate.curentPdf.filter({$0.id == id})
@@ -146,8 +149,6 @@ extension VitalStatVC {
                     cell1.seperatorColor.backgroundColor = UIColor.white
                 }
             }
-            print("hide1 \(hide1)")
-            print("hide2 \(hide2)")
             if hide1 == true && hide2 == true {
                 tableView.isHidden = true
             } else {
@@ -164,6 +165,7 @@ extension VitalStatVC {
                 cell2.nameLbl.text = key
                 cell2.contentLbl.text = fieldsDict[key]
             }
+            
            cell = cell2
         }
         return cell

@@ -55,13 +55,16 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
        
         
         //find element
-        a = appDelegate.childs.filter({$0.name == name })
         b = [ReferEnt]()
         if a.isEmpty == true {
             b = appDelegate.referencesChild.filter({$0.name == name })
         }
         changeName()
         
+        self.tableView3.rowHeight = UITableView.automaticDimension
+        self.tableView3.estimatedRowHeight = 73.0
+        self.tableView4.rowHeight = UITableView.automaticDimension
+        self.tableView4.estimatedRowHeight = 73.0
         
     }
     
@@ -87,20 +90,20 @@ class VitalFullScrennVC: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func index() {
         
-        if parentID != nil {
-            let resault = appDelegate.childs.filter{$0.id == parentID}
-            for i in resault {
-                if cars.contains(i.name!) == false {
-                    cars.append(i.name!)
-                }
-            }
-        } else {
-            for i in appDelegate.childs {
-                if cars.contains(i.name!) == false {
-                    cars.append(i.name!)
-                }
-            }
-        }
+//        if parentID != nil {
+//            let resault = appDelegate.childs.filter{$0.id == parentID}
+//            for i in resault {
+//                if cars.contains(i.name!) == false {
+//                    cars.append(i.name!)
+//                }
+//            }
+//        } else {
+//            for i in appDelegate.childs {
+//                if cars.contains(i.name!) == false {
+//                    cars.append(i.name!)
+//                }
+//            }
+//        }
         
         // 1
         for car in cars {
@@ -192,7 +195,7 @@ extension VitalFullScrennVC {
         }
         
         if tableView == self.tableView4 {
-                return keysAZ2.count + 2
+                return keysAZ2.count + 4
         }
         
         if tableView == self.tableView6 {

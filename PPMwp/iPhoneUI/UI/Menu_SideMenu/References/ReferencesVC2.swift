@@ -207,7 +207,6 @@ extension ReferencesVC2 {
         if cell.nameLbl.text != nil {
             text = cell.nameLbl.text!
         }
-        print("text \(text)")
         let arr1 = appDelegate.referencesChild.filter({$0.name == text})
         let arr2 = appDelegate.referencesChild.filter({$0.parent == arr1.first?.id})
         if arr2.isEmpty == true {

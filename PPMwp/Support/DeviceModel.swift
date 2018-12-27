@@ -19,14 +19,13 @@ public extension UIDevice {
         } else if  identifier.contains("iPod") {
             return "iPhone"
         } else if identifier.contains("i386") {
-            return "iPhone"
+            return "iPad"
         } else if identifier.contains("x86_64") {
-            return "iPhone"
+            return "iPad"
 //            iPhone
 //            iPad
         } else {
             return "iPhone"
         }
     }
-    
 }

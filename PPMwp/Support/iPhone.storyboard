@@ -1140,17 +1140,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="364" height="73"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfI-jc-Bhd">
-                                                    <rect key="frame" x="0.0" y="16" width="364" height="19"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="19" id="qzy-fK-vkZ"/>
-                                                    </constraints>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Type" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cfI-jc-Bhd">
+                                                    <rect key="frame" x="0.0" y="16" width="364" height="18.666666666666671"/>
                                                     <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="16"/>
                                                     <color key="textColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Content" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qp5-3Z-SgN">
-                                                    <rect key="frame" x="0.0" y="40" width="364" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" ambiguous="YES" text="Content" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qp5-3Z-SgN">
+                                                    <rect key="frame" x="0.0" y="39.666666666666657" width="364" height="17.333333333333336"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <color key="textColor" red="0.52549019610000003" green="0.56078431370000004" blue="0.60784313729999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1279,7 +1276,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ogl-CE-Aix" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="7088.8000000000002" y="2267.7339901477835"/>
+            <point key="canvasLocation" x="6891" y="2240"/>
         </scene>
         <!--FviewerVC-->
         <scene sceneID="OCZ-dJ-oO7">
@@ -2289,7 +2286,7 @@ Cg
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <mutableString key="content">The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification. </mutableString>
+                                        <string key="content">The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification. </string>
                                         <attributes>
                                             <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <font key="NSFont" size="13.333" name="Lato-Regular"/>
@@ -2385,7 +2382,7 @@ Cg
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <mutableString key="content">PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice....</mutableString>
+                                        <string key="content">PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice....</string>
                                         <attributes>
                                             <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <font key="NSFont" size="13.333" name="Lato-Regular"/>
@@ -3078,6 +3075,7 @@ If you choose to cancel your subscription, PPM Genius will continue to function,
                         <segue destination="FPM-vb-uNU" kind="show" identifier="showRef" id="M9s-x2-Hn4"/>
                         <segue destination="fA1-Yt-z8b" kind="show" identifier="showSideMenu2" id="jvs-qd-sBY"/>
                         <segue destination="4XH-yS-6RB" kind="show" identifier="showModels" id="ze8-jM-v3U"/>
+                        <segue destination="b3p-rW-GRh" kind="show" identifier="showProdFromSearch" id="d8P-Ss-okN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3kk-qV-xIE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3156,7 +3154,7 @@ Cg
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <mutableString key="content">The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification. </mutableString>
+                                        <string key="content">The information contained with this application is, to the best of CEPIA's knowledge, complete and accurate at the time of publication. Company product and technical information has been compiled from multiple sources and is provided with the understanding that the information has not been independently verified. Because no independent verification of the information included in this application has been performed, the accuracy of the data cannot be guaranteed, although all due care was taken when compiling the information. Check with the original manufacturers product manual or technical services for clarification. </string>
                                         <attributes>
                                             <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <font key="NSFont" size="13.333" name="Lato-Regular"/>
@@ -3252,7 +3250,7 @@ Cg
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <mutableString key="content">PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice....</mutableString>
+                                        <string key="content">PPM Genius - Pacemaker &amp; ICD Companion is not designed to, and does not, provide medical advice. All content, including text, graphics, images and information available on or through this application are for general information purposes only. The content is not intended to be a substitute for professional medical advice, diagnosis or treatment. Never disregard professional medical advice, or delay in seeking it, because of something you have read in PPM Genius - Pacemaker &amp; ICD Companion. Never rely on information in PPM Genius -Pacemaker &amp; ICD Companion in place of seeking professional medical advice....</string>
                                         <attributes>
                                             <color key="NSColor" red="0.12549019610000001" green="0.18039215689999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <font key="NSFont" size="13.333" name="Lato-Regular"/>
@@ -3399,14 +3397,14 @@ Cg
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="nBz-ae-3uO"/>
-        <segue reference="vY0-5U-moD"/>
+        <segue reference="jvs-qd-sBY"/>
         <segue reference="SDY-ab-mWa"/>
         <segue reference="M9s-x2-Hn4"/>
         <segue reference="do6-9I-KNb"/>
-        <segue reference="sE0-hJ-xTF"/>
-        <segue reference="ciZ-at-CdR"/>
+        <segue reference="aiB-hl-doe"/>
+        <segue reference="nwL-6g-w7n"/>
         <segue reference="eWs-QG-U0T"/>
         <segue reference="ze8-jM-v3U"/>
-        <segue reference="A98-F5-V1U"/>
+        <segue reference="zJu-XY-OBG"/>
     </inferredMetricsTieBreakers>
 </document>

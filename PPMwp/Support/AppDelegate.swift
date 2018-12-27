@@ -8,16 +8,9 @@ import SwiftyStoreKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    
     var showDisc =  UserDefaults.standard.bool(forKey: "DiscAlert")
     var currentUser: User!
-    
-    var allCateg: [CategoryEnt] = []
-    var parents: [CategoryEnt] = []
-    var childs: [CategoryEnt] = []
     var favourites: [String] = []
-    
-    var favouritesStart: [String] = []
     var model: String!
     var subscribtion = false {
         didSet {
@@ -30,18 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var referencesParent = [ReferEnt]()
     var referencesChild = [ReferEnt]()
     var fileLocalURLDict = [String:String]()
-    
     var curentPdf = [PdfDocumentInfo]()
     var networkPdf = [PdfDocumentInfo]()
-    
     var curentPdfRef = [PdfDocumentInfoRef]()
     var networkPdfRef = [PdfDocumentInfoRef]()
-    
     var productsDocCount: CGFloat! = 0.0
     var refsDocCount: CGFloat! = 0.0
     var allCountDoc: CGFloat! = 0.0
     var models = [CategoryEnt]()
-    
     var networkProd = [String]()
     var networkRef = [String]()
     
@@ -178,16 +167,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     @objc func check() {
         if Reachability.isConnectedToNetwork() == true {
-            removeDataFrom(entity: "CategoryEnt")
             removeDataFrom(entity: "ReferEnt")
-            filter()
-            req(page: 1)
             reqRef(page: 1)
-            filter()
         } else {
-            fetchCoreData()
-                        fetchCoreDataRef()
-            filter()
+            fetchCoreDataRef()
         }
     }
     
@@ -295,71 +278,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    @objc func req(page: Int) {
-        let url = URL(string: "http://ppm.customertests.com/wp-json/wp/v2/categories?page=\(page)&per_page=100")
-        guard url != nil else {
-            return
-        }
-        
-        Alamofire.request(url!, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
-            let json = JSON(response.result.value!)
-            let resaults = json[].arrayValue
-            guard resaults.isEmpty == false else {
-                print("page is empty")
-                return
-            }
-            if resaults.count == 100 {
-                print("page is full, page is \(page)")
-                self.req(page: page + 1)
-            } else {
-                print("not full page")
-            }
-            for resault in resaults {
-                var name = resault["name"].stringValue
-                let first = name.prefix(1).uppercased()
-                name = String(name.dropFirst())
-                name = first + name
-                self.networkProd.append(name)
-                let a = self.allCateg.filter{$0.name == name}
-                if a.isEmpty == false {
-                } else {
-                    
-                    self.saveCategories(name: name,
-                                        id: resault["id"].intValue,
-                                        parent: resault["parent"].intValue)
-                }
-                
-            }
-        }
-    }
-    
-    //MARK: -save catigories
-    func saveCategories(name: String, id: Int, parent: Int) {
-        
-        let context = persistentContainer.viewContext
-        let entity = NSEntityDescription.entity(forEntityName: "CategoryEnt", in: context)
-        let categObject = NSManagedObject(entity: entity!, insertInto: context) as! CategoryEnt
-        categObject.id = Int64(id)
-        categObject.parent = Int64(parent)
-        categObject.name = name
-        
-        if context.hasChanges {
-            do {
-                
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-        
-        if categObject.parent == 0 {
-            parents.append(categObject)
-        } else {
-            childs.append(categObject)
-        }
-    }
-    
     func saveRefer(name: String, id: Int, parent: Int, description: String) {
         
         let context = persistentContainer.viewContext
@@ -384,27 +302,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             referencesParent.append(categObject)
         } else {
             referencesChild.append(categObject)
-        }
-    }
-    
-    func fetchCoreData() {
-        let context = persistentContainer.viewContext
-        let fetchReq: NSFetchRequest<CategoryEnt> = CategoryEnt.fetchRequest()
-        
-        do {
-            allCateg = try context.fetch(fetchReq)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func filter() {
-        for i in allCateg {
-            if i.parent == 0 {
-                parents.append(i)
-            } else {
-                childs.append(i)
-            }
         }
     }
     
@@ -487,11 +384,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //check sub
     
     func applicationWillResignActive(_ application: UIApplication) {
+        NotificationCenter.default.post(name: NSNotification.Name("stopAnimation"), object: nil)
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
+        NotificationCenter.default.post(name: NSNotification.Name("stopAnimation"), object: nil)
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
@@ -511,12 +410,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
     
     lazy var persistentContainer: NSPersistentContainer = {
-        /*
-         The persistent container for the application. This implementation
-         creates and returns a container, having loaded the store for the
-         application to it. This property is optional since there are legitimate
-         error conditions that could cause the creation of the store to fail.
-         */
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -539,8 +432,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
-    // rotate
     
     
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {

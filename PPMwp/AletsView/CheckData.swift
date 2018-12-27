@@ -56,24 +56,24 @@ class CheckDataController: UIViewController {
     }
     
     fileprivate func checkActualData() {
-        for i in appDelegate.parents {
-            if appDelegate.networkProd.contains(where: {$0 == i.name}) == false {
-                appDelegate.parents = appDelegate.parents.filter({$0.name != i.name})
-                appDelegate.removeFile(name: "\(i.name!)Alert")
-                appDelegate.removeFile(name: "\(i.name!)Info")
-                appDelegate.deleteFromCoreData(id: i.id)
-            }
-        }
-        for i in appDelegate.childs {
-            if appDelegate.networkProd.contains(where: {$0 == i.name}) == false {
-                appDelegate.childs = appDelegate.childs.filter({$0.name != i.name})
-                appDelegate.removeFile(name: "\(i.name!)Alert")
-                appDelegate.removeFile(name: "\(i.name!)Info")
-                appDelegate.deleteFromCoreData(id: i.id)
-            }
-        }
-        
-        
+//        for i in appDelegate.parents {
+//            if appDelegate.networkProd.contains(where: {$0 == i.name}) == false {
+//                appDelegate.parents = appDelegate.parents.filter({$0.name != i.name})
+//                appDelegate.removeFile(name: "\(i.name!)Alert")
+//                appDelegate.removeFile(name: "\(i.name!)Info")
+//                appDelegate.deleteFromCoreData(id: i.id)
+//            }
+//        }
+//        for i in appDelegate.childs {
+//            if appDelegate.networkProd.contains(where: {$0 == i.name}) == false {
+//                appDelegate.childs = appDelegate.childs.filter({$0.name != i.name})
+//                appDelegate.removeFile(name: "\(i.name!)Alert")
+//                appDelegate.removeFile(name: "\(i.name!)Info")
+//                appDelegate.deleteFromCoreData(id: i.id)
+//            }
+//        }
+//
+    
         for i in appDelegate.referencesParent {
             if appDelegate.networkRef.contains(where: {$0 == i.name}) == false {
                 appDelegate.referencesParent = appDelegate.referencesParent.filter({$0.name != i.name})
@@ -119,7 +119,6 @@ class CheckDataController: UIViewController {
                 let first = name.prefix(1).uppercased()
                 name = String(name.dropFirst())
                 name = first + name
-                print("name upp case \(name)")
                 let id = resault["id"].intValue
                 let startLink = resault["acf"]["references"].stringValue
                 let name2 = PDFDownloader.shared.addPercent(fromString: name)
@@ -223,10 +222,6 @@ class CheckDataController: UIViewController {
                 }
                
             }
-            print("ss \(self.timePDFRef.count)")
-            for i in self.timePDFRef {
-                print("i \(i.title)")
-            }
             self.appDelegate.networkPdfRef = self.timePDFRef
             self.appDelegate.curentPdfRef = self.timePDFRef
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdfRef)
@@ -288,7 +283,7 @@ class CheckDataController: UIViewController {
                     var model_name: String?
                     var manufacturer: String?
                     var modified: String?
-                    var prodTypeId: Int64?
+                    var prodType: String?
                     var nbg_code: String?
                     var polarity: String?
                     var sensor_type: String?
@@ -340,7 +335,7 @@ class CheckDataController: UIViewController {
                     if resault["acf"]["model_name"] != "" &&  resault["acf"]["model_name"] != "false" {
                         model_name = resault["acf"]["model_name"].stringValue
                     } else {
-                        model_name = ""
+                        model_name = "None"
                     }
                     if resault["acf"]["manufacturer"] != "" &&  resault["acf"]["manufacturer"] != "false" {
                         manufacturer = resault["acf"]["manufacturer"].stringValue
@@ -352,10 +347,10 @@ class CheckDataController: UIViewController {
                     } else {
                         modified = "_"
                     }
-                    if parentId != nil  {
-                        prodTypeId = parentId
+                    if resault["acf"]["product_type"] != "" &&  resault["acf"]["product_type"] != "false" {
+                        prodType = resault["acf"]["product_type"].stringValue
                     } else {
-                        prodTypeId = 0
+                        prodType = "_"
                     }
                     if resault["acf"]["nbg_code"] != "" &&  resault["acf"]["nbg_code"] != "false" {
                         nbg_code = resault["acf"]["nbg_code"].stringValue
@@ -537,7 +532,7 @@ class CheckDataController: UIViewController {
                                                              model_name: model_name,
                                                              manufacturer: manufacturer,
                                                              modified: modified,
-                                                             prodTypeId: prodTypeId,
+                                                             prodType: prodType,
                                                              nbg_code: nbg_code,
                                                              polarity: polarity,
                                                              sensor_type: sensor_type,
@@ -599,7 +594,7 @@ class CheckDataController: UIViewController {
                                                              model_name: model_name,
                                                              manufacturer: manufacturer,
                                                              modified: modified,
-                                                             prodTypeId: prodTypeId,
+                                                             prodType: prodType,
                                                              nbg_code: nbg_code,
                                                              polarity: polarity,
                                                              sensor_type: sensor_type,
@@ -639,7 +634,7 @@ class CheckDataController: UIViewController {
                                                              model_name: model_name,
                                                              manufacturer: manufacturer,
                                                              modified: modified,
-                                                             prodTypeId: prodTypeId,
+                                                             prodType: prodType,
                                                              nbg_code: nbg_code,
                                                              polarity: polarity,
                                                              sensor_type: sensor_type,
@@ -701,7 +696,7 @@ class CheckDataController: UIViewController {
                                                          model_name: model_name,
                                                          manufacturer: manufacturer,
                                                          modified: modified,
-                                                         prodTypeId: prodTypeId,
+                                                         prodType: prodType,
                                                          nbg_code: nbg_code,
                                                          polarity: polarity,
                                                          sensor_type: sensor_type,
@@ -763,18 +758,14 @@ class CheckDataController: UIViewController {
                 self.progressBar.progress += self.point2
             }
             
-            for i in self.appDelegate.childs {
-                let a = self.appDelegate.childs.filter({$0.parent == i.id})
-                if a.isEmpty {
-                    if self.appDelegate.models.contains(where: {$0.name == i.name}) == false {
-                        self.appDelegate.models.append(i)
-                    }
-                }
-            }
-            print("ss2 \(self.timePDF.count)")
-            for i in self.timePDF {
-                print("i.... \(i.model_name) \(i.model_number)")
-            }
+//            for i in self.appDelegate.childs {
+//                let a = self.appDelegate.childs.filter({$0.parent == i.id})
+//                if a.isEmpty {
+//                    if self.appDelegate.models.contains(where: {$0.name == i.name}) == false {
+//                        self.appDelegate.models.append(i)
+//                    }
+//                }
+//            }
             self.appDelegate.curentPdf = self.timePDF
             self.appDelegate.networkPdf = self.timePDF
             let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: self.appDelegate.networkPdf)

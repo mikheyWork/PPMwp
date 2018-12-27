@@ -21,6 +21,8 @@ class FavouriteFSVC: UIViewController {
             imgView.isHidden = false
             self.view.backgroundColor = UIColor(red: 234/255, green: 34/255, blue: 37/255, alpha: 1)
         }
+        
+        
     }
     
     func read(nameFile: String) {

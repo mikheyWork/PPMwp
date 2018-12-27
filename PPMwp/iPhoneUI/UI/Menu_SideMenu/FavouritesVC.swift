@@ -23,9 +23,8 @@ class FavouritesVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             for i in a {
                 
                 if self.appDelegate.favourites.contains(String(i)) == false {
-                    if appDelegate.curentPdf.contains(where: {$0.id == Int(String(i))}) || appDelegate.curentPdfRef.contains(where: {$0.id == Int(String(i))}) || appDelegate.childs.contains(where: {$0.id == Int64(String(i))}) || appDelegate.referencesChild.contains(where: {$0.id == Int64(String(i))})  {
+                    if appDelegate.curentPdf.contains(where: {$0.id == Int(String(i))}) || appDelegate.curentPdfRef.contains(where: {$0.id == Int(String(i))}) ||  appDelegate.referencesChild.contains(where: {$0.id == Int64(String(i))})  {
                         self.appDelegate.favourites.append(String(i))
-                        print("favor id is \(i)")
                     }
                 }
             }

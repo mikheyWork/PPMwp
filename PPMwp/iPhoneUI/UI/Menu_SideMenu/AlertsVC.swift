@@ -103,10 +103,8 @@ class AlertsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Ta
         
         if isAzTabep {
             cars = cars.sorted(by: {$0.name < $1.name})
-            print("1 1 1")
         } else if isTop5Taped {
             cars = cars.sorted(by: {$0.date > $1.date})
-            print("2 2 2")
         }
         
         
@@ -300,8 +298,7 @@ extension AlertsVC {
             cell.nameLbl.text = prod.name + " \(prod.number ?? "")"
             let alert = cars[indexPath.row].date
             let date = alert?.dropLast(9)
-            let time = alert?.dropFirst(11)
-            cell.dateLbl.text = "\(date!)   \(time!)"
+            cell.dateLbl.text = "\(date!)"
         }
         
         cell.accessoryType = .disclosureIndicator
@@ -331,7 +328,7 @@ extension AlertsVC {
             let name = sender as! AlertsTVCell
             let vs = segue.destination as! VitalStatVC
             vs.id = name.id
-            print("id \(name.id)")
+            
         }
         if segue.identifier == "showAlertsRef" {
             let name = sender as! AlertsTVCell
