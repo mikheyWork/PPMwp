@@ -460,12 +460,12 @@ extension CepiaVCiPad {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var headerLabel = UILabel()
         let headerView = UIView()
-        headerView.backgroundColor = UIColor(red: 32/255, green: 46/255, blue: 61/255, alpha: 1)
+        headerView.backgroundColor = UIColor.white
         headerLabel =
             UILabel(frame: CGRect(x: 30, y: 0, width:
                 tableView.bounds.size.width, height: tableView.bounds.size.height))
         headerLabel.font = UIFont(name: "Lato-Black", size: 15)
-        headerLabel.textColor = UIColor.white
+        headerLabel.textColor = UIColor(red: 8/255, green: 12/255, blue: 100/255, alpha: 1)
         headerLabel.text = self.tableView(self.tableView, titleForHeaderInSection: section)
         headerLabel.sizeToFit()
         headerView.addSubview(headerLabel)
